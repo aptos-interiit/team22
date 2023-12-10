@@ -5,6 +5,7 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import axios from "axios"
 import DndPic from './DndPic';
 import DndSong from './DndSong';
+import { toast } from 'react-toastify';
 
 const JWT = process.env.REACT_APP_JWT
 
@@ -46,6 +47,19 @@ const AddSong = () => {
 
     const pinimage = async (e) => {
         e.preventDefault();
+        if(sname === "" || artname === "" || photo === null || song === null){
+            toast.error(`Fields cant be empty`, {
+                position: "top-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return;
+        }
         check_and_submit(e);
         setLoad(0)
         const formData = new FormData();
@@ -105,7 +119,7 @@ const AddSong = () => {
             const { IpfsHash } = res.data;
             console.log(sname + " " + artname + " " + imghash + " " + IpfsHash)
             handleAddSong(IpfsHash, imghash);
-            setLoad(1);
+            
         } catch (error) {
             console.log(error);
         }
@@ -156,13 +170,24 @@ const AddSong = () => {
             const response = await signAndSubmitTransaction(payload);
             console.log("song added");
             console.log(response)
+            toast.success(`Song Uploaded`, {
+                position: "top-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            setLoad(1);
             await provider.waitForTransaction(response.hash);
         } catch (err) {
             console.log(err);
         } finally {
             setTransactionInProgress(false);
         }
-        window.location.href = "/dashboard"
+        window.location.href = "/"
     };
 
     const handlePhoto = (e) => {
@@ -211,12 +236,7 @@ const AddSong = () => {
                             </div>
                             
                                 </label>
-                        </div>
-
-                        <div>
-                            <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">Song Description</label>
-                            <textarea id="textarea" type="textarea" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"></textarea>
-                        </div>
+                        </div>                        
                         <div>
                             <label className="text-white dark:text-gray-200" htmlFor="password">Add Collaborators</label>
                             <AddCollaborators formFields={formFields} setFormFields={setFormFields} remainingSplit={remainingSplit} setRemainingSplit={setRemainingSplit} account={account} />
@@ -224,9 +244,9 @@ const AddSong = () => {
 
                         {/* </div> */}
 
-                        <div className="flex justify-end mt-6">
-                            <button className="px-6 py-2 mx-5 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600">Home</button>
-                            <button onClick={(e) => pinimage(e)} className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600">Save</button>
+                        <div className="flex justify-end mt-6">                            
+                        {load ? (<><button onClick={(e) => pinimage(e)} className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none ">Upload</button></>):(<><button disabled={true} className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600">Uploading</button></>)}
+                            
                         </div>
 
                     </div>

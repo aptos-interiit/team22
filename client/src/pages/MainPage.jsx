@@ -235,7 +235,7 @@ function MainPage({ setTrackid }) {
     <>
       {user &&
         <div
-          className={`bg-white min-h-screen text-white w-full`}
+          className={`min-h-screen text-white w-full`}
           style={{
             // width: "100%",
             backgroundImage: `url(${backicon})`,
@@ -265,7 +265,7 @@ function MainPage({ setTrackid }) {
                   <img 
                     onClick={() => getIpfsObject(radioz.user_address, radioz.songs, radioz.title, radioz.description)}               
                     src={play2}              
-                    className="ml-auto mr-auto mr-auto h-[300px] w-[300px] hover:scale-110 hover:cursor-pointer transition-transform transform"                   
+                    className="ml-auto mr-auto h-[300px] w-[300px] hover:scale-110 hover:cursor-pointer transition-transform transform"                   
                   />                    
                 </div>
               </>)
@@ -416,9 +416,9 @@ function MainPage({ setTrackid }) {
                     />
                     <div
                       id="slider"
-                      className=" w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide no-scrollbar "
+                      className=" h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide no-scrollbar "
                     >
-                      <div className="flex flex-wrap">
+                      <div className="flex flex-wrap p-3">
                         {songs.map((it, i) => {
                           if(i<ct){                          
                             return (                              

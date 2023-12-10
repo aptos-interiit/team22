@@ -73,15 +73,13 @@ const Search = () => {
                   <div className="flex flex-wrap">
                     {searchsong.map((it, i) => {
                       if (i < ct) {
-                        return (
-                          <>
-                            <TrendingSongCard key={i} bg={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${it.coverIpfs}`} owner={it.title} songs={songs} id={i} setid={setid} artists={it.artists} distri={it.distri} address={it.owner} artistName={it.owner_name} songID={it.id} />
-                          </>
+                        return (                          
+                            <TrendingSongCard key={i} bg={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${it.coverIpfs}`} owner={it.title} songs={songs} id={i} setid={setid} artists={it.artists} distri={it.distri} address={it.owner} artistName={it.owner_name} songID={it.id} />                          
                         );
                       }
                     })}
                     {
-                      ct < songs.length ? (<><p className="mt-auto mb-auto p-5 ml-5 bg-[#23252e] hover:bg-black transform hover:cursor-pointer rounded-lg" onClick={() => setCt(ct + 2)}>Load More</p></>) : (<></>)
+                      ct < songs.length ? (<><p className="mt-auto mb-auto p-5 ml-5 bg-[#23252e] hover:bg-black transform hover:cursor-pointer rounded-lg" onClick={() => setCt(ct + 5)}>Load More</p></>) : (<></>)
 
                     }
                   </div>

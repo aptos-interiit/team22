@@ -9,7 +9,7 @@ import searchicon from '../MusicPlayer/assets/search.png'
 import addsongicon from '../MusicPlayer/assets/addsong.png'
 import yourradioicon from '../MusicPlayer/assets/yourradio.png'
 import allradiosicon from '../MusicPlayer/assets/allradios.png'
-
+import docicon from '../MusicPlayer/assets/icons8-document.svg'
 
 function SideSlider() {
   const [isSidebarOpen, setSidebarOpen] = useState(true)
@@ -136,6 +136,22 @@ function SideSlider() {
                     className={`hover:text-white block  rounded-lg ml-2 px-4 py-2 text-xl font-medium ${location.pathname === '/allradios' ? 'text-white' : 'text-gray-500'}`}
                   >
                     All Radios
+                  </p>
+                  {/* <Search /> */}
+                </li>
+              </Link>
+            </div>
+
+            <div className='bg-[#121212] m-4 rounded-lg'>
+              <Link to="/dao">
+                <li className={`flex items-center hover:text-white pl-2`}>
+                <div className='mt-auto mb-auto pl-2'>
+                    <img src={docicon} alt="" className='w-[35px] h-[35px]'/>
+                  </div>
+                  <p
+                    className={`hover:text-white block  rounded-lg ml-2 px-4 py-2 text-xl font-medium ${location.pathname === '/dao' ? 'text-white' : 'text-gray-500'}`}
+                  >
+                    DAO
                   </p>
                   {/* <Search /> */}
                 </li>

@@ -147,7 +147,7 @@ export default function MusicCard({ song, id, tracks, inPlaylist, playListName }
       console.log(response);
       await provider.waitForTransaction(response.hash);
       setTransact(transact + 1);
-      window.location.href = "/";
+      // window.location.href = "/";
     } catch (err) {
       console.log(err);
     } finally {

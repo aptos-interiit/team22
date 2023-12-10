@@ -19,32 +19,13 @@ const ProfilePg = () => {
     const {setLoad}=useContext(dataContext)
     const [disp, setDisp] = useState("hidden");
     const [tstatus, setTransactionInProgress] = useState(0)
-    const [profileName, setProfileName] = useState(user.name);
-    const [location, setLocation] = useState(user.location);
+    const [profileName, setProfileName] = useState(user ? user.name:"");
+    const [location, setLocation] = useState(user ? user.location:"");
     const [description, setDescription] = useState(user.description);
     const [profilePic, setProfilePic] = useState(null);
     const [profilePicHash, setProfilePicHash] = useState(user.profile_pic);
 
-    const setid = (e, id, songtrack, name, addr, dist) => {
-      e.preventDefault();
-      if (!disable) {
-        setTrackid(id);
-        setCurrent(songtrack);
-        setIsRadio(0);
-        setRadio([]);
-        if (recadd === null) {
-          setRecAdd(addr);
-        }
-        if (recName === "") {
-          setRecName(name);
-        }
-        if(distrix === null){
-          setDistri(dist)
-        }
-      }
-    };
-
-
+    
     const handleDel = async (e, id) => {
       if (!account) return;
       setTransactionInProgress(true);
@@ -132,7 +113,7 @@ const ProfilePg = () => {
       try {
         const response = await signAndSubmitTransaction(payload);
         console.log("user updated");
-        window.location.href = "/dashboard";
+        window.location.href = "/";
         await provider.waitForTransaction(response.hash);
       } catch (err) {
         console.log(err);
@@ -162,12 +143,14 @@ const ProfilePg = () => {
     <div className="bg-transparent max-h-screen overflow-y-scroll text-white shadow-md rounded px-20 pt-20 pb-10 mb-4">
       <div className="flex gap-10">
         <div className='col-span-1'>
-          
+          {
+            user ? (<>
               <img
           className="rounded-lg w-[200px] h-[200px]"
-          src={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${user.profile_pic}`}
+          src={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${user.profile_pic}`}/>
           alt={user.name}
-        />
+            </>):(<></>)
+          }        
             {/* ) : (
               <span>
               
@@ -187,9 +170,13 @@ const ProfilePg = () => {
         
         </div>
         <div className='mt-8 col-span-4'>
+          {
+            user ? (<>
           <h1 className="text-2xl font-bold">{user.name}</h1>
           <h3 className="text-2xl ">{user.location}</h3>
           <p className="text-gray-300 line-clamp-3">{user.description}</p>
+            </>):(<></>)
+          }
         </div>
       </div>
     <div className="mt-8 mx-auto">
@@ -216,10 +203,9 @@ const ProfilePg = () => {
           setDescription(e.target.value)
         }}/><br />
             </div>
-            <div className='mb-2 grid grid-cols-4'>
-        
-<label class="ml-2 col-span-1 my-auto" for="file_input">Change Photo:</label>
-<input class="border border-white ml-2 p-1 col-span-2 rounded-xl  bg-transparent" id="file_input" type="file" onChange={(e) => {
+            <div className='mb-2 grid grid-cols-4'>        
+        <label className="ml-2 col-span-1 my-auto" htmlFor="file_input">Change Photo:</label>
+        <input className="border border-white ml-2 p-1 col-span-2 rounded-xl  bg-transparent" id="file_input" type="file" onChange={(e) => {
           setProfilePic(e.target.files[0]);
         }}/>
 

@@ -11,7 +11,7 @@ const {
   Ed25519PrivateKey
 } = require("@aptos-labs/ts-sdk");
 
-const APTOS_NETWORK = Network.DEVNET;
+const APTOS_NETWORK = Network.TESTNET;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const MODULE_ADDRESS = process.env.MODULE_ADDRESS;
 

@@ -98,7 +98,7 @@ const Music = ({
               <></>
             ) : (
               <>
-                <div className="text-cyan-500 dark:text-white pr-2 pt-6">
+                <div className="text-cyan-500 dark:text-white pr-2 py-3">
                   {isNaN(trackProgress)
                     ? "00:00"
                     : secondsToTime(trackProgress)}
@@ -167,10 +167,13 @@ const Music = ({
           ) : (
             <>
               <div className="text-white flex-auto flex items-center justify-evenly">
-                
-                <div className='w-[200px]'><Marquee>{title} </Marquee>
+                <div className='mr-3 flex ml-0'>
+                <img src={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${coverIpfs}`} alt="" width="44" height="44" className="flex-none rounded-lg bg-slate-100" loading="lazy" />
+                <div className='w-[200px] my-auto mx-4'><Marquee>{title} </Marquee>
                   
                   </div>
+                </div>
+                
                 <button
                   type="button"
                   className="hidden sm:block lg:hidden xl:block"

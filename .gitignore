@@ -30,3 +30,6 @@ Desktop.ini
 
 # Dependency directories
 .jenkins/
+
+move/build
+move/.aptos

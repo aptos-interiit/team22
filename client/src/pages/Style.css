@@ -3,6 +3,7 @@
   height: 0em
 }
 
+
 .loader {
     position: fixed;
     top: 0;
@@ -36,5 +37,21 @@
     }
     to {
       transform: rotate(1turn);
+    }
+  }
+
+  .animate{
+    animation: float 2s infinite;
+  }
+
+  @keyframes float {
+    0% {
+      margin-top: 15px;
+    }
+    50% {
+      margin-top: 20px;
+    }
+    100%{
+      margin-top: 15px;
     }
   }

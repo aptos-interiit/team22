@@ -8,7 +8,7 @@ import SideBar from './SideBar';
 
 function Dashboard({ load, user, handleAdd, handleDeposit, setDeposit, setTrackid }) {
   return (
-    <div className="flex">
+    <div className="flex bg-black">
       <div className="border-e">
         <SideSlider />
         {/* <SideBar></SideBar> */}

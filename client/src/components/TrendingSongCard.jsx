@@ -17,8 +17,8 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   height: 400,
-  bgcolor: "#070707",
-  border: "2px solid white",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
   zIndex: 999,
@@ -187,13 +187,15 @@ export default function TrendingSongCard({
           }}
         ></button>
       </div>
+<div className="w-[150px] mx-auto">
 
-      <div className="text-md font-bold mt-2 truncate">
+      <div className="text-md font-bold mt-2 truncate w-[150px]">
       <Tooltip content={owner}>{owner}</Tooltip>
 
         </div>
-      <div className="text-sm mb-2 text-[#606269] truncate">{artistName}</div>
+      <div className="text-sm mb-2 text-[#606269] truncate w-[150px]">{artistName}</div>
       <div
+      className="w-[150px]"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -225,6 +227,7 @@ export default function TrendingSongCard({
           style={{ marginLeft: "auto", color: "none", fontSize: "28px" }}
         />
       </div>
+</div>
 
       <Modal
         open={open}
@@ -232,30 +235,32 @@ export default function TrendingSongCard({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box style={style} className="bg-[#1d1d23] border-2 border-white rounded-lg p-4 overflow-y-auto">
-          <div class="flex justify-center">
-            <div class="text-white text-2xl mb-2">All Playlists</div>
+        <Box style={style} className="bg-[#1d1d23] rounded-lg p-4 overflow-y-auto">
+          <div className="flex justify-center">
+            <div className="text-white text-2xl mb-2">All Playlists</div>
           </div>
           <div className="max-h-[75%] overflow-y-auto mb-2">
             {myPlaylistName.map((it, i) => {
               return <div key={i} onClick={() => setCurrPlaylist(it)} className={`mb-2 ${currPlaylist === it ? 'border-[1px] rounded-lg' : ''}`}><OptionCard playlistName={it} /></div>
             })}
           </div>
-
+          <div className="flex">
           <button
-            className="px-6 py-2 mx-5 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600"
-            onClick={(e) => {
-              handleAddSongToPlaylist(currPlaylist, songID);
-            }}
-          >
-            submit
-          </button>
-          <button
-            className="px-6 py-2 mx-5 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600"
+            className="px-6 py-2 ml-auto leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600"
             onClick={handleClose}
           >
             Close
           </button>
+          <button
+            className="px-6 py-2 leading-5 ml-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600"
+            onClick={(e) => {
+              handleAddSongToPlaylist(currPlaylist, songID);
+            }}
+          >
+            Add
+          </button>
+          </div>
+          
         </Box>
       </Modal>
       {/* <div className="text-sm mt-[-5px] text-center overflow-hidden">{address}</div> */}

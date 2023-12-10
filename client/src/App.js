@@ -25,12 +25,14 @@ import SearchPage from "./pages/SearchPage.jsx";
 import LandingPg from "./pages/LandingPg";
 import Navbar from "./pages/Navbar.jsx";
 import { ToastContainer, toast } from 'react-toastify';
+import AboutUs from "./pages/AboutUs";
+import DaoFrontend from "./pages/DaoFrontend.jsx";
 
 
 
 const addre = process.env.REACT_APP_MODULE_ADDRESS;
 const res_acc = process.env.REACT_APP_RESOURCE_ACCOUNT;
-export const provider = new Provider(Network.DEVNET);
+export const provider = new Provider(Network.TESTNET);
 
 function App() {
   const { account, signAndSubmitTransaction } = useWallet();
@@ -60,6 +62,8 @@ function App() {
   const [distrix, setDistri] = useState(null)
   const [currPlaylist, setCurrPlaylist] = useState(null)
 
+
+  
 
   useEffect(() => {
     if (popup !== null) {
@@ -131,8 +135,8 @@ function App() {
     const payload = {
       sender: `${account.address}`,
       data: {
-        function: `0x1::coin::transfer`,
-        typeArguments: ['0x1::aptos_coin::AptosCoin'],
+        function: `${addre}::music_platform::donate`,
+        typeArguments: [],
         functionArguments: [to_address, amount],
       },
     };
@@ -191,6 +195,7 @@ function App() {
   };
 
   const handleDeposit = async (e) => {
+    e.preventDefault();
     if (!account) return;
 
     if (deposit < 0.05) {
@@ -213,6 +218,7 @@ function App() {
       await provider.waitForTransaction(response.hash);
       setTransact(transact + 1)
       setDeposit(0)
+      handleClose();
     } catch (err) {
       console.log(err);
     } finally {
@@ -422,7 +428,7 @@ function App() {
               !user ? (
                 <div className="bg-black flex max-h-screen overflow-y-scroll">
 
-                  <LandingPage />
+                  <LandingPg />
                 </div>
               ) : (
                 <Dashboard
@@ -449,8 +455,9 @@ function App() {
               />
             }
           ></Route>
+          <Route path="/land" element={<LandingPg/>}> </Route>
           <Route
-            path="/album"
+            path="/dao"
             element={
               <>
                 <div className="bg-black flex">
@@ -460,8 +467,9 @@ function App() {
                   <div className="w-full">
                     {load ? (
                       <>
-                        <div className="">
-                          <AlbumPage />
+                        <div className=" max-h-screen overflow-y-scroll">
+                          <Navbar savings={user ? user.savings : 0} handleDeposit={handleDeposit}></Navbar>
+                          <DaoFrontend />
                         </div>
                       </>
                     ) : (

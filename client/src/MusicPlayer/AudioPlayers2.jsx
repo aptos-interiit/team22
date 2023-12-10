@@ -70,9 +70,13 @@ function AudioPlayer2() {
 
 
     const addSongsData = (timestamp, type, title, id) => {
+        console.log(timestamp, type, title, id);
         setSongsListened([...songsListened, { timestamp, type, title, id }]);
     };
 
+    useEffect(() => {
+        localStorage.setItem("songsListened", JSON.stringify(songsListened));
+    }, [songsListened.length]);
     const startTimer = () => {
         clearInterval(intervalRef.current);
         intervalRef.current = setInterval(() => {
@@ -124,8 +128,12 @@ function AudioPlayer2() {
     };
 
     const CalculateTokenFromSongsData = async (songsListenedx) => {
+        console.log("in function CalculateTokenFromSongsData")
+        console.log(songsListenedx);
         let arr = songsListenedx
         let temp = {}
+        console.log(arr[0]);
+        console.log(arr[1]);
         for (let i = 0; i < arr.length - 1; i++) {
             if (arr[i].type === 'start') {
                 if (arr[i + 1].type === 'end') {
@@ -202,7 +210,7 @@ function AudioPlayer2() {
     }
 
     const sendTransaction = (amount, artName, artAddr, distriArr, timelistened, songId) => {
-        axios.post("https://server-81e3.onrender.com/user_to_artist", {
+        axios.post("http://localhost:4000/user_to_artist", {
             userAddress: account.address,
             artistAddresses: artAddr,
             dist: distriArr,
@@ -230,7 +238,7 @@ function AudioPlayer2() {
     }
 
     const updateTimeListened = async (timelistened, songId) => {
-        axios.post("https://server-81e3.onrender.com/update_timelistened", {
+        axios.post("http://localhost:4000/update_timelistened", {
             songId: songId,
             time: parseInt(timelistened)
         }).then(async (res) => {
@@ -253,6 +261,7 @@ function AudioPlayer2() {
     }
 
     useEffect(() => {
+        console.log(songsListened)
         if (audioRef.current !== null) {
             if (isPlaying) {
                 audioRef.current.play();
@@ -282,6 +291,7 @@ function AudioPlayer2() {
 
     useEffect(() => {
         if (trackid < current.length) {
+            console.log(songsListened)
             setDisable(1)
             if (user.savings < 12000) {
                 console.log("no balance")
@@ -344,18 +354,32 @@ function AudioPlayer2() {
     }, [flag]);
 
     useEffect(() => {
-        // Pause and clean up on unmount
-        return () => {
-            if (audioRef.current == null) return
-            audioRef.current.pause();
-            clearInterval(intervalRef.current);
-            let date = new Date()
-            let sec = date.getTime()
-            addSongsData(sec, 'end', title, id)
-            CalculateTokenFromSongsData([...songsListened, { timestamp: sec, type: 'end', title: title, id: id }]);
 
-        };
+        const handleReload = async (e) => {
+            
+            e.preventDefault();
+            if (audioRef.current !== null) {
+                console.log("reloading");
+                audioRef.current.pause();
+                let date = new Date()
+                let sec = date.getTime()
+                addSongsData(sec, 'end', title, id)
+                let songlistenedx = JSON.parse(localStorage.getItem("songsListened"));
+                console.log(songsListened);
+                songlistenedx.push({ timestamp: sec, type: 'end', title: title, id: id });
+                await CalculateTokenFromSongsData(songlistenedx);
+            }
+        }
+
+        window.addEventListener('beforeunload', handleReload);
+
+        return () => {
+          // hit endpoint to end show
+          window.removeEventListener('beforeunload', handleReload);
+        }
     }, []);
+
+
 
     return <div>
         {audioRef.current !== null ? (<><Music

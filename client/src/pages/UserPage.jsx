@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 const addre =process.env.REACT_APP_MODULE_ADDRESS;
 const res_acc = process.env.REACT_APP_RESOURCE_ACCOUNT;
-export const provider = new Provider(Network.DEVNET);
+export const provider = new Provider(Network.TESTNET);
 
 function UserPage() {
   const { account, signAndSubmitTransaction } = useWallet();

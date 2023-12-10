@@ -18,28 +18,21 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="">
-    <img src="https://tan-mad-salamander-939.mypinata.cloud/ipfs/QmQk7KK17aQfb6my529ndPrgZbgtVgGjUNhw6NzqRYa1Gt" alt="Logo" width="80" height="80">
+    <img src="https://tan-mad-salamander-939.mypinata.cloud/ipfs/QmcKiw5EGKYu37pJQ3o7av3iyG9Xz9JKFsP1suRACgwrTz" alt="Logo" width="200" height="">
   </a>
 
-  <h3 align="center">APTUNES</h3>
+  <h1 align="center">APTUNES</h1>
 
   <p align="center">
   Join the Symphony of Decentralization: Aptunes, Where Music Finds Freedom
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">Visit Website</a>
+    <a href="https://team22-client.vercel.app/">Visit Website</a>
     
   </p>
 </div>
@@ -79,7 +72,7 @@
 
 <div align="center">
  <a href="">
-    <img src="https://tan-mad-salamander-939.mypinata.cloud/ipfs/QmNRghQ8tM12A7hLXTBU1dShgaNAhCQ4vgMHVmsThQNZ6s" alt="Logo" width="400" height="200">
+    <img src="https://tan-mad-salamander-939.mypinata.cloud/ipfs/QmNRghQ8tM12A7hLXTBU1dShgaNAhCQ4vgMHVmsThQNZ6s" alt="Logo" width="800" height="400">
   </a>
 </div>
 

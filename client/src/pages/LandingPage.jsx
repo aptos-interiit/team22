@@ -1,30 +1,26 @@
 import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
 import React, {useContext, useState} from "react";
 import { dataContext } from "../Context/dataContext";
-import { Network, Provider } from "aptos";
+
 import axios from "axios";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { useNavigate } from "react-router";
+
 import { FetchUser } from "../helpers/FetchUser";
 
-export const provider = new Provider(Network.DEVNET);
 
 const JWT = process.env.REACT_APP_JWT;
 
-const addre =process.env.REACT_APP_MODULE_ADDRESS;
-const res_acc = process.env.REACT_APP_RESOURCE_ACCOUNT;
 
 function LandingPage() {
     const [showModal, setShowModal] = useState(false);
-    const {account, setUser, setUserSongs, setLoad} = useContext(dataContext);
-    const [profilePic, setProfilePic] = useState(false);
-    const [coverHash, setCoverHash] = useState();
+    const {addre, res_acc, provider, account, setUser, setUserSongs, setLoad} = useContext(dataContext);
+    const [profilePic, setProfilePic] = useState(false);    
     const [transactionInProgress, setTransactionInProgress] = useState(0);
     const { signAndSubmitTransaction } = useWallet();
     const [username, setUsername] = useState();
     const [location, setLocation] = useState();
     const [description, setDescription] = useState();
-    const navigate = useNavigate();
+    
     const {setTransact, transact} = useContext(dataContext)
 
     const handleAdd = async (IpfsHash) => {
@@ -103,8 +99,7 @@ function LandingPage() {
           });
           console.log(res.data);
           const {IpfsHash} = res.data
-          console.log(IpfsHash) 
-          setCoverHash(IpfsHash)
+          console.log(IpfsHash)           
           handleAdd(IpfsHash)                
         } catch (error) {
           console.log(error);
@@ -174,7 +169,7 @@ function LandingPage() {
                     </div>
                     <div className="mb-5">
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload your profile picture</label>
-                        <input type="file" id="email" onChange={(e)=>setProfilePic(e.target.files[0])} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="granturismopro" required />
+                        <input type="file" accept="image/png, image/jpeg" id="email" onChange={(e)=>setProfilePic(e.target.files[0])} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="granturismopro" required />
                     </div>
                     <button type="submit" className="mb-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={handleSubmit}>Submit</button>
 

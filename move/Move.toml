@@ -1,0 +1,26 @@
+[package]
+name = "music"
+version = "1.0.0"
+authors = []
+
+[addresses]
+sender='d092ae09a4dc8dd1d352edc5de5a89062ae6eb55bc0c76d5a94e10781368d2b9'
+resource_account = '0xf26abcb81b6c9980c27fc9637ddfbf0bad7e220f3f67d5e940ff2d37391d30ca'
+[dev-addresses]
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-framework"
+[dependencies.AptosToken]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-token"
+[dependencies.AptosStdlib]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-stdlib"
+
+[dependencies.simple_defi]
+local = "simple_defi"
+[dev-dependencies]

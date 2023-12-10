@@ -1,8 +1,10 @@
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { dataContext } from "../Context/dataContext";
 import { FaSearch } from "react-icons/fa";
 import SearchPg from "./SearchPg";
+import RadioCard from "../components/RadioCard";
+import { toast } from "react-toastify";
 
 function YourRadio() {
   const { account, signAndSubmitTransaction } = useWallet();
@@ -34,16 +36,29 @@ function YourRadio() {
   const [radioName, setRadioName] = useState("")
   const [radioDesc, setRadioDesc] = useState("")    
 
+  const bottomRef = useRef(null);
+
   const handleclick = (e, idx, song) => {
     e.preventDefault();
     setAddSongs([...addsongs, song]);              
   }; 
 
   const search = (e) => {
-    e.preventDefault();
+    e.preventDefault();    
     let value = e.target.value;
-    let search = SearchPg(songs, value)   
-    setShowSongs(search)
+    if(value[value.length-1]>='A' && value[value.length-1] <= 'Z'){
+      let search = SearchPg(songs, value)   
+      setShowSongs(search)
+    }
+    else if(value[value.length-1]>='a' && value[value.length-1] <= 'z'){
+      let search = SearchPg(songs, value)   
+      setShowSongs(search)
+    }
+    else if(value === ""){
+      let search = SearchPg(songs, value)   
+      setShowSongs(search)
+    }
+
   }
 
   const remove = (e, idx, song) => {
@@ -61,9 +76,12 @@ function YourRadio() {
       setShow("block");
     } else {
       setShow("hidden");
-    }
-    console.log(addsongs);
+    }    
   };
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+  },[show])
 
   const addradio = async () => {
     if (!account) return;
@@ -73,6 +91,19 @@ function YourRadio() {
       arr.push(addsongs[i].id);
     }
     console.log(arr);
+    if(radioName === "" || radioDesc === ""){
+      toast.error(`Fields cant be empty`, {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+    return;
+    }
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -345,7 +376,7 @@ function YourRadio() {
                       <button
                         type="button"
                         onClick={() => handleRadioCalculations(userradio)}
-                        className="ml-auto max-h-[100px] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        className="ml-auto max-h-[80px] text-black bg-white hover:bg-white focus:ring-4 focus:ring-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white"
                       >
                         Play Radio
                       </button>
@@ -354,20 +385,20 @@ function YourRadio() {
                       <button
                         type="button"
                         onClick={(e) => handleDelete(e, radioid)}
-                        className="text-white max-h-[100px] bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800"
+                        className="text-white max-h-[80px] bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800"
                       >
-                        Delete
+                        Delete Radio
                       </button>
                     </div>
                     <hr/>
                     <div className="flex p-8">
-                      <div>
+                      <div className="w-4/5">
                       <p className="text-3xl text-white">Songs:</p>
                       <br/>
                         {userradio.songs.map((it2, id2) => {
                           return (
-                            <p className="text-white text-xl" key={id2}>
-                              {id2}. {it2.title}
+                            <p className="text-white text-xl p-3 bg-gray-900 mt-3 rounded-lg" key={id2}>
+                              {id2}. {it2.title} - {it2.owner_name}
                             </p>
                           );
                         })}
@@ -384,7 +415,7 @@ function YourRadio() {
                             <button
                           type="button"
                           onClick={(e) => handleDisable(e, true)}
-                          className="mt-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-radio-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                          className="ml-auto max-h-[100px] text-black bg-white hover:bg-white focus:ring-4 focus:ring-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white"
                         >
                           Enable Radio
                         </button>
@@ -394,7 +425,7 @@ function YourRadio() {
                         <button
                           type="button"
                           onClick={toggleClick}
-                          className="mt-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                          className="mt-auto max-h-[100px] text-black bg-white hover:bg-white focus:ring-4 focus:ring-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white"
                         >
                           Add Songs
                         </button>
@@ -407,7 +438,7 @@ function YourRadio() {
                 <div className="w-2/5">
                 <p className={`${show} text-4xl ml-auto mr-auto mb-10 text-white`}>Choose Songs</p>
                 <div                
-                    className={` flex flex-col ${show} rounded-lg h-96 border pt-5 pb-5`}
+                    className={` flex flex-col ${show} rounded-lg h-[850px] border pt-5 pb-5`}
                   >
                     
                     <div className="flex flex-col h-full w-full justify-center gap-5 mb-5 content-center">
@@ -425,13 +456,14 @@ function YourRadio() {
                         return (
                           <div
                             key={i}
-                            id={`${i}`}
-                            className="bg-gray-900 w-2/5 shadow-lg rounded select-none hover:cursor-pointer mb-3"
+                            id={`${i}`}    
+                            className="hover:cursor-pointer mb-10"                        
                             onClick={(e) => handleclick(e, i, it)}
                           >
-                            <div className="p-3">
+                            <RadioCard bg={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${it.coverIpfs}`} owner={it.title} artistName={it.owner_name}/>
+                            {/* <div className="p-3">
                               <h3 className="text-white text-lg">{it.title}</h3>
-                            </div>
+                            </div> */}
                           </div>
                         );
                       })}
@@ -446,19 +478,17 @@ function YourRadio() {
                    Songs To Add
                   </p>
                   <div
-                    className={` flex flex-col ${show} rounded-lg overflow-scroll h-96 border pt-5 pb-5`}
+                    className={` flex flex-col ${show} rounded-lg  overflow-scroll h-[850px] border pt-5 pb-5`}
                   >
                     <div className={`flex flex-wrap justify-around`}>
                       {addsongs.map((it, i) => {
                         return (
                           <div
-                            key={i}
-                            className="bg-gray-900 w-2/5 shadow-lg rounded p-1 select-none hover:cursor-pointer mb-3"
+                            key={i}   
+                            className="mb-10 hover:cursor-pointer"                         
                             onClick={(e) => remove(e, i, it)}
                           >
-                            <div className="p-5">
-                              <h3 className="text-white text-lg">{it.title}</h3>
-                            </div>
+                            <RadioCard bg={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${it.coverIpfs}`} owner={`${i+1}. ${it.title}`} artistName={it.owner_name}/>
                           </div>
                         );
                       })}
@@ -498,7 +528,7 @@ function YourRadio() {
                     <div className="w-2/5">
                   <p className={`${show} text-4xl ml-auto mr-auto mb-10`}>Choose Songs</p>
                   <div                
-                    className={` flex flex-col ${show} rounded-lg h-96 border pt-5 pb-5`}
+                    className={` flex flex-col ${show} rounded-lg h-[850px] border pt-5 pb-5`}
                   >
                     
                     <div className="flex flex-col h-full w-full justify-center gap-5 mb-5 content-center">
@@ -516,13 +546,11 @@ function YourRadio() {
                         return (
                           <div
                             key={i}
-                            id={`${i}`}
-                            className="bg-gray-900 w-2/5 shadow-lg rounded p-1 select-none hover:cursor-pointer mb-3"
+                            id={`${i}`} 
+                            className="hover:cursor-pointer mb-10"                           
                             onClick={(e) => handleclick(e, i, it)}
                           >
-                            <div className="p-5">
-                              <h3 className="text-white text-lg">{it.title}</h3>
-                            </div>
+                            <RadioCard bg={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${it.coverIpfs}`} owner={`${it.title}`} artistName={it.owner_name}/>
                           </div>
                         );
                       })}
@@ -537,19 +565,17 @@ function YourRadio() {
                    Songs To Add
                   </p>
                   <div
-                    className={` flex flex-col ${show} rounded-lg overflow-scroll h-96 border pt-5 pb-5`}
+                    className={` flex flex-col ${show} rounded-lg overflow-scroll h-[850px] border pt-5 pb-5`}
                   >
                     <div className={`flex flex-wrap justify-around`}>
                       {addsongs.map((it, i) => {
                         return (
                           <div
                             key={i}
-                            className="bg-gray-900 w-2/5 shadow-lg rounded p-1 select-none hover:cursor-pointer mb-3"
+                            className="mb-10 hover:cursor-pointer"
                             onClick={(e) => remove(e, i, it)}
                           >
-                            <div className="p-5">
-                              <h3 className="text-white text-lg">{it.title}</h3>
-                            </div>
+                            <RadioCard bg={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${it.coverIpfs}`} owner={`${i+1}. ${it.title}`} artistName={it.owner_name}/>
                           </div>
                         );
                       })}
@@ -570,6 +596,7 @@ function YourRadio() {
                 </div>
               </>
             )}
+            <div ref={bottomRef}></div>
           </div>          
         </>
       )}

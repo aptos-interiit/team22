@@ -4,7 +4,7 @@ import { dataContext } from "../Context/dataContext";
 
 const addre = process.env.REACT_APP_MODULE_ADDRESS;
 const res_acc = process.env.REACT_APP_RESOURCE_ACCOUNT;
-export const provider = new Provider(Network.DEVNET);
+export const provider = new Provider(Network.TESTNET);
 
 export const FetchUser = async (account) => {
 

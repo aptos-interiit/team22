@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { dataContext } from "../Context/dataContext";
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import { toast } from "react-toastify";
 
 const style = {
   position: 'absolute',
@@ -45,7 +46,18 @@ export default function PlaylistCard({ name, len, id, playlist }) {
       console.log(response);
       setTransact(transact + 1);
       console.log(myPlaylistName);
+      toast.success(`Playlist Deleted`, {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
       await provider.waitForTransaction(response.hash);
+
     } catch (err) {
       console.log(err);
     } finally {
@@ -106,14 +118,15 @@ export default function PlaylistCard({ name, len, id, playlist }) {
             <h1 class="text-lg text-white capitalize">Are you Sure you want to delete your</h1>
             <h1 class="text-lg text-white capitalize">"{name}" playlist ?</h1>
             <form className="mt-5">
-              <button className="px-6 py-2 mx-5 leading-5 text-white transition-colors duration-200 transform bg-red-500 rounded-md focus:outline-none focus:bg-gray-600" onClick={(e)=>{
+            <button className="px-6 py-2 mx-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600" onClick={()=>{
+                handleClose();
+              }}>Cancel</button>
+              <button className="px-6 py-2 mx-2 leading-5 text-white transition-colors duration-200 transform bg-red-500 rounded-md focus:outline-none focus:bg-gray-600" onClick={(e)=>{
                 e.preventDefault();
                 handleDeletePlaylist(name);
                 handleClose();
               }}>Confirm</button>
-              <button className="px-6 py-2 mx-5 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600" onClick={()=>{
-                handleClose();
-              }}>Cancel</button>
+             
             </form>
           </section>
         </Box>
