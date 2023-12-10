@@ -77,7 +77,12 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<div align="center">
+ <a href="">
+    <img src="https://tan-mad-salamander-939.mypinata.cloud/ipfs/QmNRghQ8tM12A7hLXTBU1dShgaNAhCQ4vgMHVmsThQNZ6s" alt="Logo" width="400" height="200">
+  </a>
+</div>
+
 
 Aptunes is a revolutionary decentralized on-chain radio and music platform deployed on the Aptos Blockchain. This innovative platform offers users a unique and decentralized approach to discovering, streaming, and sharing music. By harnessing the power of blockchain technology, Aptunes ensures transparency, security, and fair compensation for artists and content creators.
 Aptunes goes beyond traditional music platforms by introducing a groundbreaking real-time revenue distribution system. Artists on Aptunes experience instant and transparent compensation as listeners engage with their music. Through smart contracts, microtransactions are executed in real-time, ensuring fair and immediate payment to artists. This novel approach not only empowers artists but also transforms the way we appreciate and support music in a decentralized ecosystem.
@@ -116,15 +121,21 @@ Follow the following steps to setup using docker.
 #### Setup Steps
 
 * Clone this repository
-    ```git clone https://github.com/aptos-interiit/team22.git```
+    ```sh
+    git clone https://github.com/aptos-interiit/team22.git
+    ```
 
 * Run your docker daemon.
 
 * Change directory to team22
-    ```cd team22```
+    ```sh
+    cd team22
+    ```
 
 * Run the following command to spin up docker containers.
-    ```docker compose up```
+    ```sh 
+    docker compose up
+    ```
 
 * After successfully creation of containers, the frontend will be on port ```3000```.
 
