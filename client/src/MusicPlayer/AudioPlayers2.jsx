@@ -202,7 +202,7 @@ function AudioPlayer2() {
     }
 
     const sendTransaction = (amount, artName, artAddr, distriArr, timelistened, songId) => {
-        axios.post("http://localhost:4000/user_to_artist", {
+        axios.post("https://server-81e3.onrender.com/user_to_artist", {
             userAddress: account.address,
             artistAddresses: artAddr,
             dist: distriArr,
@@ -230,7 +230,7 @@ function AudioPlayer2() {
     }
 
     const updateTimeListened = async (timelistened, songId) => {
-        axios.post("http://localhost:4000/update_timelistened", {
+        axios.post("https://server-81e3.onrender.com/update_timelistened", {
             songId: songId,
             time: parseInt(timelistened)
         }).then(async (res) => {
