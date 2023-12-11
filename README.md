@@ -38,6 +38,8 @@
     <br />
     <br />
     <a href="https://team22-client.vercel.app/">VISIT WEBSITE</a>
+    <br />
+    <a href="https://github.com/aptos-interiit/team22">GITHUB REPOSITORY</a>
     
   </p>
 </div>
