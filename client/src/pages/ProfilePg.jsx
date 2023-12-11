@@ -147,8 +147,7 @@ const ProfilePg = () => {
             user ? (<>
               <img
           className="rounded-lg w-[200px] h-[200px]"
-          src={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${user.profile_pic}`}/>
-          alt={user.name}
+          src={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${user.profile_pic}`} alt={user.name}/>
             </>):(<></>)
           }        
             {/* ) : (
