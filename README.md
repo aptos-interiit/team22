@@ -286,8 +286,8 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 - [x] Add Wallet Connectivity
 - [x] Add Real-time distribution of revenue generated from listener interactions, tips, or paid content.
 - [x] Add UI that allows listeners to discover, interact, and pay tips to artists.
-- [x] Smart contracts to handle the automated distribution of funds and validate transactions.
-- [x] Community-driven governance model (DAO) for protocol updates and feature additions.
+- [x] Add Smart contracts to handle the automated distribution of funds and validate transactions.
+- [x] Add Community-driven governance model (DAO) for protocol updates and feature additions.
 
 
 <!-- CONTACT -->
