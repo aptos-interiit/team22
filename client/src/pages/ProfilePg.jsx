@@ -30,7 +30,7 @@ const ProfilePg = () => {
       if (!account) return;
       setTransactionInProgress(true);
   
-      console.log(id);
+      // console.log(id);
   
       const payload = {
         sender: `${account.address}`,
@@ -86,9 +86,9 @@ const ProfilePg = () => {
             'Authorization': `Bearer ${JWT}`
           }
         });
-        console.log(res.data);
+        // console.log(res.data);
         const {IpfsHash} = res.data
-        console.log(IpfsHash) 
+        // console.log(IpfsHash) 
         setProfilePicHash(IpfsHash)  
         handleEditAndTransaction(IpfsHash)          
       } catch (error) {
@@ -112,7 +112,7 @@ const ProfilePg = () => {
   
       try {
         const response = await signAndSubmitTransaction(payload);
-        console.log("user updated");
+        // console.log("user updated");
         window.location.href = "/";
         await provider.waitForTransaction(response.hash);
       } catch (err) {

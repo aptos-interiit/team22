@@ -39,7 +39,7 @@ function LandingPage() {
     
         try {
           const response = await signAndSubmitTransaction(payload);
-          console.log("user added");
+          // console.log("user added");
           await provider.waitForTransaction(response.hash);
           handleInitialReg();
         } catch (err) {
@@ -65,7 +65,7 @@ function LandingPage() {
     
         try {
           const response = await signAndSubmitTransaction(payload);
-          console.log("registered too");
+          // console.log("registered too");
           setTransact(transact+1)
           window.location.href = "/dashboard"
           await provider.waitForTransaction(response.hash);
@@ -97,9 +97,9 @@ function LandingPage() {
               'Authorization': `Bearer ${JWT}`
             }
           });
-          console.log(res.data);
+          // console.log(res.data);
           const {IpfsHash} = res.data
-          console.log(IpfsHash)           
+          // console.log(IpfsHash)           
           handleAdd(IpfsHash)                
         } catch (error) {
           console.log(error);
@@ -111,7 +111,7 @@ function LandingPage() {
     const handleAddUser = async () => {
         // if(user === null) setShowModal(true);
         setShowModal(true);
-        console.log(account)
+        // console.log(account)
     }
 
     const handleSubmit = async (e) => {
@@ -121,7 +121,7 @@ function LandingPage() {
             setShowModal(false);
             try {
                 const usery = await FetchUser(account);
-                console.log(usery);
+                // console.log(usery);
                 setUser(usery);
                 setUserSongs(usery.songs);
               } catch (error) {

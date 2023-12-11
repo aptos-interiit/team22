@@ -6,7 +6,7 @@ import play_icon from "../MusicPlayer/assets/playBtn.png"
 export default function TopArtistsCard({artistFullInfo}) {
     const {artistAndTheirSongs}=useContext(dataContext)
     useEffect(()=>{
-        console.log(artistFullInfo);
+        // console.log(artistFullInfo);
     }, [artistAndTheirSongs])
   return (
    <Link to="/artistSongsSpace" state={{ data: artistFullInfo }} className=" w-[23vh] h-[90%] mr-5 mt-3 mb-3 hover:bg-black hover:shadow-md hover:shadow-black rounded-md hover:ease-in hover:scale-105">

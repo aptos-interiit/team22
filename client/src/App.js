@@ -103,7 +103,7 @@ function App() {
 
     try {
       const response = await signAndSubmitTransaction(payload);
-      console.log("user added");
+      // console.log("user added");
       await provider.waitForTransaction(response.hash);
       handleInitialReg();
     } catch (err) {
@@ -143,7 +143,7 @@ function App() {
 
     try {
       const response = await signAndSubmitTransaction(payload);
-      console.log("Paise sent");
+      // console.log("Paise sent");
       await provider.waitForTransaction(response.hash);
 
       toast.success(`Thank you for contributing!!!`, {
@@ -183,7 +183,7 @@ function App() {
 
     try {
       const response = await signAndSubmitTransaction(payload);
-      console.log("registered too");
+      // console.log("registered too");
       setTransact(transact + 1)
       await provider.waitForTransaction(response.hash);
     } catch (err) {
@@ -234,11 +234,11 @@ function App() {
         `${addre}`,
         `${addre}::music_platform::All_songs`
       );
-      console.log(todoListResource);
+      // console.log(todoListResource);
       const tableHandle = todoListResource.data.content.handle;
       let songsx = songs;
-      console.log("songsx", songsx);
-      console.log("songsx", songsx);
+      // console.log("songsx", songsx);
+      // console.log("songsx", songsx);
       let len = todoListResource.data.all_indexes.length
 
       for (let i = 0; i < len; i++) {
@@ -250,7 +250,7 @@ function App() {
         try {
           const song = await provider.getTableItem(tableHandle, tableItem);
           if (songsx.some((e) => e.IpfsHash !== song.IpfsHash)) {
-            console.log("Already exists");
+            // console.log("Already exists");
             continue;
           }
           songsx.push(song);
@@ -258,12 +258,12 @@ function App() {
           console.log(err);
         }
       }
-      console.log("all songs", songs);
+      // console.log("all songs", songs);
       let x = songs.toSorted((b, a) => parseInt(a.timestamp - b.timestamp));
       let y = songs.toSorted((b, a) => parseInt(a.timeListened - b.timeListened));
 
-      console.log("trending songs", y);
-      console.log("latest songs", x);
+      // console.log("trending songs", y);
+      // console.log("latest songs", x);
       setLatestSong(x.slice(0, 5));
       setTrendingSong(y.slice(0, 5));
       setSongs(x);
@@ -276,7 +276,7 @@ function App() {
       if (!account) return;
       try {
         const usery = await FetchUser(account);
-        console.log(usery);
+        // console.log(usery);
         setUser(usery);
         setUserSongs(usery.songs);
       } catch (error) {
@@ -319,8 +319,8 @@ function App() {
   }, [load, user]);
 
   useEffect(() => {
-    console.log("myplaylist from App.jsx", myPlaylists);
-    console.log("myplaylistname from App.jsx", myPlaylistName);
+    // console.log("myplaylist from App.jsx", myPlaylists);
+    // console.log("myplaylistname from App.jsx", myPlaylistName);
   }, [myPlaylists]);
 
   useEffect(() => {
@@ -349,7 +349,7 @@ function App() {
         let info = await FetchUserFromAddress(Object.keys(temp)[i]);
         artistInfo.push(info);
       }
-      console.log("artist info", artistInfo);
+      // console.log("artist info", artistInfo);
       setArtistsAndTheirSongs(artistInfo);
     })();
 
@@ -357,7 +357,7 @@ function App() {
   }, [load, user]);
 
   useEffect(() => {
-    console.log("artists and their songs", artistsAndTheirSongs);
+    // console.log("artists and their songs", artistsAndTheirSongs);
   }, [artistsAndTheirSongs])
 
   return (

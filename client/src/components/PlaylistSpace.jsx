@@ -37,9 +37,9 @@ export default function PlaylistSpace(props) {
   useEffect(() => {
     let timelength = 0;
 
-    console.log(passedData);
+    // console.log(passedData);
     passedData.data.map((it, i) => {
-      console.log(it);
+      // console.log(it);
       timelength += parseFloat(it.duration)
     })
     setTimelength(parseInt(timelength / 60))

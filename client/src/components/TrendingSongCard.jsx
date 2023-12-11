@@ -87,7 +87,7 @@ export default function TrendingSongCard({
 
     try {
       const response = await signAndSubmitTransaction(payload);
-      console.log("song added to playlist");
+      // console.log("song added to playlist");
       await provider.waitForTransaction(response.hash);
       setTransact(transact+1)
     } catch (err) {
@@ -106,7 +106,7 @@ export default function TrendingSongCard({
     }
 
     let likeSongs = user.playlists[0].songs;
-    console.log(likeSongs);
+    // console.log(likeSongs);
     let flag = false;
     for (let i = 0; i < likeSongs.length; i++) {
       if (likeSongs[i] === songID) {
@@ -128,7 +128,7 @@ export default function TrendingSongCard({
 
       try {
         const response = await signAndSubmitTransaction(payload);
-        console.log("song removed from Liked Song Playlist");
+        // console.log("song removed from Liked Song Playlist");
         await provider.waitForTransaction(response.hash);
         setLiked(false);
         setTransact(transact+1);
@@ -151,7 +151,7 @@ export default function TrendingSongCard({
 
       try {
         const response = await signAndSubmitTransaction(payload);
-        console.log("song liked and added to Liked Song Playlist");
+        // console.log("song liked and added to Liked Song Playlist");
         await provider.waitForTransaction(response.hash);
         setLiked(true);        
         setTransact(transact+1);

@@ -24,11 +24,11 @@ function UserPage() {
       `${addre}`,
       `${addre}::music_platform::All_songs`
     );
-    console.log(todoListResource);
+    // console.log(todoListResource);
     const tableHandle = todoListResource.data.content.handle;
     let songsx = [];
 
-    console.log("songsx", songsx);
+    // console.log("songsx", songsx);
     for (let i = 0; i < ids.length; i++) {
       const tableItem = {
         key_type: "u64",
@@ -37,9 +37,9 @@ function UserPage() {
       };
       try {
         const song = await provider.getTableItem(tableHandle, tableItem);
-        console.log(song);
+        // console.log(song);
         if (songsx.some((e) => e.IpfsHash !== song.IpfsHash)) {
-          console.log("Already exists");
+          // console.log("Already exists");
           continue;
         }
         songsx.push(song);
@@ -50,7 +50,7 @@ function UserPage() {
     let radio = {"title": title, songs: songsx};
     return radio;
     setHashArray(songsx)
-    console.log(hashArray)
+    // console.log(hashArray)
     // return songsx;
   }
   
@@ -62,7 +62,7 @@ function UserPage() {
           `${addre}`,
           `${addre}::music_platform::All_radios`
         );
-        console.log(todoListResource);
+        // console.log(todoListResource);
         const tableHandle = todoListResource.data.content.handle;
         let radiosx = [];
         
@@ -74,18 +74,18 @@ function UserPage() {
           };
           try {
             const radio = await provider.getTableItem(tableHandle, tableItem);
-            console.log(radio);
+            // console.log(radio);
             let arr = radio.songs;
             let object = await getIpfsObject(arr, radio.title);
-            console.log(object)
+            // console.log(object)
             radiosx.push(object);
           } catch (err) {
             console.log(err);
           }
         }
         setRadios(radiosx)
-        console.log(radiosx);
-        console.log(hashArray)
+        // console.log(radiosx);
+        // console.log(hashArray)
       })();
       
     }, [account]);
@@ -93,7 +93,7 @@ function UserPage() {
   const handleDel = async (id) => {
     if (!account) return;
 
-    console.log(id);
+    // console.log(id);
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -119,7 +119,7 @@ function UserPage() {
     } else {
       setShow("hidden");
     }
-    console.log(addsongs)
+    // console.log(addsongs)
   }
 
   const addradio = async () => {
@@ -137,8 +137,8 @@ function UserPage() {
 
     try {
       const response = await signAndSubmitTransaction(payload);
-      console.log("added");
-      console.log(response)
+      // console.log("added");
+      // console.log(response)
       await provider.waitForTransaction(response.hash);
       
     } catch (err) {
@@ -182,9 +182,9 @@ function UserPage() {
   };
   const handleSave = async (e) => {
     e.preventDefault();
-    console.log(e.target.profile_name.value);
-    console.log(e.target.profile_type.value);
-    console.log(e.target.profile_location.value);
+    // console.log(e.target.profile_name.value);
+    // console.log(e.target.profile_type.value);
+    // console.log(e.target.profile_location.value);
   };
 
   const handleRadioCalculations = async (radio) => {
@@ -199,15 +199,15 @@ function UserPage() {
       songs.push(it);
       duration.push(parseInt(it.duration))
     })
-    console.log(duration)
+    // console.log(duration)
     let prefix_array = [];
     prefix_array.push(duration[0]);
     for(let i = 1; i < duration.length; i++) {
       prefix_array.push(parseInt(prefix_array[prefix_array.length - 1]) + duration[i]);
     }
-    console.log(prefix_array)
+    // console.log(prefix_array)
     const timestamp = totalSeconds % prefix_array[prefix_array.length - 1];
-    console.log(totalSeconds % prefix_array[prefix_array.length - 1]);
+    // console.log(totalSeconds % prefix_array[prefix_array.length - 1]);
     let usedUpTime;
     let index;
     for(let i = 0; i < prefix_array.length; i++) {
@@ -221,15 +221,15 @@ function UserPage() {
         break;
       } 
     }
-    console.log({index, usedUpTime});
-    console.log(songs)
+    // console.log({index, usedUpTime});
+    // console.log(songs)
     setTrackid(index);
     setCurrent(songs);
     setUsedUpTime(usedUpTime);
     setIsRadio(1)    
-    // console.log({hours, minutes, seconds})
-    // console.log(scaleTimeToRange(hours, minutes, seconds, 24, 0.00000000005, prefix_array[prefix_array.length - 1]))
-    console.log(radio)
+    // // console.log({hours, minutes, seconds})
+    // // console.log(scaleTimeToRange(hours, minutes, seconds, 24, 0.00000000005, prefix_array[prefix_array.length - 1]))
+    // console.log(radio)
   }
 
 
@@ -379,7 +379,7 @@ function UserPage() {
         <div>
         {radios && radios.map((it, i) => {
           // const arr = it.songs
-          // console.log(it.songs) 
+          // // console.log(it.songs) 
           // getIpfsArray(arr);
                 return (
                   <div

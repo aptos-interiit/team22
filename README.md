@@ -77,7 +77,7 @@
 </div>
 
 
-Aptunes is a revolutionary decentralized on-chain radio and music platform deployed on the Aptos Blockchain. This innovative platform offers users a unique and decentralized approach to discovering, streaming, and sharing music. By harnessing the power of blockchain technology, Aptunes ensures transparency, security, and fair compensation for artists and content creators.
+Aptunes is a revolutionary decentralized on-chain radio and music platform deployed on the Aptos Blockchain. This innovative platform offers users a unique and decentralized approach to discovering and streaming music. By harnessing the power of blockchain technology, Aptunes ensures transparency, security, and fair compensation for artists and content creators.
 Aptunes goes beyond traditional music platforms by introducing a groundbreaking real-time revenue distribution system. Artists on Aptunes experience instant and transparent compensation as listeners engage with their music. Through smart contracts, microtransactions are executed in real-time, ensuring fair and immediate payment to artists. This novel approach not only empowers artists but also transforms the way we appreciate and support music in a decentralized ecosystem.
 
 Join Aptunes on its mission to reshape the music industry, providing artists and listeners alike with a fair, transparent, and community-driven platform.
@@ -124,6 +124,28 @@ Follow the following steps to setup using docker.
     ```sh
     cd team22
     ```
+* Make .env files in server and client folders.
+  ```sh
+  touch ./client/.env && touch ./server/.env
+  ```
+
+* Add following in ```./client/.env```.
+  ```sh
+  REACT_APP_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJhZTVlYWJkOS0zMjg4LTQ5OWUtYTAyMy05MWZmNzA5MTI2MzEiLCJlbWFpbCI6InNhcnRoYWsubmFuZHJlMzFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siaWQiOiJGUkExIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9LHsiaWQiOiJOWUMxIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6ImQzMjgxYTY0ZGU2YTgxMjljNzhjIiwic2NvcGVkS2V5U2VjcmV0IjoiM2QwMTEwMDE0MWU4YzMzZTA1MzJlNTdkZWQ0ODE0ZDUwYjhkMDlkZDE0ODhiY2I4M2RiOWY0MjNhYjc4ZTMwNiIsImlhdCI6MTY5OTYyNjg4MH0.5Jvi8BBOrdX5cDFRk6KIoR3FZv0sObmOJMB2oiO-uMI
+  REACT_APP_MODULE_ADDRESS=0xd092ae09a4dc8dd1d352edc5de5a89062ae6eb55bc0c76d5a94e10781368d2b9
+  REACT_APP_RESOURCE_ACCOUNT=0xf26abcb81b6c9980c27fc9637ddfbf0bad7e220f3f67d5e940ff2d37391d30ca
+  REACT_APP_DAO_ADDRESS=0xc61b28c1536b6a24ec4dd25faf792089925b9d33e075b187a89e3d5293892766
+  REACT_APP_SERVER_ADDRESS=http://localhost:4000
+  ```
+
+* Add following in ```./server/.env```.
+
+  ```sh
+  PRIVATE_KEY=0x6f2ad8728fb57391d2e8222a97bb5be7b2294044afc824c8bbe40840259fa702
+  MODULE_ADDRESS=0xd092ae09a4dc8dd1d352edc5de5a89062ae6eb55bc0c76d5a94e10781368d2b9
+  ```
+
+* Now make sure that you are in the root directory of this project.
 
 * Run the following command to spin up docker containers.
     ```sh 
@@ -135,26 +157,104 @@ Follow the following steps to setup using docker.
 * Visit http://localhost:3000.
 
 
+### Setup without using Docker
 
-### Installation
+Follow the following steps to setup without using docker.
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+#### Pre Requisites
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+* Install [Node ^20](https://nodejs.org/en/download) on your system.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+#### Setup Steps
+
+* Clone this repository
+    ```sh
+    git clone https://github.com/aptos-interiit/team22.git
+    ```
+
+* Change directory to team22
+    ```sh
+    cd team22
+    ```
+
+* Make .env files in server and client folders.
+  ```sh
+  touch ./client/.env && touch ./server/.env
+  ```
+
+* Add following in ```./client/.env```.
+  ```sh
+  REACT_APP_JWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJhZTVlYWJkOS0zMjg4LTQ5OWUtYTAyMy05MWZmNzA5MTI2MzEiLCJlbWFpbCI6InNhcnRoYWsubmFuZHJlMzFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siaWQiOiJGUkExIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9LHsiaWQiOiJOWUMxIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6ImQzMjgxYTY0ZGU2YTgxMjljNzhjIiwic2NvcGVkS2V5U2VjcmV0IjoiM2QwMTEwMDE0MWU4YzMzZTA1MzJlNTdkZWQ0ODE0ZDUwYjhkMDlkZDE0ODhiY2I4M2RiOWY0MjNhYjc4ZTMwNiIsImlhdCI6MTY5OTYyNjg4MH0.5Jvi8BBOrdX5cDFRk6KIoR3FZv0sObmOJMB2oiO-uMI
+  REACT_APP_MODULE_ADDRESS=0xd092ae09a4dc8dd1d352edc5de5a89062ae6eb55bc0c76d5a94e10781368d2b9
+  REACT_APP_RESOURCE_ACCOUNT=0xf26abcb81b6c9980c27fc9637ddfbf0bad7e220f3f67d5e940ff2d37391d30ca
+  REACT_APP_DAO_ADDRESS=0xc61b28c1536b6a24ec4dd25faf792089925b9d33e075b187a89e3d5293892766
+  REACT_APP_SERVER_ADDRESS=http://localhost:4000
+  ```
+
+* Add following in ```./server/.env```.
+
+  ```sh
+  PRIVATE_KEY=0x6f2ad8728fb57391d2e8222a97bb5be7b2294044afc824c8bbe40840259fa702
+  MODULE_ADDRESS=0xd092ae09a4dc8dd1d352edc5de5a89062ae6eb55bc0c76d5a94e10781368d2b9
+  ```
+
+* Change directory to ```client```.
+
+  ```sh
+  cd client
+  ```
+
+* Install all client dependencies.
+  ```sh
+  npm install
+  ```
+
+  * If any error occurs, try running above with root permissions.
+
+* Spin up the developmental client side.
+
+  ```sh
+  npm start
+  ```
+
+* Client side is now running on ```http://localhost:3000```.
+
+* Change directory to ```server```.
+
+  ```sh
+  cd ../server
+  ```
+
+* Install all client dependencies.
+  ```sh
+  npm install
+  ```
+
+  * If any error occurs, try running above with root permissions.
+
+
+* Install nodemon globally.
+
+  ```sh
+  npm install -g nodemon
+  ```
+
+* Spin up the developmental server side.
+
+  ```sh
+  nodemon server.js
+  ```
+
+  * If above command doesn't work, use this instead.
+
+    ```sh
+    node server.js
+    ```
+
+* Server side is now running on ```http://localhost:4000```.
+
+* Visit http://localhost:3000.
+
 
 
 

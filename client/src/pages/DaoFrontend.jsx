@@ -51,13 +51,13 @@ function DaoFrontend() {
           `${dao_addr}`,
           `${moduleAddress}::nft_dao::DAO`
         );
-        console.log(resource.data.proposals);
-        console.log(resource2.data);
+        // console.log(resource.data.proposals);
+        // console.log(resource2.data);
         const tableHandle = resource.data.proposals.handle;
         let prop = [];
         let pending = [], passed = [], failed = [];
 
-        // console.log(/tableHandle);
+        // // console.log(/tableHandle);
         
         for (let i = 1; i <= resource2.data.next_proposal_id; i++) {
           const tableItem = {
@@ -77,7 +77,7 @@ function DaoFrontend() {
             else if(proposal.resolution === 2 || proposal.resolution === 4){
                 failed.push(proposal);
             }
-            console.log(proposal);
+            // console.log(proposal);
           } catch (err) {
             console.log(err);
           }
@@ -93,7 +93,7 @@ function DaoFrontend() {
     
     const getNFT = async (e) => {
         e.preventDefault();
-        console.log("getNFT");
+        // console.log("getNFT");
         if (!account) return [];
         // build a transaction payload to be submited
         const payload = {
@@ -104,11 +104,11 @@ function DaoFrontend() {
             functionArguments: [],
           },
         };
-        console.log(payload)
+        // console.log(payload)
         try {
           // sign and submit transaction to chain
           const response = await signAndSubmitTransaction(payload);
-          console.log(response);
+          // console.log(response);
           // wait for transaction
           await provider.waitForTransaction(response.hash);
           setAccountHasList(true);
@@ -133,7 +133,7 @@ function DaoFrontend() {
      };
 
       const createProposal = async (e) => {
-        console.log(proposalAttributes.title+" "+proposalAttributes.description+" "+proposalAttributes.startTime+" "+proposalAttributes.proposalId+" "+proposalAttributes.songId+" "+proposalAttributes.artist)
+        // console.log(proposalAttributes.title+" "+proposalAttributes.description+" "+proposalAttributes.startTime+" "+proposalAttributes.proposalId+" "+proposalAttributes.songId+" "+proposalAttributes.artist)
         e.preventDefault();
         if (!account) return [];
         // build a transaction payload to be submited
@@ -156,10 +156,10 @@ function DaoFrontend() {
         try {
           // sign and submit transaction to chain
           const response = await signAndSubmitTransaction(payload);
-          console.log(response);
+          // console.log(response);
           // wait for transaction
           await provider.waitForTransaction(response.hash);
-          console.log("done");
+          // console.log("done");
           setAccountHasList(true);
         } catch (error) {
           setAccountHasList(false);
@@ -187,7 +187,7 @@ function DaoFrontend() {
         try {
           // sign and submit transaction to chain
           const response = await signAndSubmitTransaction(payload);
-          console.log(response);
+          // console.log(response);
           // wait for transaction
           await provider.waitForTransaction(response.hash);
           setAccountHasList(true);
@@ -214,7 +214,7 @@ function DaoFrontend() {
         try {
           // sign and submit transaction to chain
           const response = await signAndSubmitTransaction(payload);
-          console.log(response);
+          // console.log(response);
           // wait for transaction
           await provider.waitForTransaction(response.hash);
           setAccountHasList(true);

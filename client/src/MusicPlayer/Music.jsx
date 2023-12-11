@@ -72,7 +72,7 @@ const Music = ({
   }
 
   useEffect(() => {
-    console.log(radio);
+    // console.log(radio);
   }, [radio])
 
   return (

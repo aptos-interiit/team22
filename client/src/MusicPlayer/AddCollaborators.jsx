@@ -57,7 +57,7 @@ function AddCollaborators({
       x[0].Split = 100 - sum;
       setFormFields(x);
       setRemainingSplit(100 - sum);
-      console.log(formFields);
+      // console.log(formFields);
     } else {
       alert("Split should be 100%");
     }

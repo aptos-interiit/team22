@@ -8,7 +8,7 @@ function AddCollaborators({
 }) {  
   const handleFormChange = (event, index) => {
     let data = [...formFields];
-    console.log(data);
+    // console.log(data);
     data[index][event.target.name] = event.target.value;
     if (event.target.name === "Split") {
       let sum = 0;

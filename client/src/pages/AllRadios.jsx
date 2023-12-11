@@ -19,7 +19,7 @@ function AllRadios() {
     const tableHandle = todoListResource.data.content.handle;
     let songsx = [];
 
-    console.log("songsx", songsx);
+    // console.log("songsx", songsx);
     for (let i = 0; i < ids.length; i++) {
       const tableItem = {
         key_type: "u64",
@@ -29,7 +29,7 @@ function AllRadios() {
       try {
         const song = await provider.getTableItem(tableHandle, tableItem);
         if (songsx.some((e) => e.IpfsHash !== song.IpfsHash)) {
-          console.log("Already exists");
+          // console.log("Already exists");
           continue;
         }
         songsx.push(song);
@@ -56,7 +56,7 @@ function AllRadios() {
       songs.push(it);
       duration.push(parseInt(it.duration));
     });
-    console.log(duration);
+    // console.log(duration);
     let prefix_array = [];
     prefix_array.push(duration[0]);
     for (let i = 1; i < duration.length; i++) {
@@ -64,9 +64,9 @@ function AllRadios() {
         parseInt(prefix_array[prefix_array.length - 1]) + duration[i]
       );
     }
-    console.log(prefix_array);
+    // console.log(prefix_array);
     const timestamp = totalSeconds % prefix_array[prefix_array.length - 1];
-    console.log(totalSeconds % prefix_array[prefix_array.length - 1]);
+    // console.log(totalSeconds % prefix_array[prefix_array.length - 1]);
     let usedUpTime;
     let index;
     for (let i = 0; i < prefix_array.length; i++) {
@@ -80,9 +80,9 @@ function AllRadios() {
         break;
       }
     }
-    console.log(totalSeconds);
-    console.log({ index, usedUpTime });
-    console.log(songs);
+    // console.log(totalSeconds);
+    // console.log({ index, usedUpTime });
+    // console.log(songs);
     setTrackid(index);
     setCurrent(songs);
     setUsedUpTime(usedUpTime);
@@ -97,8 +97,8 @@ function AllRadios() {
       setDistri(songs[index].distri)
     }
     // s.log({hours, minutes, seconds})
-    // console.log(scaleTimeToRange(hours, minutes, seconds, 24, 0.00000000005, prefix_array[prefix_array.length - 1]))
-    console.log(radioz);
+    // // console.log(scaleTimeToRange(hours, minutes, seconds, 24, 0.00000000005, prefix_array[prefix_array.length - 1]))
+    // console.log(radioz);
   };
 
   useEffect(() => {
@@ -110,7 +110,7 @@ function AllRadios() {
         `${addre}`,
         `${addre}::music_platform::All_radios`
       );
-      console.log(todoListResource);
+      // console.log(todoListResource);
       let allradiosx = [];
       let radioidsx = []
       const tableHandle = todoListResource.data.content.handle;
@@ -123,7 +123,7 @@ function AllRadios() {
         try {
           const radiox = await provider.getTableItem(tableHandle, tableItem);
           if(!radiox.is_active) continue;
-          console.log(radiox);
+          // console.log(radiox);
           // let arr = radio.songs;
           // let object = await getIpfsObject(arr, radio.title, radio.description);                        
           radioidsx.push(todoListResource.data.all_indexes[i])

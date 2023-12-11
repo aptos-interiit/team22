@@ -12,7 +12,7 @@ export default function ArtistSongsSpace(props) {
 
   useEffect(() => {
     
-    console.log(passedData.data);
+    // console.log(passedData.data);
   }, [])
 
   return (

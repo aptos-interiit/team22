@@ -42,10 +42,10 @@ export default function PlaylistCard({ name, len, id, playlist }) {
     };
     try {
       const response = await signAndSubmitTransaction(payload);
-      console.log("playlist deleted");
-      console.log(response);
+      // console.log("playlist deleted");
+      // console.log(response);
       setTransact(transact + 1);
-      console.log(myPlaylistName);
+      // console.log(myPlaylistName);
       toast.success(`Playlist Deleted`, {
         position: "top-left",
         autoClose: 5000,

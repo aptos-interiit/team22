@@ -12,7 +12,7 @@ export const FetchUser = async (account) => {
       `${addre}`,
       `${addre}::music_platform::Address_to_artist`
     );
-    console.log(resource);
+    // console.log(resource);
     const tableHandle = resource.data.content.handle;
 
     const tableItem = {

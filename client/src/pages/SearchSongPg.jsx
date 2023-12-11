@@ -16,7 +16,7 @@ function SearchSongPg() {
     if (!account) return;
     setTransactionInProgress(true);
     
-    console.log(id);
+    // console.log(id);
     
     const payload = {
       sender: `${account.address}`,

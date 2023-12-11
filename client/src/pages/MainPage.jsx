@@ -52,7 +52,7 @@ function MainPage({ setTrackid }) {
     const tableHandle = todoListResource.data.content.handle;
     let songsx = [];
 
-    console.log("songsx", songsx);
+    // console.log("songsx", songsx);
     for (let i = 0; i < ids.length; i++) {
       const tableItem = {
         key_type: "u64",
@@ -62,7 +62,7 @@ function MainPage({ setTrackid }) {
       try {
         const song = await provider.getTableItem(tableHandle, tableItem);            
         if (songsx.some((e) => e.IpfsHash !== song.IpfsHash)) {
-          console.log("Already exists");
+          // console.log("Already exists");
           continue;
         }
         songsx.push(song);
@@ -89,7 +89,7 @@ function MainPage({ setTrackid }) {
       songs.push(it);
       duration.push(parseInt(it.duration));
     });
-    console.log(duration);
+    // console.log(duration);
     let prefix_array = [];
     prefix_array.push(duration[0]);
     for (let i = 1; i < duration.length; i++) {
@@ -97,9 +97,9 @@ function MainPage({ setTrackid }) {
         parseInt(prefix_array[prefix_array.length - 1]) + duration[i]
       );
     }
-    console.log(prefix_array);
+    // console.log(prefix_array);
     const timestamp = totalSeconds % prefix_array[prefix_array.length - 1];
-    console.log(totalSeconds % prefix_array[prefix_array.length - 1]);
+    // console.log(totalSeconds % prefix_array[prefix_array.length - 1]);
     let usedUpTime;
     let index;
     for (let i = 0; i < prefix_array.length; i++) {
@@ -113,16 +113,16 @@ function MainPage({ setTrackid }) {
         break;
       }
     }
-    console.log(totalSeconds);
-    console.log({ index, usedUpTime });
-    console.log(songs);
+    // console.log(totalSeconds);
+    // console.log({ index, usedUpTime });
+    // console.log(songs);
     setTrackid(index);
     setCurrent(songs);
     setUsedUpTime(usedUpTime);
     setIsRadio(1);
     // s.log({hours, minutes, seconds})
-    // console.log(scaleTimeToRange(hours, minutes, seconds, 24, 0.00000000005, prefix_array[prefix_array.length - 1]))
-    console.log(radioz);
+    // // console.log(scaleTimeToRange(hours, minutes, seconds, 24, 0.00000000005, prefix_array[prefix_array.length - 1]))
+    // console.log(radioz);
   };
 
 
@@ -134,7 +134,7 @@ function MainPage({ setTrackid }) {
         `${addre}`,
         `${addre}::music_platform::All_radios`
       );
-      console.log(todoListResource);
+      // console.log(todoListResource);
       
       const tableHandle = todoListResource.data.content.handle;
       if(todoListResource.data.all_indexes.length === 0) return;
@@ -145,7 +145,7 @@ function MainPage({ setTrackid }) {
         };
         try {                      
             const radiox = await provider.getTableItem(tableHandle, tableItem);
-            console.log(radiox);                          
+            // console.log(radiox);                          
             // let arr = radio.songs;
             // let object = await getIpfsObject(arr, radio.title, radio.description);                                    
             setRadioz(radiox)
@@ -188,7 +188,7 @@ function MainPage({ setTrackid }) {
 
     try {
       const response = await signAndSubmitTransaction(payload);
-      console.log("playlist created");
+      // console.log("playlist created");
       await provider.waitForTransaction(response.hash);
       setTransact(transact + 1);
     } catch (err) {
@@ -353,7 +353,7 @@ function MainPage({ setTrackid }) {
               <div>
                 <div className="h-[100%] overflow-y-scroll w-content">
                   {myPlaylists.map((it, i) => {
-                    // console.log(it);
+                    // // console.log(it);
                     return (
                       <PlaylistCard key={i} name={myPlaylistName[i]} playlist={it} len={it.length} id={i} />
                     );
@@ -384,7 +384,7 @@ function MainPage({ setTrackid }) {
                     >
                       <div className="flex">
                         {artistsAndTheirSongs && artistsAndTheirSongs.map((it, i) => {
-                          console.log(it);
+                          // console.log(it);
                           return (
                             <TopArtistsCard artistFullInfo={it} key={i}/>
                           );

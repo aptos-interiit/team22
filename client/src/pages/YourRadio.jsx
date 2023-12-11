@@ -90,7 +90,7 @@ function YourRadio() {
     for (let i = 0; i < addsongs.length; i++) {
       arr.push(addsongs[i].id);
     }
-    console.log(arr);
+    // console.log(arr);
     if(radioName === "" || radioDesc === ""){
       toast.error(`Fields cant be empty`, {
         position: "top-left",
@@ -115,8 +115,8 @@ function YourRadio() {
 
     try {
       const response = await signAndSubmitTransaction(payload);
-      console.log("added");
-      console.log(response);
+      // console.log("added");
+      // console.log(response);
       await provider.waitForTransaction(response.hash);
       setFlag(!flag)
       setShow("hidden")
@@ -134,8 +134,8 @@ function YourRadio() {
     for (let i = 0; i < addsongs.length; i++) {
       arr.push(addsongs[i].id);
     }
-    console.log(radioid);
-    console.log(arr)
+    // console.log(radioid);
+    // console.log(arr)
 
     const payload = {
       sender: `${account.address}`,
@@ -148,8 +148,8 @@ function YourRadio() {
 
     try {
       const response = await signAndSubmitTransaction(payload);
-      console.log("added");
-      console.log(response);
+      // console.log("added");
+      // console.log(response);
       await provider.waitForTransaction(response.hash);
       setFlag(!flag)
       setShow("hidden")
@@ -175,8 +175,8 @@ function YourRadio() {
 
     try {
       const response = await signAndSubmitTransaction(payload);
-      console.log("deleted");
-      console.log(response);
+      // console.log("deleted");
+      // console.log(response);
       await provider.waitForTransaction(response.hash);
       setFlag(!flag)      
     } catch (err) {
@@ -201,8 +201,8 @@ function YourRadio() {
 
     try {
       const response = await signAndSubmitTransaction(payload);
-      console.log("deleted");
-      console.log(response);
+      // console.log("deleted");
+      // console.log(response);
       await provider.waitForTransaction(response.hash);
       setFlag(!flag)      
     } catch (err) {
@@ -232,7 +232,7 @@ function YourRadio() {
       try {
         const song = await provider.getTableItem(tableHandle, tableItem);       
         if (songsx.some((e) => e.IpfsHash !== song.IpfsHash)) {
-          console.log("Already exists");
+          // console.log("Already exists");
           continue;
         }
         songsx.push(song);
@@ -248,8 +248,8 @@ function YourRadio() {
     if(radio.user_address && radio.user_address === radioz.user_address){
       return;
     }    
-    console.log(radio)
-    console.log(radioz)
+    // console.log(radio)
+    // console.log(radioz)
     const hours = new Date().getHours();
     const minutes = new Date().getMinutes();
     const seconds = new Date().getSeconds();
@@ -261,7 +261,7 @@ function YourRadio() {
       songs.push(it);
       duration.push(parseInt(it.duration));
     });
-    console.log(duration);
+    // console.log(duration);
     let prefix_array = [];
     prefix_array.push(duration[0]);
     for (let i = 1; i < duration.length; i++) {
@@ -269,9 +269,9 @@ function YourRadio() {
         parseInt(prefix_array[prefix_array.length - 1]) + duration[i]
       );
     }
-    console.log(prefix_array);
+    // console.log(prefix_array);
     const timestamp = totalSeconds % prefix_array[prefix_array.length - 1];
-    console.log(totalSeconds % prefix_array[prefix_array.length - 1]);
+    // console.log(totalSeconds % prefix_array[prefix_array.length - 1]);
     let usedUpTime;
     let index;
     for (let i = 0; i < prefix_array.length; i++) {
@@ -285,9 +285,9 @@ function YourRadio() {
         break;
       }
     }
-    console.log(totalSeconds);
-    console.log({ index, usedUpTime });
-    console.log(songs);
+    // console.log(totalSeconds);
+    // console.log({ index, usedUpTime });
+    // console.log(songs);
     setTrackid(index);
     setCurrent(songs);
     setUsedUpTime(usedUpTime);
@@ -303,7 +303,7 @@ function YourRadio() {
       setDistri(songs[index].distri)
     }
     // s.log({hours, minutes, seconds})
-    // console.log(scaleTimeToRange(hours, minutes, seconds, 24, 0.00000000005, prefix_array[prefix_array.length - 1]))
+    // // console.log(scaleTimeToRange(hours, minutes, seconds, 24, 0.00000000005, prefix_array[prefix_array.length - 1]))
     
   };
 
@@ -319,7 +319,7 @@ function YourRadio() {
         `${addre}`,
         `${addre}::music_platform::All_radios`
       );
-      console.log(todoListResource);
+      // console.log(todoListResource);
       const tableHandle = todoListResource.data.content.handle;
 
       for (let i = 0; i < todoListResource.data.all_indexes.length; i++) {
@@ -335,7 +335,7 @@ function YourRadio() {
             setRadioId(todoListResource.data.all_indexes[i])
             let arr = radio.songs;
             let object = await getIpfsObject(arr, radio.title, radio.description, radio.user_address, radio.is_active);
-            console.log(object);
+            // console.log(object);
             setUserRadio(object);             
                         
           }

@@ -17,7 +17,7 @@ function SearchPage({ load, user}) {
         e.preventDefault()
         let value = e.target.value
         let search = await SearchPg(songs, value)
-        console.log(search);
+        // console.log(search);
         setSearchsong(search)
         setCount(search.length)
         // window.location.href="/search"

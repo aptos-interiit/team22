@@ -83,7 +83,7 @@ function UserMusicCard({ song, id, tracks, handleDel }) {
     }
 
     let likeSongs = user.playlists[0].songs;
-    console.log(likeSongs);
+    // console.log(likeSongs);
     let flag = false;
     for (let i = 0; i < likeSongs.length; i++) {
       if (likeSongs[i] === songID) {
@@ -105,7 +105,7 @@ function UserMusicCard({ song, id, tracks, handleDel }) {
 
       try {
         const response = await signAndSubmitTransaction(payload);
-        console.log("song removed from Liked Song Playlist");
+        // console.log("song removed from Liked Song Playlist");
         await provider.waitForTransaction(response.hash);
         setLiked(false);
         setTransact(transact + 1);
@@ -128,7 +128,7 @@ function UserMusicCard({ song, id, tracks, handleDel }) {
 
       try {
         const response = await signAndSubmitTransaction(payload);
-        console.log("song liked and added to Liked Song Playlist");
+        // console.log("song liked and added to Liked Song Playlist");
         await provider.waitForTransaction(response.hash);
         setLiked(true);
         setTransact(transact + 1);
@@ -157,7 +157,7 @@ function UserMusicCard({ song, id, tracks, handleDel }) {
   ];
 
   const date = new Date(parseInt(song.timestamp));
-  console.log(date);
+  // console.log(date);
   return (
     <>
     <div className="group w-[250px] sm:w-[85%] sm:mx-16 grid items-center grid-cols-6 sm:grid-cols-6 border-white mx-auto mt-6 sm:mt-8 hover:opacity-80 bg-[#282829] rounded-md py-5">

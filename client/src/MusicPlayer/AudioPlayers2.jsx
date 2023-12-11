@@ -42,8 +42,8 @@ function AudioPlayer2() {
                     }
                 )
                 .then(async (res) => {
-                    console.log("SUCC");
-                    console.log(new Audio(URL.createObjectURL(res.data)))
+                    // // console.log("SUCC");
+                    // // console.log(new Audio(URL.createObjectURL(res.data)))
                     audioRef.current = new Audio(URL.createObjectURL(res.data))
 
                 })
@@ -56,7 +56,7 @@ function AudioPlayer2() {
         setLoad(1);
         setIsPlaying(1);
     };
-    // console.log(tracks)
+    // // console.log(tracks)
 
 
 
@@ -69,7 +69,7 @@ function AudioPlayer2() {
 
 
     const addSongsData = (timestamp, type, title, id) => {
-        console.log(timestamp, type, title, id);
+        // // console.log(timestamp, type, title, id);
         setSongsListened([...songsListened, { timestamp, type, title, id }]);
     };
 
@@ -127,17 +127,17 @@ function AudioPlayer2() {
     };
 
     const CalculateTokenFromSongsData = async (songsListenedx) => {
-        console.log("in function CalculateTokenFromSongsData")
-        console.log(songsListenedx);
+        // // console.log("in function CalculateTokenFromSongsData")
+        // // console.log(songsListenedx);
         let arr = songsListenedx
         let temp = {}
-        console.log(arr[0]);
-        console.log(arr[1]);
+        // // console.log(arr[0]);
+        // // console.log(arr[1]);
         for (let i = 0; i < arr.length - 1; i++) {
             if (arr[i].type === 'start') {
                 if (arr[i + 1].type === 'end') {
                     let duration = (arr[i + 1].timestamp - arr[i].timestamp) / 1000;
-                    console.log(duration, ':', arr[i].title);
+                    // console.log(duration, ':', arr[i].title);
                     if (temp[arr[i].title]) {
                         temp[arr[i].title] += duration
 
@@ -151,7 +151,7 @@ function AudioPlayer2() {
             if (arr[i].type === 'start') {
                 if (arr[i + 1].type === 'change') {
                     let duration = (arr[i + 1].timestamp - arr[i].timestamp) / 1000;
-                    console.log(duration, ':', arr[i].title);
+                    // console.log(duration, ':', arr[i].title);
                     if (temp[arr[i].title]) {
                         temp[arr[i].title] += duration
 
@@ -165,7 +165,7 @@ function AudioPlayer2() {
             if (arr[i].type === 'change') {
                 if (arr[i + 1].type === 'end') {
                     let duration = (arr[i + 1].timestamp - arr[i].timestamp) / 1000;
-                    console.log(duration, ':', arr[i].title);
+                    // console.log(duration, ':', arr[i].title);
                     if (temp[arr[i].title]) {
                         temp[arr[i].title] += duration
 
@@ -179,7 +179,7 @@ function AudioPlayer2() {
             if (arr[i].type === 'change') {
                 if (arr[i + 1].type === 'change') {
                     let duration = (arr[i + 1].timestamp - arr[i].timestamp) / 1000;
-                    console.log(duration, ':', arr[i].title);
+                    // console.log(duration, ':', arr[i].title);
                     if (temp[arr[i].title]) {
                         temp[arr[i].title] += duration
 
@@ -191,18 +191,18 @@ function AudioPlayer2() {
                 }
             }
         }
-        // console.log(temp);
+        // // console.log(temp);
 
         setTimearr(temp)
-        console.log("fbewjhlbhjlwbf hwjb fwjef cwje fcwhejbfhwe dwbejfh bwehjf bwjef whefcw")
-        console.log(owner, temp[arr[0].title] * 1000)
-        console.log(recieverAddress)
-        console.log(distriarr)
+        // console.log("fbewjhlbhjlwbf hwjb fwjef cwje fcwhejbfhwe dwbejfh bwehjf bwjef whefcw")
+        // console.log(owner, temp[arr[0].title] * 1000)
+        // console.log(recieverAddress)
+        // console.log(distriarr)
 
         if (!isNaN(temp[arr[0].title]) && temp[arr[0].title] > 5) {
-            console.log("sent")
-            console.log(arr[0])
-            console.log(`The song id is ${arr[0].id} and time listened is ${temp[arr[0].title]}`)
+            // console.log("sent")
+            // console.log(arr[0])
+            // console.log(`The song id is ${arr[0].id} and time listened is ${temp[arr[0].title]}`)
             sendTransaction(parseInt(temp[arr[0].title] * 50), recieverName, recieverAddress, distriarr, temp[arr[0].title], arr[0].id)
         }
         setSongsListened([])
@@ -215,9 +215,9 @@ function AudioPlayer2() {
             dist: distriArr,
             amount
         }).then(async (res) => {
-            console.log(res)
+            // console.log(res)
             await provider.waitForTransaction(res.data.response);
-            console.log(transact)
+            // console.log(transact)
             toast.success(`${amount / 100000000} T22 Coins sent to ${artName}.`, {
                 position: "top-left",
                 autoClose: 5000,
@@ -241,7 +241,7 @@ function AudioPlayer2() {
             songId: songId,
             time: parseInt(timelistened)
         }).then(async (res) => {
-            console.log(res)
+            // console.log(res)
             await provider.waitForTransaction(res.data.response);
         }).catch((err) => {
             console.log(err)
@@ -260,7 +260,7 @@ function AudioPlayer2() {
     }
 
     useEffect(() => {
-        console.log(songsListened)
+        // console.log(songsListened)
         if (audioRef.current !== null) {
             if (isPlaying) {
                 audioRef.current.play();
@@ -290,10 +290,10 @@ function AudioPlayer2() {
 
     useEffect(() => {
         if (trackid < current.length) {
-            console.log(songsListened)
+            // console.log(songsListened)
             setDisable(1)
             if (user.savings < 12000) {
-                console.log("no balance")
+                // console.log("no balance")
                 setTrackid(-1)
                 setCurrent([])
                 setOpen(true)
@@ -302,7 +302,7 @@ function AudioPlayer2() {
                 setRecAdd(artists)
                 setRecName(owner_name)
                 setDistri(distri)
-                console.log("lkefrw")
+                // console.log("lkefrw")
                 let date = new Date()
                 let sec = date.getTime()
                 addSongsData(sec, 'end', title, id)
@@ -332,7 +332,7 @@ function AudioPlayer2() {
             audioRef.current.currentTime = useduptime
             setUsedUpTime(0)
             if (user.savings < 12000) {
-                console.log("no balance")
+                // console.log("no balance")
                 setTrackid(-1)
                 setCurrent([])
             }
@@ -358,13 +358,13 @@ function AudioPlayer2() {
             
             e.preventDefault();
             if (audioRef.current !== null) {
-                console.log("reloading");
+                // console.log("reloading");
                 audioRef.current.pause();
                 let date = new Date()
                 let sec = date.getTime()
                 addSongsData(sec, 'end', title, id)
                 let songlistenedx = JSON.parse(localStorage.getItem("songsListened"));
-                console.log(songsListened);
+                // console.log(songsListened);
                 songlistenedx.push({ timestamp: sec, type: 'end', title: title, id: id });
                 await CalculateTokenFromSongsData(songlistenedx);
             }

@@ -39,7 +39,7 @@ const AddSong = () => {
             x[0].Split = 100 - sum;
             setFormFields(x);
             setRemainingSplit(100 - sum);
-            console.log(formFields);
+            // console.log(formFields);
         } else {
             alert("Split should sum up to 100%");
         }
@@ -80,9 +80,9 @@ const AddSong = () => {
                     'Authorization': `Bearer ${JWT}`
                 }
             });
-            console.log(res.data);
+            // console.log(res.data);
             const { IpfsHash } = res.data
-            console.log(IpfsHash)
+            // console.log(IpfsHash)
             await pinFileToIPFS(IpfsHash)
         } catch (error) {
             console.log(error);
@@ -115,9 +115,9 @@ const AddSong = () => {
                     },
                 }
             );
-            console.log(res.data);
+            // console.log(res.data);
             const { IpfsHash } = res.data;
-            console.log(sname + " " + artname + " " + imghash + " " + IpfsHash)
+            // console.log(sname + " " + artname + " " + imghash + " " + IpfsHash)
             handleAddSong(IpfsHash, imghash);
             
         } catch (error) {
@@ -129,24 +129,24 @@ const AddSong = () => {
     let val = 0
     const click = async (e) => {
         e.preventDefault()
-        console.log(song)
+        // console.log(song)
 
         val = parseInt(audioRef.current.duration)
-        console.log(val)
+        // console.log(val)
     }
 
     const songup = (e) => {
-        console.log(e)
-        console.log('song done')
+        // console.log(e)
+        // console.log('song done')
         setSong(e)
         audioRef.current = new Audio(URL.createObjectURL(e))
-        console.log(audioRef)
+        // console.log(audioRef)
     }
 
     const handleAddSong = async (songHash, imghash) => {
         if (!account) return;
         setTransactionInProgress(true);
-        console.log(songHash);
+        // console.log(songHash);
         let date = new Date()
         let sec = date.getTime()
         let artist = []
@@ -155,9 +155,9 @@ const AddSong = () => {
             artist.push(formFields[i].ArtistAddr)
             split.push(formFields[i].Split)
         }
-        console.log(audioRef)
+        // console.log(audioRef)
         let x = parseInt(audioRef.current.duration)
-        console.log(artist + split)
+        // console.log(artist + split)
         const payload = {
             sender: `${account.address}`,
             data: {
@@ -168,8 +168,8 @@ const AddSong = () => {
         };
         try {
             const response = await signAndSubmitTransaction(payload);
-            console.log("song added");
-            console.log(response)
+            // console.log("song added");
+            // console.log(response)
             toast.success(`Song Uploaded`, {
                 position: "top-left",
                 autoClose: 5000,
@@ -192,8 +192,8 @@ const AddSong = () => {
 
     const handlePhoto = (e) => {
         // e.preventDefault();
-        console.log("done Photo");
-        console.log(e)
+        // console.log("done Photo");
+        // console.log(e)
         setPhoto(e);
     }
 
