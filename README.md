@@ -67,7 +67,7 @@ Join Aptunes on its mission to reshape the music industry, providing artists and
 * Permissionless access, a hallmark feature of this platform, offers users direct and intermediary-free access to upload and broadcast music. It enables creators to share their music seamlessly, bypassing any restrictions or middlemen.
 * Real-time revenue distribution stands as a pivotal feature, dynamically allocating earnings based on listener interaction revenue and direct donations. It ensures real-time recognition and compensation for content as listeners engage, ensuring a direct and transparent support system between creators and their audience.
 * The live radio feature allows users to craft personalized stations using a vast library of available songs, tailoring their listening experience. Additionally, users can explore and access radio stations curated by fellow users, diving into a diverse array of musical tastes and styles.
-* Governance (DAO) emerges as a pivotal feature, empowering users to generate proposals, acquire NFT-based voting passes, and vote on platform decisions. Administrators utilize on/off-chain actions for effective execution. This governance feature grants active user participation, shaping the platform's direction efficiently and inclusively.
+* Governance (DAO) empowers users to generate proposals, acquire NFT-based voting passes, and vote on platform decisions. Administrators utilize on/off-chain actions for effective execution. This governance feature grants active user participation, shaping the platform's direction efficiently and inclusively.
 
 
 ### Built With
