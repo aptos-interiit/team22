@@ -78,6 +78,7 @@
  <a href="">
     <img src="https://tan-mad-salamander-939.mypinata.cloud/ipfs/QmNRghQ8tM12A7hLXTBU1dShgaNAhCQ4vgMHVmsThQNZ6s" alt="Logo" width="800" height="400">
   </a>
+  <br></br>
 </div>
 
 
@@ -88,12 +89,10 @@ Join Aptunes on its mission to reshape the music industry, providing artists and
 
 ### Features
 
-* 
-* 
-* 
-* 
-* 
-* 
+* Permissionless access, a hallmark feature of this platform, offers users direct and intermediary-free access to upload and broadcast music. It enables creators to share their music seamlessly, bypassing any restrictions or middlemen.
+* Real-time revenue distribution stands as a pivotal feature, dynamically allocating earnings based on listener interaction revenue and direct donations. It ensures real-time recognition and compensation for content as listeners engage, ensuring a direct and transparent support system between creators and their audience.
+* Governance (DAO) emerges as a pivotal feature, empowering users to generate proposals, acquire NFT-based voting passes, and vote on platform decisions. Administrators utilize on/off-chain actions for effective execution. This governance feature grants active user participation, shaping the platform's direction efficiently and inclusively.
+
 
 ### Built With
 
@@ -173,7 +172,7 @@ Follow the following steps to setup without using docker.
 
 #### Pre Requisites
 
-* Install [Node ^20](https://nodejs.org/en/download) on your system.
+* Install [Node >=20](https://nodejs.org/en/download) on your system.
 
 #### Setup Steps
 
@@ -271,11 +270,9 @@ Follow the following steps to setup without using docker.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+For usage and Project Demo, please follow this [link]().
 
-_For more examples, please refer to the [Documentation](https://example.com)_
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
