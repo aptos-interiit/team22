@@ -97,7 +97,7 @@ Follow the following steps to setup using docker.
 #### Pre Requisites
 
 * Install [Docker](https://docs.docker.com/engine/install/) on your system.
-* Install [Petra Wallet](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?pli=1), switch to ```tesnet``` and the account should have more than 0 APT.
+* Install [Petra Wallet](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?pli=1), switch to ```testnet``` and the account should have more than 0 APT.
 
 #### Setup Steps
 
@@ -149,7 +149,7 @@ Follow the following steps to setup without using docker.
 #### Pre Requisites
 
 * Install [Node >=20](https://nodejs.org/en/download) on your system.
-* Install [Petra Wallet](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?pli=1), switch to ```tesnet``` and the account should have more than 0 APT.
+* Install [Petra Wallet](https://chromewebstore.google.com/detail/petra-aptos-wallet/ejjladinnckdgjemekebdpeokbikhfci?pli=1), switch to ```testnet``` and the account should have more than 0 APT.
 
 #### Setup Steps
 
