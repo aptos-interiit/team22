@@ -7,8 +7,7 @@ import Music from "./Music";
 // import tracks from "../tracks";
 import { ToastContainer, toast } from 'react-toastify';
 
-
-
+const server_address = process.env.REACT_APP_SERVER_ADDRESS
 
 function AudioPlayer2() {
     const { distrix, setDistri, recName, setRecName, setOpen, account, trackid, recadd, setRecAdd, transact, setTransact, current, setTrackid, setRadio, setPopup, provider, useduptime, setCurrent, user, setUsedUpTime, setDisable } = useContext(dataContext)
@@ -210,7 +209,7 @@ function AudioPlayer2() {
     }
 
     const sendTransaction = (amount, artName, artAddr, distriArr, timelistened, songId) => {
-        axios.post("https://server-81e3.onrender.com/user_to_artist", {
+        axios.post(server_address + "/user_to_artist", {
             userAddress: account.address,
             artistAddresses: artAddr,
             dist: distriArr,
@@ -238,7 +237,7 @@ function AudioPlayer2() {
     }
 
     const updateTimeListened = async (timelistened, songId) => {
-        axios.post("https://server-81e3.onrender.com/update_timelistened", {
+        axios.post(server_address + "/update_timelistened", {
             songId: songId,
             time: parseInt(timelistened)
         }).then(async (res) => {
