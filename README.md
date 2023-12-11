@@ -96,6 +96,11 @@ Follow the following steps to setup using docker.
 
 #### Setup Steps
 
+* Clone this repository
+    ```sh
+    git clone https://github.com/aptos-interiit/team22.git
+    ```
+
 * Run your docker daemon.
 
 * Make sure you are in root directory.
@@ -142,7 +147,15 @@ Follow the following steps to setup without using docker.
 
 #### Setup Steps
 
-* Make sure you are in root directory.
+* Clone this repository
+    ```sh
+    git clone https://github.com/aptos-interiit/team22.git
+    ```
+
+* Change directory to team22
+    ```sh
+    cd team22
+    ```
 
 * Make .env files in server and client folders.
   ```sh
@@ -234,14 +247,29 @@ For usage and Project Demo, please checkout the Demo Video provided.
 
 * After registering as new user in landing page the page redirects to the main dashboard.
 * Main dashboard provides different features to interact with the website.
+* Add Deposit, converts your APT into our T22 Coin for smoother transactions. One can only listen to songs on the platform, if it has enough T22 Coins.
 * Using Add Song feature, one can add song and also add collaborators and decide their split.
 * So whenever, any user listens the song, the revenue is shared according to the split in real time. 
-* On song change / unmounting the website / reloading the website, the revenue of current song is calculated, then signing of transaction occurs using a node server, and then the revenue automatically gets distributed to artists/collaborators. All transaction takes place using T22 Coin and a resource account with resource signer capabilities. Also the user is instantly notified about the revenue deduction after listening songs.
+* On song change / unmounting the website / reloading the website, the revenue of current song is calculated proportional to the time listened, then signing of transaction occurs using a node server, and then the revenue automatically gets distributed to artists/collaborators. All transaction takes place using T22 Coin and a resource account with resource signer capabilities. Also the user is instantly notified about the revenue deduction after listening songs.
+* Listeners can create their own playlist and add songs to it.
+* Listeners have the option to add any song they enjoy to their liked songs playlist.
 * Search feature is also integrated into our website.
-* Add Deposit, converts your APT into our T22 Coin for smoother transactions.
 * All further transaction occurs in T22 Coin. During revenue distribution, the listeners savings is decreased by revenue amount and the artist(s) balance of T22 Coin in their Wallet increases by amount according to the split.
 * A user can withdraw its savings to APT anytime using Withdraw Savings Feature on profile page.
 * Similarly anyone can withdraw their earnings (convert their T22 Coin asset into APT Coin) using Withdraw Earnings feature on profile page.
+* A user/artist can create/delete/modify its own live radio consisting of different songs.
+* The songs in the radio will be broadcasted and will be live to all users.
+* Listener can donate to the radio creator using Turbo Tip, which directly transfers the given amount of APT Coin to the radio creator's account.
+* In radio, song owners earn money based on how much time people spend listening to their songs.
+* In our platform's DAO (Governance) system, the criteria are as follows:
+
+  * DAO creation is restricted to platform administrators.
+  * Proposals can be initiated by stakeholders staking a minimum of 10 T22 Coins.
+  * Voting eligibility is extended to users holding an NFT Membership pass.
+  * Once a proposal concludes, any user can address its resolution.
+  * If a proposal is successfully resolved, administrators will execute the corresponding action either on-chain or off-chain.
+
+
 
 
 
@@ -260,6 +288,10 @@ For usage and Project Demo, please checkout the Demo Video provided.
 
 <!-- CONTACT -->
 ## Contact
+
+Team 22: team22interiittechmeet@gmail.com
+
+Project Link: [https://github.com/aptos-interiit/team22](https://github.com/aptos-interiit/team22)
 
 Website Link: [https://team22-client.vercel.app/](https://team22-client.vercel.app/)
 
