@@ -76,7 +76,7 @@
 
 <div align="center">
  <a href="">
-    <img src="https://tan-mad-salamander-939.mypinata.cloud/ipfs/QmNRghQ8tM12A7hLXTBU1dShgaNAhCQ4vgMHVmsThQNZ6s" alt="Logo" width="800" height="400">
+    <img src="https://sapphire-petite-roundworm-454.mypinata.cloud/ipfs/QmcDjyDmXXmBCYkijmPWj1zwDjUHfSQV2QsTnRRqexyUVf" alt="Logo" width="800" height="400">
   </a>
   <br></br>
 </div>
