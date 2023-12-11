@@ -27,6 +27,10 @@
     <img src="https://tan-mad-salamander-939.mypinata.cloud/ipfs/QmcKiw5EGKYu37pJQ3o7av3iyG9Xz9JKFsP1suRACgwrTz" alt="Logo" width="200" height="">
   </a>
 
+  <h4 align="center">Powered by</h4>
+  <a href="">
+    <img src="https://sapphire-petite-roundworm-454.mypinata.cloud/ipfs/Qmf9YhuoaaN43cWLsQ88zG49PsZCcCaXNX1iHDEg1hbbtK" alt="Logo" width="100" height="">
+  </a>
   <h1 align="center">APTUNES</h1>
 
   <p align="center">
