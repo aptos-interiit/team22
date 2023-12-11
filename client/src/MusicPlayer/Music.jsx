@@ -165,18 +165,16 @@ const Music = ({
 
             </>
           ) : (
-            <>
-              <div className="text-white flex-auto flex items-center justify-evenly">
-                <div className='mr-3 flex ml-0'>
-                <img src={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${coverIpfs}`} alt="" width="44" height="44" className="flex-none rounded-lg bg-slate-100" loading="lazy" />
-                <div className='w-[200px] my-auto mx-4'><Marquee>{title} </Marquee>
-                  
-                  </div>
+            <div className='grid grid-cols-6 w-[100%] p-2'>
+              <div className="text-white flex-auto flex items-center p-2 col-span-2">
+                <div className='flex'>
+                  <img src={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${coverIpfs}`} alt="" width="44" height="44" className="flex-none rounded-lg bg-slate-100" loading="lazy" />
+                  <div className='w-[140px] my-auto mx-4'><Marquee>{title} </Marquee></div>
                 </div>
-                
+
                 <button
                   type="button"
-                  className="hidden sm:block lg:hidden xl:block"
+                  className="hidden sm:block lg:hidden xl:block ml-auto"
                   aria-label="Previous"
                   onClick={onPrevClick}
                 >
@@ -199,11 +197,12 @@ const Music = ({
                   </svg>
                 </button>
               </div>
+              <div className='col-span-2 w-[100%] flex items-center justify-center'>
               {isPlaying ? (
                 <button
                   type="button"
                   onClick={() => onPlayPauseClick(false)}
-                  className="bg-white text-white dark:bg-slate-100 dark:text-white flex-none my-1 mx-auto w-10 h-10 rounded-full ring-1 ring-slate-900/5 shadow-md flex items-center justify-center"
+                  className="bg-white text-white dark:bg-slate-100 dark:text-white flex-none my-1 mx-auto w-16 h-16 rounded-full ring shadow-md flex items-center justify-center"
                   aria-label="Pause"
                 >
                   <img src={pause}>
@@ -213,19 +212,20 @@ const Music = ({
                 <button
                   type="button"
                   onClick={() => onPlayPauseClick(true)}
-                  className="bg-white text-white dark:bg-slate-100 dark:text-white flex-none my-1 mx-auto w-10 h-10 rounded-full ring-1 ring-slate-900/5 shadow-md flex items-center justify-center"
+                  className="bg-white text-white dark:bg-slate-100 dark:text-white flex-none my-1 mx-auto w-16 h-16 rounded-full ring shadow-md flex items-center justify-center"
                   aria-label="Play"
                 >
-                  <img src={img}>
+                  <img className='' src={img}>
                   </img>
                 </button>
               )}
-
-              <div className="text-white flex-auto flex items-center justify-evenly">
+              </div>
+              
+              <div className="text-white flex-auto flex items-center justify-evenly col-span-2">
                 <button
                   type="button"
                   onClick={onNextClick}
-                  className="hidden sm:block lg:hidden xl:block"
+                  className="hidden sm:block lg:hidden xl:block mr-auto"
                   aria-label="Next"
                 >
                   <svg width="24" height="24" fill="none">
@@ -247,6 +247,7 @@ const Music = ({
                   </svg>
                 </button>
                 <button
+                className='p-4'
                   onClick={() => {
                     if (disp === "hidden") {
                       setDisp("block");
@@ -260,7 +261,7 @@ const Music = ({
                   {icon}
                 </button>
               </div>
-            </>
+            </div>
           )}
 
           </div>
