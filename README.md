@@ -56,6 +56,8 @@
   <br></br>
 </div>
 
+> **_NOTE:_** 
+This website is currently designed for optimal viewing on laptop or desktop screens. Please avoid accessing it on mobile or tablet devices.
 
 [Aptunes](https://team22-client.vercel.app/) is a revolutionary decentralized on-chain radio and music platform deployed on the Aptos Blockchain. This innovative platform offers users a unique and decentralized approach to discovering and streaming music. By harnessing the power of blockchain technology, Aptunes ensures transparency, security, and fair compensation for artists and content creators.
 Aptunes goes beyond traditional music platforms by introducing a groundbreaking real-time revenue distribution system. Artists on Aptunes experience instant and transparent compensation as listeners engage with their music. Through smart contracts, microtransactions are executed in real-time, ensuring fair and immediate payment to artists. This novel approach not only empowers artists but also transforms the way we appreciate and support music in a decentralized ecosystem.
