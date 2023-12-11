@@ -36,38 +36,11 @@
   <p align="center">
   Join the Symphony of Decentralization: Aptunes, Where Music Finds Freedom
     <br />
-    <a href="https://team22-client.vercel.app/">Visit Website</a>
+    <br />
+    <a href="https://team22-client.vercel.app/">VISIT WEBSITE</a>
     
   </p>
 </div>
-
-
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
 
 
 
@@ -82,7 +55,7 @@
 </div>
 
 
-Aptunes is a revolutionary decentralized on-chain radio and music platform deployed on the Aptos Blockchain. This innovative platform offers users a unique and decentralized approach to discovering and streaming music. By harnessing the power of blockchain technology, Aptunes ensures transparency, security, and fair compensation for artists and content creators.
+[Aptunes](https://team22-client.vercel.app/) is a revolutionary decentralized on-chain radio and music platform deployed on the Aptos Blockchain. This innovative platform offers users a unique and decentralized approach to discovering and streaming music. By harnessing the power of blockchain technology, Aptunes ensures transparency, security, and fair compensation for artists and content creators.
 Aptunes goes beyond traditional music platforms by introducing a groundbreaking real-time revenue distribution system. Artists on Aptunes experience instant and transparent compensation as listeners engage with their music. Through smart contracts, microtransactions are executed in real-time, ensuring fair and immediate payment to artists. This novel approach not only empowers artists but also transforms the way we appreciate and support music in a decentralized ecosystem.
 
 Join Aptunes on its mission to reshape the music industry, providing artists and listeners alike with a fair, transparent, and community-driven platform.
@@ -123,17 +96,9 @@ Follow the following steps to setup using docker.
 
 #### Setup Steps
 
-* Clone this repository
-    ```sh
-    git clone https://github.com/aptos-interiit/team22.git
-    ```
-
 * Run your docker daemon.
 
-* Change directory to team22
-    ```sh
-    cd team22
-    ```
+* Make sure you are in root directory.
 * Make .env files in server and client folders.
   ```sh
   touch ./client/.env && touch ./server/.env
@@ -177,15 +142,7 @@ Follow the following steps to setup without using docker.
 
 #### Setup Steps
 
-* Clone this repository
-    ```sh
-    git clone https://github.com/aptos-interiit/team22.git
-    ```
-
-* Change directory to team22
-    ```sh
-    cd team22
-    ```
+* Make sure you are in root directory.
 
 * Make .env files in server and client folders.
   ```sh
@@ -271,7 +228,20 @@ Follow the following steps to setup without using docker.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-For usage and Project Demo, please follow this [link]().
+For usage and Project Demo, please checkout the Demo Video provided.
+
+## Walkthrough of the Platform
+
+* After registering as new user in landing page the page redirects to the main dashboard.
+* Main dashboard provides different features to interact with the website.
+* Using Add Song feature, one can add song and also add collaborators and decide their split.
+* So whenever, any user listens the song, the revenue is shared according to the split in real time. 
+* On song change / unmounting the website / reloading the website, the revenue of current song is calculated, then signing of transaction occurs using a node server, and then the revenue automatically gets distributed to artists/collaborators. All transaction takes place using T22 Coin and a resource account with resource signer capabilities. Also the user is instantly notified about the revenue deduction after listening songs.
+* Search feature is also integrated into our website.
+* Add Deposit, converts your APT into our T22 Coin for smoother transactions.
+* All further transaction occurs in T22 Coin. During revenue distribution, the listeners savings is decreased by revenue amount and the artist(s) balance of T22 Coin in their Wallet increases by amount according to the split.
+* A user can withdraw its savings to APT anytime using Withdraw Savings Feature on profile page.
+* Similarly anyone can withdraw their earnings (convert their T22 Coin asset into APT Coin) using Withdraw Earnings feature on profile page.
 
 
 
@@ -290,10 +260,6 @@ For usage and Project Demo, please follow this [link]().
 
 <!-- CONTACT -->
 ## Contact
-
-Team 22: team22interiittechmeet@gmail.com
-
-Project Link: [https://github.com/aptos-interiit/team22](https://github.com/aptos-interiit/team22)
 
 Website Link: [https://team22-client.vercel.app/](https://team22-client.vercel.app/)
 
