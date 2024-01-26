@@ -1,16 +1,47 @@
+// Purpose: Provide a page for users to view all radios.
+
+
+// importing dependencies
 import React, { useContext, useState, useEffect } from 'react'
 import { dataContext } from '../Context/dataContext';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import img from '../MusicPlayer/assets/wireless-icon.svg'
 import playingRadio from '../MusicPlayer/assets/gif2.gif'
 
+
+// AllRadios component
 function AllRadios() {
+
+  // addre: address of the contract
+  // provider: provider of the contract
+  // setIsRadio: set is radio
+  // setUsedUpTime: set used up time
+  // setRadio: set radio
+  // setCurrent: set current
+  // setTrackid: set track id
+  // addre: address of the contract
+  // radio: radio state
+  // recadd: recommended address
+  // setRecAdd: set recommended address
+  // recName: recommended name
+  // setRecName: set recommended name
+  // distrix: distribution
+  // setDistri: set distribution
   const { provider, setIsRadio, setUsedUpTime, setRadio, setCurrent, setTrackid, addre, radio, recadd, setRecAdd, recName, setRecName, distrix, setDistri } = useContext(dataContext)
+
+  // account: account of the user
   const { account, signAndSubmitTransaction } = useWallet()
+
+  // radios: radios state
   const [radios, setRadios] = useState([])
+
+  // load: load state
   const [load, setLoad] = useState(1)
+
+  // radioIds: radio ids state
   const [radioIds, setRadiosIds] = useState([])
 
+  // function to get ipfs object
   const getIpfsObject = async (user_address, ids, title, description) => {
     const todoListResource = await provider.getAccountResource(
       `${addre}`,
@@ -18,8 +49,6 @@ function AllRadios() {
     );
     const tableHandle = todoListResource.data.content.handle;
     let songsx = [];
-
-    // console.log("songsx", songsx);
     for (let i = 0; i < ids.length; i++) {
       const tableItem = {
         key_type: "u64",
@@ -29,7 +58,6 @@ function AllRadios() {
       try {
         const song = await provider.getTableItem(tableHandle, tableItem);
         if (songsx.some((e) => e.IpfsHash !== song.IpfsHash)) {
-          // console.log("Already exists");
           continue;
         }
         songsx.push(song);
@@ -41,6 +69,7 @@ function AllRadios() {
     handleRadioCalculations(radio)
   };
 
+  // function to handle radio calculations
   const handleRadioCalculations = async (radioz) => {
     if (radio.user_address && radioz.user_address == radio.user_address) {
       return;
@@ -56,7 +85,6 @@ function AllRadios() {
       songs.push(it);
       duration.push(parseInt(it.duration));
     });
-    // console.log(duration);
     let prefix_array = [];
     prefix_array.push(duration[0]);
     for (let i = 1; i < duration.length; i++) {
@@ -64,9 +92,7 @@ function AllRadios() {
         parseInt(prefix_array[prefix_array.length - 1]) + duration[i]
       );
     }
-    // console.log(prefix_array);
     const timestamp = totalSeconds % prefix_array[prefix_array.length - 1];
-    // console.log(totalSeconds % prefix_array[prefix_array.length - 1]);
     let usedUpTime;
     let index;
     for (let i = 0; i < prefix_array.length; i++) {
@@ -80,9 +106,6 @@ function AllRadios() {
         break;
       }
     }
-    // console.log(totalSeconds);
-    // console.log({ index, usedUpTime });
-    // console.log(songs);
     setTrackid(index);
     setCurrent(songs);
     setUsedUpTime(usedUpTime);
@@ -96,21 +119,16 @@ function AllRadios() {
     if(distrix === null){
       setDistri(songs[index].distri)
     }
-    // s.log({hours, minutes, seconds})
-    // // console.log(scaleTimeToRange(hours, minutes, seconds, 24, 0.00000000005, prefix_array[prefix_array.length - 1]))
-    // console.log(radioz);
   };
 
+  // useEffect hook
   useEffect(() => {
-
     (async () => {
-
       if (!account) return;
       const todoListResource = await provider.getAccountResource(
         `${addre}`,
         `${addre}::music_platform::All_radios`
       );
-      // console.log(todoListResource);
       let allradiosx = [];
       let radioidsx = []
       const tableHandle = todoListResource.data.content.handle;
@@ -122,10 +140,7 @@ function AllRadios() {
         };
         try {
           const radiox = await provider.getTableItem(tableHandle, tableItem);
-          if(!radiox.is_active) continue;
-          // console.log(radiox);
-          // let arr = radio.songs;
-          // let object = await getIpfsObject(arr, radio.title, radio.description);                        
+          if(!radiox.is_active) continue;                      
           radioidsx.push(todoListResource.data.all_indexes[i])
           allradiosx.push(radiox)
         } catch (err) {
@@ -138,6 +153,7 @@ function AllRadios() {
     })();
   }, []);
 
+  // returning the AllRadios component
   return (
     <>
       {
@@ -161,7 +177,6 @@ function AllRadios() {
                         <div
                           onClick={() => getIpfsObject(radioz.user_address, radioz.songs, radioz.title, radioz.description)}
                           style={{
-                            // width: "100%",
                             backgroundImage: `url(${playingRadio})`,
                             backgroundRepeat: "no-repeat",
                             backgroundSize: "100% 100%",

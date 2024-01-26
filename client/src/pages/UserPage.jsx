@@ -1,34 +1,69 @@
+// Purpose: Provide a page for the user to view their profile and edit it.
+
+
+// importing dependencies
 import React, { useContext, useState } from "react";
 import { dataContext } from "../Context/dataContext";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { Network, Provider } from "aptos";
 import { useEffect } from "react";
 
-const addre =process.env.REACT_APP_MODULE_ADDRESS;
-const res_acc = process.env.REACT_APP_RESOURCE_ACCOUNT;
+// provider: provider of the contract
 export const provider = new Provider(Network.TESTNET);
 
+
+// UserPage component
 function UserPage() {
+
+  // account: account of the user
   const { account, signAndSubmitTransaction } = useWallet();
+
+  // addre: address of the contract
+  // distrix: distribution
+  // setDistri: set distribution
+  // recName: recommended name
+  // setRecName: set recommended name
+  // recadd: recommended address
+  // setRecAdd: set recommended address
+  // disable: disable state
+  // setTrackid: set track id
+  // setCurrent: set current
+  // usersongs: user songs
+  // addre: address of the contract
+  // provider: provider of the contract
+  // songs: songs
+  // setUsedUpTime: set used up time
+  // setIsRadio: set is radio
+  // setRadio: set radio
   const { distrix, setDistri, recName, setRecName ,recadd, setRecAdd, disable, setTrackid, setCurrent, usersongs, addre, provider, songs, setUsedUpTime, setIsRadio ,setRadio} =
     useContext(dataContext);
+
+  // disp: display state
   const [disp, setDisp] = useState("hidden");
+
+  // show: show state
   const [show, setShow] = useState("hidden")
+
+  // addsongs: add songs
   const [addsongs, setAddSongs] = useState([])
+
+  // radios: radios
   const [radios, setRadios] = useState([])
+
+  // transactionInProgress: transaction state
   const [tstatus, setTransactionInProgress] = useState(0)
+
+  // hashArray: hash array
   const [hashArray, setHashArray] = useState([]);
 
+  // function to get ipfs object
   const getIpfsObject = async (ids, title) => {
     const todoListResource = await provider.getAccountResource(
       `${addre}`,
       `${addre}::music_platform::All_songs`
     );
-    // console.log(todoListResource);
     const tableHandle = todoListResource.data.content.handle;
     let songsx = [];
-
-    // console.log("songsx", songsx);
     for (let i = 0; i < ids.length; i++) {
       const tableItem = {
         key_type: "u64",
@@ -37,9 +72,7 @@ function UserPage() {
       };
       try {
         const song = await provider.getTableItem(tableHandle, tableItem);
-        // console.log(song);
         if (songsx.some((e) => e.IpfsHash !== song.IpfsHash)) {
-          // console.log("Already exists");
           continue;
         }
         songsx.push(song);
@@ -49,20 +82,16 @@ function UserPage() {
     }
     let radio = {"title": title, songs: songsx};
     return radio;
-    setHashArray(songsx)
-    // console.log(hashArray)
-    // return songsx;
   }
-  
+
+  // useEffect hook
   useEffect(() => {
     (async () => {
         if (!account) return;
-
         const todoListResource = await provider.getAccountResource(
           `${addre}`,
           `${addre}::music_platform::All_radios`
         );
-        // console.log(todoListResource);
         const tableHandle = todoListResource.data.content.handle;
         let radiosx = [];
         
@@ -74,26 +103,21 @@ function UserPage() {
           };
           try {
             const radio = await provider.getTableItem(tableHandle, tableItem);
-            // console.log(radio);
             let arr = radio.songs;
             let object = await getIpfsObject(arr, radio.title);
-            // console.log(object)
             radiosx.push(object);
           } catch (err) {
             console.log(err);
           }
         }
         setRadios(radiosx)
-        // console.log(radiosx);
-        // console.log(hashArray)
       })();
       
     }, [account]);
 
+  // function to delete song
   const handleDel = async (id) => {
     if (!account) return;
-
-    // console.log(id);
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -102,7 +126,6 @@ function UserPage() {
         functionArguments: [id],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
       await provider.waitForTransaction(response.hash);
@@ -113,15 +136,16 @@ function UserPage() {
     }
   };
 
+  // function to toggle click
   const toggleClick = () => {
     if (show === "hidden") {
       setShow("block");
     } else {
       setShow("hidden");
     }
-    // console.log(addsongs)
   }
 
+  // function to add radio
   const addradio = async () => {
     if (!account) return;
     setTransactionInProgress(true);    
@@ -137,10 +161,7 @@ function UserPage() {
 
     try {
       const response = await signAndSubmitTransaction(payload);
-      // console.log("added");
-      // console.log(response)
       await provider.waitForTransaction(response.hash);
-      
     } catch (err) {
       console.log(err);
     } finally {
@@ -148,12 +169,15 @@ function UserPage() {
     }    
   }
 
+
+  // function to handle click
   const handleclick = (e, id, i) => {
     e.preventDefault();
     setAddSongs([...addsongs, id]);
     document.getElementById(i).style.display = "none"
   }
 
+  // function to set id
   const setid = (e, id, songtrack, name, addr, dist) => {
     e.preventDefault();
     if (!disable) {
@@ -173,6 +197,7 @@ function UserPage() {
     }
   };
 
+  // function to handle edit
   const HandleEdit = () => {
     if (disp === "hidden") {
       setDisp("block");
@@ -180,13 +205,13 @@ function UserPage() {
       setDisp("hidden");
     }
   };
+
+  // function to handle save
   const handleSave = async (e) => {
     e.preventDefault();
-    // console.log(e.target.profile_name.value);
-    // console.log(e.target.profile_type.value);
-    // console.log(e.target.profile_location.value);
   };
 
+  // function to handle radio calculations
   const handleRadioCalculations = async (radio) => {
     const hours = new Date().getHours();
     const minutes = new Date().getMinutes();
@@ -199,15 +224,12 @@ function UserPage() {
       songs.push(it);
       duration.push(parseInt(it.duration))
     })
-    // console.log(duration)
     let prefix_array = [];
     prefix_array.push(duration[0]);
     for(let i = 1; i < duration.length; i++) {
       prefix_array.push(parseInt(prefix_array[prefix_array.length - 1]) + duration[i]);
     }
-    // console.log(prefix_array)
     const timestamp = totalSeconds % prefix_array[prefix_array.length - 1];
-    // console.log(totalSeconds % prefix_array[prefix_array.length - 1]);
     let usedUpTime;
     let index;
     for(let i = 0; i < prefix_array.length; i++) {
@@ -221,20 +243,14 @@ function UserPage() {
         break;
       } 
     }
-    // console.log({index, usedUpTime});
-    // console.log(songs)
     setTrackid(index);
     setCurrent(songs);
     setUsedUpTime(usedUpTime);
     setIsRadio(1)    
-    // // console.log({hours, minutes, seconds})
-    // // console.log(scaleTimeToRange(hours, minutes, seconds, 24, 0.00000000005, prefix_array[prefix_array.length - 1]))
-    // console.log(radio)
   }
 
 
   return (
-    // <div className="group col-span-1 cursor-pointer rounded-md  bg-neutral-600 bg-opacity-10 p-3 transition-all duration-300 ease-in-out hover:bg-opacity-20 bg-gray-600">
     <>
       <div className="group relative w-full overflow-hidden rounded-xl shadow-lg shadow-neutral-900 transition-all duration-300 ease-in-out bg-gray-700 grid grid-cols-10 ">
         <div className="col-span-2">
@@ -378,9 +394,6 @@ function UserPage() {
         <div>
         <div>
         {radios && radios.map((it, i) => {
-          // const arr = it.songs
-          // // console.log(it.songs) 
-          // getIpfsArray(arr);
                 return (
                   <div
                     key={i}                    
@@ -428,7 +441,6 @@ function UserPage() {
         Location
       </div>
       </>
-    // </div>
   );
 }
 

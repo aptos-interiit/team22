@@ -1,3 +1,6 @@
+// Purpose: Main Page of the application. It contains the trending songs, latest songs, my playlist and all songs.
+
+// importing dependencies
 import React, { useContext, useEffect, useState } from "react";
 import { dataContext } from "../Context/dataContext";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
@@ -9,11 +12,13 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import TopArtistsCard from "../components/TopArtistCard";
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import play from '../MusicPlayer/assets/playBtn.png'
 import backicon from '../MusicPlayer/assets/back.jpg'
 import play2 from '../MusicPlayer/assets/play2.png'
 
+
+// Style for modal
 const style = {
   position: 'absolute',
   top: '50%',
@@ -26,33 +31,69 @@ const style = {
   p: 4,
 };
 
-
-
-
+// MainPage component
 function MainPage({ setTrackid }) {
-  const { distrix, setDistri, setRadio, radio,setRecName, recName, recadd, songs, setCurrent, current, setRecAdd, provider, addre, latestSong,setUsedUpTime, trendingSong, user, myPlaylistName, myPlaylists, transact, setTransact, disable, setIsRadio, artistsAndTheirSongs } =
-  useContext(dataContext);
-  const { account, signAndSubmitTransaction } = useWallet();
-  const [tstatus, setTransactionInProgress] = useState(0);
-  
-  const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [pname, setPname] = useState();
-  const [radioz, setRadioz] = useState([])
-  const [load, setLoad] = useState(1)
-  const [ct ,setCt] = useState(5)
 
+  // addre: address of the contract
+  // distrix: distribution
+  // setDistri: set distribution
+  // setRadio: set radio
+  // setRecName: set recommended name
+  // recName: recommended name
+  // recadd: recommended address
+  // songs: songs state
+  // setCurrent: set current
+  // current: current state
+  // setRecAdd: set recommended address
+  // provider: provider of the contract
+  // addre: address of the contract
+  // latestSong: latest songs state
+  // setUsedUpTime: set used up time
+  // trendingSong: trending songs state
+  // user: user state
+  // myPlaylistName: my playlist name state
+  // myPlaylists: my playlists state
+  const { distrix, setDistri, setRadio, radio, setRecName, recName, recadd, songs, setCurrent, current, setRecAdd, provider, addre, latestSong, setUsedUpTime, trendingSong, user, myPlaylistName, myPlaylists, transact, setTransact, disable, setIsRadio, artistsAndTheirSongs } =
+    useContext(dataContext);
+
+  // account: account of the user
+  const { account, signAndSubmitTransaction } = useWallet();
+
+  // transactionInProgress: transaction state
+  const [tstatus, setTransactionInProgress] = useState(0);
+
+  // navigate: navigate to a page
+  const navigate = useNavigate();
+
+  // open: open state for modal
+  const [open, setOpen] = React.useState(false);
+
+  // function to handle open for modal
+  const handleOpen = () => setOpen(true);
+
+  // function to handle close for modal
+  const handleClose = () => setOpen(false);
+
+  // pname: playlist name state
+  const [pname, setPname] = useState();
+
+  // radioz: radio state
+  const [radioz, setRadioz] = useState([])
+
+  // load: load state
+  const [load, setLoad] = useState(1)
+
+  // ct: ct state
+  const [ct, setCt] = useState(5)
+
+  // function to get ipfs object
   const getIpfsObject = async (user_address, ids, title, description) => {
     const todoListResource = await provider.getAccountResource(
       `${addre}`,
       `${addre}::music_platform::All_songs`
-    );        
+    );
     const tableHandle = todoListResource.data.content.handle;
     let songsx = [];
-
-    // console.log("songsx", songsx);
     for (let i = 0; i < ids.length; i++) {
       const tableItem = {
         key_type: "u64",
@@ -60,9 +101,8 @@ function MainPage({ setTrackid }) {
         key: `${ids[i]}`,
       };
       try {
-        const song = await provider.getTableItem(tableHandle, tableItem);            
+        const song = await provider.getTableItem(tableHandle, tableItem);
         if (songsx.some((e) => e.IpfsHash !== song.IpfsHash)) {
-          // console.log("Already exists");
           continue;
         }
         songsx.push(song);
@@ -70,13 +110,14 @@ function MainPage({ setTrackid }) {
         console.log(err);
       }
     }
-    let radio = { user_address:user_address, title: title, songs: songsx, description: description };
+    let radio = { user_address: user_address, title: title, songs: songsx, description: description };
     handleRadioCalculations(radio)
   };
 
+  // function to handle radio calculations
   const handleRadioCalculations = async (radioz) => {
-    if(radio.user_address && radioz.user_address == radio.user_address){
-        return;
+    if (radio.user_address && radioz.user_address == radio.user_address) {
+      return;
     }
     const hours = new Date().getHours();
     const minutes = new Date().getMinutes();
@@ -89,7 +130,6 @@ function MainPage({ setTrackid }) {
       songs.push(it);
       duration.push(parseInt(it.duration));
     });
-    // console.log(duration);
     let prefix_array = [];
     prefix_array.push(duration[0]);
     for (let i = 1; i < duration.length; i++) {
@@ -97,9 +137,7 @@ function MainPage({ setTrackid }) {
         parseInt(prefix_array[prefix_array.length - 1]) + duration[i]
       );
     }
-    // console.log(prefix_array);
     const timestamp = totalSeconds % prefix_array[prefix_array.length - 1];
-    // console.log(totalSeconds % prefix_array[prefix_array.length - 1]);
     let usedUpTime;
     let index;
     for (let i = 0; i < prefix_array.length; i++) {
@@ -113,48 +151,38 @@ function MainPage({ setTrackid }) {
         break;
       }
     }
-    // console.log(totalSeconds);
-    // console.log({ index, usedUpTime });
-    // console.log(songs);
     setTrackid(index);
     setCurrent(songs);
     setUsedUpTime(usedUpTime);
     setIsRadio(1);
-    // s.log({hours, minutes, seconds})
-    // // console.log(scaleTimeToRange(hours, minutes, seconds, 24, 0.00000000005, prefix_array[prefix_array.length - 1]))
-    // console.log(radioz);
   };
 
 
+  // useEffect to get all songs
   useEffect(() => {
-    
-    (async () => {      
-      if (!account) return;          
+    (async () => {
+      if (!account) return;
       const todoListResource = await provider.getAccountResource(
         `${addre}`,
         `${addre}::music_platform::All_radios`
       );
-      // console.log(todoListResource);
-      
       const tableHandle = todoListResource.data.content.handle;
-      if(todoListResource.data.all_indexes.length === 0) return;
-        const tableItem = {
-          key_type: "u64",
-          value_type: `${addre}::music_platform::Radio`,
-          key: `${todoListResource.data.all_indexes[0]}`,
-        };
-        try {                      
-            const radiox = await provider.getTableItem(tableHandle, tableItem);
-            // console.log(radiox);                          
-            // let arr = radio.songs;
-            // let object = await getIpfsObject(arr, radio.title, radio.description);                                    
-            setRadioz(radiox)
-        } catch (err) {
-          console.log(err);
-        }                
+      if (todoListResource.data.all_indexes.length === 0) return;
+      const tableItem = {
+        key_type: "u64",
+        value_type: `${addre}::music_platform::Radio`,
+        key: `${todoListResource.data.all_indexes[0]}`,
+      };
+      try {
+        const radiox = await provider.getTableItem(tableHandle, tableItem);
+        setRadioz(radiox)
+      } catch (err) {
+        console.log(err);
+      }
       setLoad(0);
     })();
-  },[]);
+  }, []);
+
 
   useEffect(() => {
     if (user == null) {
@@ -162,21 +190,21 @@ function MainPage({ setTrackid }) {
     }
   }, [user])
 
+  // function to add new playlist
   const addNewPlaylist = async (e, PlaylistName) => {
     e.preventDefault();
     if (!account) return;
-
     if (PlaylistName === "") {
       alert("Playlist Name cannot be empty")
       return;
     }
-
     if (!user) {
       alert("User not logged in")
       return;
     }
     setTransactionInProgress(true);
 
+    // add song to playlist
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -185,10 +213,8 @@ function MainPage({ setTrackid }) {
         functionArguments: [PlaylistName],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
-      // console.log("playlist created");
       await provider.waitForTransaction(response.hash);
       setTransact(transact + 1);
     } catch (err) {
@@ -198,10 +224,9 @@ function MainPage({ setTrackid }) {
       setTransactionInProgress(false);
     }
   }
-  
 
 
-  
+  // function to set id
   const setid = (e, id, songtrack, name, addr, dist) => {
     e.preventDefault();
     if (!disable) {
@@ -215,58 +240,59 @@ function MainPage({ setTrackid }) {
       if (recName === "") {
         setRecName(name);
       }
-      if(distrix === null){
+      if (distrix === null) {
         setDistri(dist)
       }
     }
   };
 
+  // function to slide left
   const slideLeft = () => {
     var slider = document.getElementById("slider");
     slider.scrollLeft = slider.scrollLeft - 200;
   };
 
+  // function to slide right
   const slideRight = () => {
     var slider = document.getElementById("slider");
     slider.scrollLeft = slider.scrollLeft + 200;
   };
 
+
+  // returning the MainPage component
   return (
     <>
       {user &&
         <div
           className={`min-h-screen text-white w-full`}
           style={{
-            // width: "100%",
             backgroundImage: `url(${backicon})`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "100% 100%",
             backgroundPosition: "center center",
           }}
-        // className="bg-black h-screen w-full text-white"
         >
           <div
-            className="text-white  w-[100%] h-[30vh] sm:h-[45vh] mx-auto flex"            
+            className="text-white  w-[100%] h-[30vh] sm:h-[45vh] mx-auto flex"
           >
             <div className="w-[100%] sm:w-[50%] h-[40vh] pt-20  pl-20 flex flex-col">
               <p className="w-[100%] ml-auto mr-auto text-8xl text-justify">Trending Radio</p>
               <Link
                 to="/allradios"
-                type="button"                
+                type="button"
                 className="ml-2 mr-auto mt-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-2xl px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
               >
                 All Radios
               </Link>
             </div>
             {
-              load ? (<></>):(<>
+              load ? (<></>) : (<>
                 <div className="w-[100%] sm:w-[50%] h-[22vh] ml-80 rounded-lg mt-16 flex flex-col from-white">
-                  {/* <p className="ml-auto mr-auto text-7xl mt-5">{radioz.title}</p> */}
-                  <img 
-                    onClick={() => getIpfsObject(radioz.user_address, radioz.songs, radioz.title, radioz.description)}               
-                    src={play2}              
-                    className="ml-auto mr-auto h-[300px] w-[300px] hover:scale-110 hover:cursor-pointer transition-transform transform"                   
-                  />                    
+                  <img
+                    onClick={() => getIpfsObject(radioz.user_address, radioz.songs, radioz.title, radioz.description)}
+                    src={play2}
+                    className="ml-auto mr-auto h-[300px] w-[300px] hover:scale-110 hover:cursor-pointer transition-transform transform"
+                  />
                 </div>
               </>)
             }
@@ -277,9 +303,6 @@ function MainPage({ setTrackid }) {
                 <div className="font-bold text-2xl sm:text-3xl sm:m-2 text-white">
                   Trending Songs
                 </div>
-
-                {/* //slider */}
-
                 <div>
                   <div className="relative flex items-center  rounded m-3">
                     <MdChevronLeft
@@ -294,7 +317,7 @@ function MainPage({ setTrackid }) {
                       <div className="flex h-content">
                         {trendingSong.map((it, i) => {
                           return (
-                            <TrendingSongCard key={i} bg={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${it.coverIpfs}`} owner={it.title} songs={trendingSong} id={i} setid={setid}  artists={it.artists} distri={it.distri} address={it.owner} artistName={it.owner_name} songID={it.id}/>
+                            <TrendingSongCard key={i} bg={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${it.coverIpfs}`} owner={it.title} songs={trendingSong} id={i} setid={setid} artists={it.artists} distri={it.distri} address={it.owner} artistName={it.owner_name} songID={it.id} />
                           );
                         })}
                       </div>
@@ -313,7 +336,6 @@ function MainPage({ setTrackid }) {
                 </div>
 
                 {/* //slider */}
-
                 <div>
                   <div className="relative flex items-center  rounded m-3">
                     <MdChevronLeft
@@ -328,7 +350,7 @@ function MainPage({ setTrackid }) {
                       <div className="flex">
                         {latestSong.map((it, i) => {
                           return (
-                            <TrendingSongCard key={i} bg={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${it.coverIpfs}`} owner={it.title} songs={latestSong} id={i} setid={setid} artists={it.artists} distri={it.distri} artistName={it.owner_name} address={it.owner} songID={it.id}/>
+                            <TrendingSongCard key={i} bg={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${it.coverIpfs}`} owner={it.title} songs={latestSong} id={i} setid={setid} artists={it.artists} distri={it.distri} artistName={it.owner_name} address={it.owner} songID={it.id} />
                           );
                         })}
                       </div>
@@ -361,86 +383,83 @@ function MainPage({ setTrackid }) {
                 </div>
               </div>
             </div>
-         
+            <div className=" h-content m-3 sm:m-4 mt-4 bg-[#1d1d24] p-2 rounded-md col-span-3">
+              <div className="font-bold text-2xl sm:text-3xl sm:m-2">
+                Top Artisits
+              </div>
 
+              {/* //slider */}
 
-          <div className=" h-content m-3 sm:m-4 mt-4 bg-[#1d1d24] p-2 rounded-md col-span-3">
-                <div className="font-bold text-2xl sm:text-3xl sm:m-2">
-                  Top Artisits
+              <div>
+                <div className="relative flex items-center  rounded m-3">
+                  <MdChevronLeft
+                    className="opacity-50 cursor-pointer hover:opacity-100 hidden"
+                    onClick={slideLeft}
+                    size={40}
+                  />
+                  <div
+                    id="slider"
+                    className=" w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide no-scrollbar "
+                  >
+                    <div className="flex">
+                      {artistsAndTheirSongs && artistsAndTheirSongs.map((it, i) => {
+                        // console.log(it);
+                        return (
+                          <TopArtistsCard artistFullInfo={it} key={i} />
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <MdChevronRight
+                    className="opacity-50 cursor-pointer hover:opacity-100 hidden"
+                    onClick={slideRight}
+                    size={40}
+                  />
                 </div>
+              </div>
+            </div>
 
-                {/* //slider */}
+            <div className=" h-content m-3 sm:m-4 mt-4 bg-[#1d1d24] p-2 rounded-md col-span-3">
+              <div className="font-bold text-2xl sm:text-3xl sm:m-2">
+                All Songs
+              </div>
 
-                <div>
-                  <div className="relative flex items-center  rounded m-3">
-                    <MdChevronLeft
-                      className="opacity-50 cursor-pointer hover:opacity-100 hidden"
-                      onClick={slideLeft}
-                      size={40}
-                    />
-                    <div
-                      id="slider"
-                      className=" w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide no-scrollbar "
-                    >
-                      <div className="flex">
-                        {artistsAndTheirSongs && artistsAndTheirSongs.map((it, i) => {
-                          // console.log(it);
+              {/* //slider */}
+
+              <div>
+                <div className="relative flex items-center rounded m-3">
+                  <MdChevronLeft
+                    className="opacity-50 cursor-pointer hover:opacity-100 hidden"
+                    onClick={slideLeft}
+                    size={40}
+                  />
+                  <div
+                    id="slider"
+                    className=" h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide no-scrollbar "
+                  >
+                    <div className="flex flex-wrap p-3">
+                      {songs.map((it, i) => {
+                        if (i < ct) {
                           return (
-                            <TopArtistsCard artistFullInfo={it} key={i}/>
+                            <TrendingSongCard key={i} bg={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${it.coverIpfs}`} owner={it.title} songs={songs} id={i} setid={setid} artists={it.artists} distri={it.distri} address={it.owner} artistName={it.owner_name} songID={it.id} />
                           );
-                        })}
-                      </div>
-                    </div>
-                    <MdChevronRight
-                      className="opacity-50 cursor-pointer hover:opacity-100 hidden"
-                      onClick={slideRight}
-                      size={40}
-                    />
-                  </div>
-                </div>
-              </div>
-
-          <div className=" h-content m-3 sm:m-4 mt-4 bg-[#1d1d24] p-2 rounded-md col-span-3">
-                <div className="font-bold text-2xl sm:text-3xl sm:m-2">
-                  All Songs
-                </div>
-
-                {/* //slider */}
-
-                <div>
-                  <div className="relative flex items-center rounded m-3">
-                    <MdChevronLeft
-                      className="opacity-50 cursor-pointer hover:opacity-100 hidden"
-                      onClick={slideLeft}
-                      size={40}
-                    />
-                    <div
-                      id="slider"
-                      className=" h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide no-scrollbar "
-                    >
-                      <div className="flex flex-wrap p-3">
-                        {songs.map((it, i) => {
-                          if(i<ct){                          
-                            return (                              
-                                <TrendingSongCard key={i} bg={`https://tan-mad-salamander-939.mypinata.cloud/ipfs/${it.coverIpfs}`} owner={it.title} songs={songs} id={i} setid={setid} artists={it.artists} distri={it.distri} address={it.owner} artistName={it.owner_name} songID={it.id}/>                                                                                            
-                            );
-                          }
-                        })}
-                        {
-                          ct < songs.length ?(<><p className="mt-auto mb-auto p-5 ml-5 bg-[#23252e] hover:bg-black transform hover:cursor-pointer rounded-lg" onClick={() => setCt(ct+5)}>Load More</p></>):(<></>)
-                          
                         }
-                      </div>
+                      })}
+                      {
+                        ct < songs.length ? (<><p className="mt-auto mb-auto p-5 ml-5 bg-[#23252e] hover:bg-black transform hover:cursor-pointer rounded-lg" onClick={() => setCt(ct + 5)}>Load More</p></>) : (<></>)
+
+                      }
                     </div>
-                    <MdChevronRight
-                      className="opacity-50 cursor-pointer hover:opacity-100 hidden"
-                      onClick={slideRight}
-                      size={40}
-                    />
                   </div>
+                  <MdChevronRight
+                    className="opacity-50 cursor-pointer hover:opacity-100 hidden"
+                    onClick={slideRight}
+                    size={40}
+                  />
                 </div>
               </div>
-              </div>
+            </div>
+          </div>
 
         </div>
 
@@ -472,13 +491,8 @@ function MainPage({ setTrackid }) {
             </form>
           </section>
         </Box>
-
       </Modal>
-
-      
     </>
-
-
   );
 }
 

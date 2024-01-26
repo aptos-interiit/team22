@@ -1,3 +1,7 @@
+// Summary: This component is the playlist page which is rendered when the
+// user clicks on a playlist from the playlist page.
+
+// importing dependencies
 import React, { useContext, useEffect, useState } from "react";
 import MusicCard from "./MusicCard";
 import { useLocation } from "react-router";
@@ -5,10 +9,14 @@ import { dataContext } from "../Context/dataContext";
 import play from "../MusicPlayer/assets/play2.png";
 import pause from "../MusicPlayer/assets/pause2.png";
 
+
+// PlaylistSpace component
 export default function PlaylistSpace(props) {
 
-
+  // location: location of the user
   const location = useLocation();
+
+  // passedData: data passed to the component
   const passedData = location.state;
   const { distrix, setDistri, user, setTrackid, setCurrent, setIsRadio, setRadio, setRecAdd, setRecName, disable, recadd, recName, setCurrPlaylist, currPlaylist } = useContext(dataContext)
   const [timeLength, setTimelength] = useState(0);
@@ -26,45 +34,39 @@ export default function PlaylistSpace(props) {
       if (recName === "") {
         setRecName(name);
       }
-      if(distrix === null){
+      if (distrix === null) {
         setDistri(dist)
       }
-      if(id != -1) setCurrPlaylist(passedData);
+      if (id != -1) setCurrPlaylist(passedData);
       else setCurrPlaylist(null);
     }
   };
 
+  // useEffect to set time length
   useEffect(() => {
     let timelength = 0;
-
-    // console.log(passedData);
     passedData.data.map((it, i) => {
-      // console.log(it);
       timelength += parseFloat(it.duration)
     })
     setTimelength(parseInt(timelength / 60))
   }, [passedData])
 
+
+  // returning the PlaylistSpace component
   return (
     <>
-      <div
-        className={`bg-[#010101] max-h-screen overflow-y-scroll text-white p-4`}
-      // className="bg-black h-screen w-full text-white"
-      >
+      <div className={`bg-[#010101] max-h-screen overflow-y-scroll text-white p-4`} >
         <div className="bg-[#000000] mx-auto flex w-full">
           <div className="flex flex-row  w-[100%] mx-auto">
-            {/* <div className=" m-auto flex flex-row  border-4 border-white ml-0"> */}
             <div
               className="m-auto flex flex-row ml-0 w-[100px] h-[100px] sm:w-[260px] sm:h-[260px] rounded-full "
               style={{
-                // width: "100%",
                 backgroundImage: `url(${require(`../MusicPlayer/assets/${passedData.img}`)})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "100% 100%",
                 backgroundPosition: "center center",
               }}
             ></div>
-            {/* </div> */}
             <div className=" my-auto m-4 w-[70%]">
               <div className="font-medium text-sm mb-[-5px] text-[#e8e8e8] sm:text-xl">{user.name}'s Playlist</div>
               <div className="font-bold text-3xl sm:text-7xl">{passedData.name}</div>
@@ -74,31 +76,27 @@ export default function PlaylistSpace(props) {
           </div>
         </div>
         <div className="w-[100%] mt-10 p-2">
-        {currPlaylist !== passedData && passedData.data.length!==0 ? (<div
-          className="m-auto w-[80px] h-[80px] rounded-full ml-0 cursor-pointer"
-          style={{
-            // width: "100%",
-            backgroundImage: `url(${play})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "100% 100%",
-            backgroundPosition: "center center",
-          }}
-          onClick={(e) => setid(e, 0, passedData.data, passedData.data[0].owner_name, passedData.data[0].owner)}
-        ></div>) : passedData.data.length!==0 ? (<div
-          className="m-auto w-[80px] h-[80px] rounded-full ml-0 cursor-pointer"
-          style={{
-            // width: "100%",
-            backgroundImage: `url(${pause})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "100% 100%",
-            backgroundPosition: "center center",
-          }}
-          onClick={(e) => setid(e, -1, passedData.data, "", null, null)}
-        ></div>)
-          : <div></div>}
+          {currPlaylist !== passedData && passedData.data.length !== 0 ? (<div
+            className="m-auto w-[80px] h-[80px] rounded-full ml-0 cursor-pointer"
+            style={{
+              backgroundImage: `url(${play})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "100% 100%",
+              backgroundPosition: "center center",
+            }}
+            onClick={(e) => setid(e, 0, passedData.data, passedData.data[0].owner_name, passedData.data[0].owner)}
+          ></div>) : passedData.data.length !== 0 ? (<div
+            className="m-auto w-[80px] h-[80px] rounded-full ml-0 cursor-pointer"
+            style={{
+              backgroundImage: `url(${pause})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "100% 100%",
+              backgroundPosition: "center center",
+            }}
+            onClick={(e) => setid(e, -1, passedData.data, "", null, null)}
+          ></div>)
+            : <div></div>}
         </div>
-        
-
         <div>
           <div className=" mt-2  sm:h-[60vh] h-[60vh] overflow-y-scroll">
             {passedData.data && passedData.data.map((it, i) => (
@@ -106,7 +104,7 @@ export default function PlaylistSpace(props) {
             ))}
           </div>
         </div>
-        </div>
+      </div>
     </>
   );
 }

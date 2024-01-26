@@ -1,20 +1,24 @@
-import { Network, Provider } from "aptos";
-import { useContext } from "react";
-import { dataContext } from "../Context/dataContext";
+// Summary: Fetches user data from the blockchain
 
+
+// importing the aptos library
+import { Network, Provider } from "aptos";
+
+// addre: the address of the module
 const addre = process.env.REACT_APP_MODULE_ADDRESS;
-const res_acc = process.env.REACT_APP_RESOURCE_ACCOUNT;
+
+// provider: the provider of the blockchain
 export const provider = new Provider(Network.TESTNET);
 
+// FetchUser: fetches the user data from the blockchain
 export const FetchUser = async (account) => {
 
+    // resource: the resource of the module i.e. Address_to_artist
     const resource = await provider.getAccountResource(
       `${addre}`,
       `${addre}::music_platform::Address_to_artist`
     );
-    // console.log(resource);
     const tableHandle = resource.data.content.handle;
-
     const tableItem = {
       key_type: "address",
       value_type: `${addre}::music_platform::User`,

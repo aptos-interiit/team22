@@ -1,3 +1,8 @@
+// Purpose: Provide the user with the ability to create their own radio station and add songs to it.
+
+
+
+// importing dependencies
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { dataContext } from "../Context/dataContext";
@@ -6,43 +11,70 @@ import SearchPg from "./SearchPg";
 import RadioCard from "../components/RadioCard";
 import { toast } from "react-toastify";
 
+
+// YourRadio component
 function YourRadio() {
+
+  // account: account of the user
   const { account, signAndSubmitTransaction } = useWallet();
   const {
-    addre,
-    provider,
-    songs,
-    setRadio,
-    setTrackid,
-    setCurrent,
-    setUsedUpTime,
-    setIsRadio,
-    radio,
-    recadd,
-    setRecAdd,
-    recName,
-    setRecName,
-    setDistri,
-    distrix
+    addre,          // addre: address of the contract
+    provider,       // provider: provider of the contract                              
+    songs,          // songs: songs array
+    setRadio,       // setRadio: set radio
+    setTrackid,     // setTrackid: set track id
+    setCurrent,     // setCurrent: set current
+    setUsedUpTime,  // setUsedUpTime: set used up time
+    setIsRadio,     // setIsRadio: set is radio     
+    radio,          // radio: radio
+    recadd,         // recadd: recommended address
+    setRecAdd,      // setRecAdd: set recommended address
+    recName,        // recName: recommended name
+    setRecName,     // setRecName: set recommended name
+    setDistri,      // setDistri: set distribution
+    distrix         // distrix: distribution
   } = useContext(dataContext);
-  const [userradio, setUserRadio] = useState(null);  
+
+  // userRadio: user radio
+  const [userradio, setUserRadio] = useState(null);
+  
+  // showsongs: show songs
   const [showsongs, setShowSongs] = useState(songs);
+
+  // load: load state
   const [load, setLoad] = useState(1);
+
+  // show: show state
   const [show, setShow] = useState("hidden");
+
+  // addsongs: add songs
   const [addsongs, setAddSongs] = useState([]);
+
+  // transactionInProgress: transaction state
   const [tstatus, setTransactionInProgress] = useState(0);
+
+  // flag: flag state
   const [flag, setFlag] = useState(0)
+
+  // isRadio: is radio state
   const [radioid, setRadioId] = useState(0)
+
+  // isRadio: is radio state
   const [radioName, setRadioName] = useState("")
+
+  // isRadio: is radio state
   const [radioDesc, setRadioDesc] = useState("")    
 
+  // bottomRef: bottom reference
   const bottomRef = useRef(null);
 
+  // function to handle click
   const handleclick = (e, idx, song) => {
     e.preventDefault();
     setAddSongs([...addsongs, song]);              
   }; 
 
+  // function to search
   const search = (e) => {
     e.preventDefault();    
     let value = e.target.value;
@@ -61,6 +93,7 @@ function YourRadio() {
 
   }
 
+  // function to remove
   const remove = (e, idx, song) => {
     e.preventDefault();
     setAddSongs((current) =>
@@ -71,6 +104,7 @@ function YourRadio() {
     
   };  
 
+  // function to toggle click
   const toggleClick = () => {
     if (show === "hidden") {
       setShow("block");
@@ -79,10 +113,12 @@ function YourRadio() {
     }    
   };
 
+  // useEffect hook
   useEffect(() => {
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
   },[show])
 
+  // function to add radio
   const addradio = async () => {
     if (!account) return;
     setTransactionInProgress(true);
@@ -90,7 +126,6 @@ function YourRadio() {
     for (let i = 0; i < addsongs.length; i++) {
       arr.push(addsongs[i].id);
     }
-    // console.log(arr);
     if(radioName === "" || radioDesc === ""){
       toast.error(`Fields cant be empty`, {
         position: "top-left",
@@ -115,8 +150,6 @@ function YourRadio() {
 
     try {
       const response = await signAndSubmitTransaction(payload);
-      // console.log("added");
-      // console.log(response);
       await provider.waitForTransaction(response.hash);
       setFlag(!flag)
       setShow("hidden")
@@ -127,6 +160,7 @@ function YourRadio() {
     }
   };
 
+  // function to add songs to radio
   const addsongstoradio = async () => {
     if (!account) return;
     setTransactionInProgress(true);
@@ -134,9 +168,6 @@ function YourRadio() {
     for (let i = 0; i < addsongs.length; i++) {
       arr.push(addsongs[i].id);
     }
-    // console.log(radioid);
-    // console.log(arr)
-
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -145,11 +176,8 @@ function YourRadio() {
         functionArguments: [radioid, arr],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
-      // console.log("added");
-      // console.log(response);
       await provider.waitForTransaction(response.hash);
       setFlag(!flag)
       setShow("hidden")
@@ -160,6 +188,7 @@ function YourRadio() {
     }
   };
 
+  // function to delete radio
   const handleDelete = async (e) => {
     e.preventDefault();
     if (!account) return;
@@ -172,11 +201,8 @@ function YourRadio() {
         functionArguments: [radioid],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
-      // console.log("deleted");
-      // console.log(response);
       await provider.waitForTransaction(response.hash);
       setFlag(!flag)      
     } catch (err) {
@@ -186,6 +212,7 @@ function YourRadio() {
     }
   };
 
+  // function to disable radio
   const handleDisable = async (e, isActive) => {
     e.preventDefault();
     if (!account) return;
@@ -198,11 +225,8 @@ function YourRadio() {
         functionArguments: [radioid, isActive],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
-      // console.log("deleted");
-      // console.log(response);
       await provider.waitForTransaction(response.hash);
       setFlag(!flag)      
     } catch (err) {
@@ -210,19 +234,17 @@ function YourRadio() {
     } finally {
       setTransactionInProgress(false);
     }
-
-
   }  
 
+
+  // function to get ipfs object
   const getIpfsObject = async (ids, title, desc, user_address, is_active) => {
     const todoListResource = await provider.getAccountResource(
       `${addre}`,
       `${addre}::music_platform::All_songs`
     );
-    
     const tableHandle = todoListResource.data.content.handle;
     let songsx = [];
-    
     for (let i = 0; i < ids.length; i++) {
       const tableItem = {
         key_type: "u64",
@@ -232,7 +254,6 @@ function YourRadio() {
       try {
         const song = await provider.getTableItem(tableHandle, tableItem);       
         if (songsx.some((e) => e.IpfsHash !== song.IpfsHash)) {
-          // console.log("Already exists");
           continue;
         }
         songsx.push(song);
@@ -244,12 +265,11 @@ function YourRadio() {
     return radio;
   };
 
+  // function to handle radio calculations
   const handleRadioCalculations = async (radioz) => {
     if(radio.user_address && radio.user_address === radioz.user_address){
       return;
     }    
-    // console.log(radio)
-    // console.log(radioz)
     const hours = new Date().getHours();
     const minutes = new Date().getMinutes();
     const seconds = new Date().getSeconds();
@@ -261,7 +281,6 @@ function YourRadio() {
       songs.push(it);
       duration.push(parseInt(it.duration));
     });
-    // console.log(duration);
     let prefix_array = [];
     prefix_array.push(duration[0]);
     for (let i = 1; i < duration.length; i++) {
@@ -269,9 +288,7 @@ function YourRadio() {
         parseInt(prefix_array[prefix_array.length - 1]) + duration[i]
       );
     }
-    // console.log(prefix_array);
     const timestamp = totalSeconds % prefix_array[prefix_array.length - 1];
-    // console.log(totalSeconds % prefix_array[prefix_array.length - 1]);
     let usedUpTime;
     let index;
     for (let i = 0; i < prefix_array.length; i++) {
@@ -285,9 +302,6 @@ function YourRadio() {
         break;
       }
     }
-    // console.log(totalSeconds);
-    // console.log({ index, usedUpTime });
-    // console.log(songs);
     setTrackid(index);
     setCurrent(songs);
     setUsedUpTime(usedUpTime);
@@ -302,13 +316,9 @@ function YourRadio() {
     if(distrix === null){
       setDistri(songs[index].distri)
     }
-    // s.log({hours, minutes, seconds})
-    // // console.log(scaleTimeToRange(hours, minutes, seconds, 24, 0.00000000005, prefix_array[prefix_array.length - 1]))
-    
   };
 
   useEffect(() => {
-    
     (async () => {
       if (!account) return;
       setLoad(1)
@@ -319,9 +329,7 @@ function YourRadio() {
         `${addre}`,
         `${addre}::music_platform::All_radios`
       );
-      // console.log(todoListResource);
       const tableHandle = todoListResource.data.content.handle;
-
       for (let i = 0; i < todoListResource.data.all_indexes.length; i++) {
         const tableItem = {
           key_type: "u64",
@@ -335,9 +343,7 @@ function YourRadio() {
             setRadioId(todoListResource.data.all_indexes[i])
             let arr = radio.songs;
             let object = await getIpfsObject(arr, radio.title, radio.description, radio.user_address, radio.is_active);
-            // console.log(object);
             setUserRadio(object);             
-                        
           }
         } catch (err) {
           console.log(err);

@@ -1,3 +1,7 @@
+// Summary: This file contains the code for the music player at the bottom of the screen.
+
+
+// importing dependencies
 import React, { useState, useContext, useEffect } from 'react'
 import { GoChevronUp, GoChevronDown } from "react-icons/go";
 import { dataContext } from '../Context/dataContext';
@@ -12,6 +16,7 @@ import Modal from '@mui/material/Modal';
 import lightningIcon from "./assets/lightning.png"
 import Marquee from "react-fast-marquee";
 
+// style for modal
 const style = {
   position: 'absolute',
   top: '50%',
@@ -24,8 +29,7 @@ const style = {
   p: 4,
 };
 
-
-
+// function to convert seconds to time
 function secondsToTime(seconds) {
   let minutes = Math.floor(seconds / 60);
   let remainingSeconds = seconds % 60;
@@ -35,34 +39,49 @@ function secondsToTime(seconds) {
   } else {
     remainingSeconds = Math.round(remainingSeconds);
   }
-
   return minutes + ":" + remainingSeconds;
 }
 
 
+// Music component
 const Music = ({
-  isPlaying,
-  onPlayPauseClick,
-  onPrevClick,
-  onNextClick,
-  onScrubEnd,
-  onScrub,
-  trackProgress,
-  duration,
-  owner,
-  title,
-  coverIpfs,
-  stopRadio,
-  owner_name
+  isPlaying,              // isPlaying: state to store whether the song is playing or not
+  onPlayPauseClick,       // onPlayPauseClick: function to handle play/pause button click
+  onPrevClick,            // onPrevClick: function to handle previous button click
+  onNextClick,            // onNextClick: function to handle next button click
+  onScrubEnd,             // onScrubEnd: function to handle scrub end
+  onScrub,                // onScrub: function to handle scrub
+  trackProgress,          // trackProgress: state to store the track progress
+  duration,               // duration: state to store the duration
+  owner,                  // owner: owner of the song
+  title,                  // title: state to store the title
+  coverIpfs,              // coverIpfs: state to store the coverIpfs
+  stopRadio,              // stopRadio: function to handle stop radio
+  owner_name              // owner_name: state to store the owner name
 }) => {
+
+  // icon: icon state
   const [icon, setIcon] = useState(<GoChevronUp />)
+
+  // disp: display state
   const [disp, setDisp] = useState('hidden')
+
+  // isRadio: isRadio state
   const { isRadio, radio, handleTurboTip } = useContext(dataContext);
+
+  // open: open state for modal
   const [open, setOpen] = React.useState(false);
+
+  // function to handle open for modal
   const handleOpen = () => setOpen(true);
+
+  // function to handle close for modal
   const handleClose = () => setOpen(false);
+
+  // tip: tip state
   const [tip, setTip] = useState(0);
 
+  // function to handle turbo tip
   const handleTurboTipWrapper = async (e) => {
     e.preventDefault();
     const condition = await handleTurboTip(tip * 1e8, radio.user_address);
@@ -71,10 +90,7 @@ const Music = ({
     }
   }
 
-  useEffect(() => {
-    // console.log(radio);
-  }, [radio])
-
+  // returning the Music component
   return (
     <footer className="sticky bottom-0 bg-black">
       <div >
@@ -104,7 +120,6 @@ const Music = ({
                     : secondsToTime(trackProgress)}
                 </div>
                 <div className="relative w-3/4 justify-center items-center">
-                  {/* <div className="bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"> */}
                   <input
                     type="range"
                     value={trackProgress}
@@ -198,29 +213,29 @@ const Music = ({
                 </button>
               </div>
               <div className='col-span-2 w-[100%] flex items-center justify-center'>
-              {isPlaying ? (
-                <button
-                  type="button"
-                  onClick={() => onPlayPauseClick(false)}
-                  className="bg-white text-white dark:bg-slate-100 dark:text-white flex-none my-1 mx-auto w-16 h-16 rounded-full ring shadow-md flex items-center justify-center"
-                  aria-label="Pause"
-                >
-                  <img src={pause}>
-                  </img>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => onPlayPauseClick(true)}
-                  className="bg-white text-white dark:bg-slate-100 dark:text-white flex-none my-1 mx-auto w-16 h-16 rounded-full ring shadow-md flex items-center justify-center"
-                  aria-label="Play"
-                >
-                  <img className='' src={img}>
-                  </img>
-                </button>
-              )}
+                {isPlaying ? (
+                  <button
+                    type="button"
+                    onClick={() => onPlayPauseClick(false)}
+                    className="bg-white text-white dark:bg-slate-100 dark:text-white flex-none my-1 mx-auto w-16 h-16 rounded-full ring shadow-md flex items-center justify-center"
+                    aria-label="Pause"
+                  >
+                    <img src={pause}>
+                    </img>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => onPlayPauseClick(true)}
+                    className="bg-white text-white dark:bg-slate-100 dark:text-white flex-none my-1 mx-auto w-16 h-16 rounded-full ring shadow-md flex items-center justify-center"
+                    aria-label="Play"
+                  >
+                    <img className='' src={img}>
+                    </img>
+                  </button>
+                )}
               </div>
-              
+
               <div className="text-white flex-auto flex items-center justify-evenly col-span-2">
                 <button
                   type="button"
@@ -247,7 +262,7 @@ const Music = ({
                   </svg>
                 </button>
                 <button
-                className='p-4'
+                  className='p-4'
                   onClick={() => {
                     if (disp === "hidden") {
                       setDisp("block");
@@ -286,8 +301,6 @@ const Music = ({
                   <label className="text-white" htmlFor="pname">Amount(in APT)</label>
                   <input step="any" onChange={(e) => setTip(e.target.value)} id="pname" type="number" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md bg-[#44b89b] dark:text-gray-300 dark:border-[#07F810] focus:border-[#07F810] dark:focus:border-[#07F810] focus:outline-none" />
                 </div>
-                {/* </div> */}
-
                 <div class="flex justify-end mt-6">
                   <button onClick={handleClose} className="bg-[#2AAA8A] text-white mr-4 rounded-2xl border-2 border-[#07F810] p-2 flex items-center px-4">Cancel</button>
                   <button onClick={(e) => handleTurboTipWrapper(e)} className="bg-[#2AAA8A] text-white mr-4 rounded-2xl border-2 border-[#07F810] p-2 flex items-center px-4">Send</button>
@@ -296,7 +309,6 @@ const Music = ({
             </form>
           </section>
         </Box>
-
       </Modal>
     </footer>
   )

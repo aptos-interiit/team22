@@ -1,44 +1,49 @@
-// MainContent.jsx
+// Purpose: To display the search page
 
-import React, {useEffect, useState, useContext} from 'react';
+
+// importing dependencies
+import React, { useEffect, useState, useContext } from 'react';
 import SideSlider from "./SideSlider";
-import MainPage from "./MainPage";
 import Navbar from './Navbar';
-import SideBar from './SideBar';
 import Search from './Search';
 import SearchPg from './SearchPg';
 import { dataContext } from "../Context/dataContext";
 
-function SearchPage({ load, user}) {
-    const {songs, setSearchsong, setTrackid} =
+// SearchPage component
+function SearchPage({ load, user }) {
+
+  // songs: songs
+  const { songs, setSearchsong } =
     useContext(dataContext);
-    const [count, setCount] = useState(0)
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        let value = e.target.value
-        let search = await SearchPg(songs, value)
-        // console.log(search);
-        setSearchsong(search)
-        setCount(search.length)
-        // window.location.href="/search"
-      }
+
+  // count: count state
+  const [count, setCount] = useState(0)
+
+  // function to handle submit
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    let value = e.target.value
+    let search = await SearchPg(songs, value)
+    setSearchsong(search)
+    setCount(search.length)
+  }
+
+  // returning the SearchPage component
   return (
     <div className="flex w-[100%] mx-auto max-w-full">
       <div className="border-e">
         <SideSlider />
-        {/* <SideBar></SideBar> */}
       </div>
-      
       <div className='bg-black m-0 w-full'>
         {load ? (
           <>
             <div className='max-h-screen overflow-y-auto mx-auto w-full'>
-            <Navbar savings={user ? user.savings : 0} handleSubmit={handleSubmit}/>
+              <Navbar savings={user ? user.savings : 0} handleSubmit={handleSubmit} />
               <Search />
             </div>
           </>
         ) : (
-          <>{/* <div className="loader"></div> */}</>
+          <></>
         )}
       </div>
     </div>

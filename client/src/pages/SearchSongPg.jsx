@@ -1,23 +1,42 @@
+// Purpose: Provide a page for searching songs.
+
+
+// importing dependencies
 import React, { useContext, useState } from "react";
 import { dataContext } from "../Context/dataContext";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
-
-
+// SearchSongPg component
 function SearchSongPg() {
-  const { distrix, setDistri, disable, setCurrent,recName, setRecName, recadd, setRecAdd, setIsRadio, setRadio, provider, addre,searchsong,setSearchsong,setTrackid} =
+
+  // distrix: distribution
+  // setDistri: set distribution
+  // disable: disable state
+  // setCurrent: set current
+  // recName: recommended name
+  // setRecName: set recommended name
+  // recadd: recommended address
+  // setRecAdd: set recommended address
+  // setIsRadio: set is radio
+  // setRadio: set radio
+  // provider: provider of the contract
+  // addre: address of the contract
+  // searchsong: search song
+  // setSearchsong: set search song
+  // setTrackid: set track id
+  const { distrix, setDistri, disable, setCurrent, recName, setRecName, recadd, setRecAdd, setIsRadio, setRadio, provider, addre, searchsong, setSearchsong, setTrackid } =
     useContext(dataContext);
+
+  // account: account of the user
   const { account, signAndSubmitTransaction } = useWallet();
+
+  // transactionInProgress: transaction state
   const [tstatus, setTransactionInProgress] = useState(0);
-  const [word,setWord]=useState("")
 
-
+  // function to delete song
   const handleDel = async (id) => {
     if (!account) return;
     setTransactionInProgress(true);
-    
-    // console.log(id);
-    
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -26,10 +45,8 @@ function SearchSongPg() {
         functionArguments: [id],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
-
       await provider.waitForTransaction(response.hash);
     } catch (error) {
       console.log("error", error);
@@ -39,6 +56,7 @@ function SearchSongPg() {
     }
   };
 
+  // function to set id
   const setid = (e, id, songtrack, name, addr, dist) => {
     e.preventDefault();
     if (!disable) {
@@ -52,28 +70,26 @@ function SearchSongPg() {
       if (recName === "") {
         setRecName(name);
       }
-      if(distrix === null){
+      if (distrix === null) {
         setDistri(dist)
       }
     }
   };
 
+  // returning the SearchSongPg component
   return (
     <div className="w-full">
       <main className="grid place-items-center min-h-screen bg-slate-700 p-5 w-full">
         <div>
-            {searchsong.length ?(
-                <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-gray-200 mb-5 select-none">
-                Search Songs
-                
-              </h1>
-            ):(
-                <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-gray-200 mb-5 select-none">
-            no song found 
-          </h1>
-            )}
-          
-          
+          {searchsong.length ? (
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-gray-200 mb-5 select-none">
+              Search Songs
+            </h1>
+          ) : (
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-gray-200 mb-5 select-none">
+              no song found
+            </h1>
+          )}
           <section className="grid grid-cols-1 sm:grid-cols-4 gap-4">
             {/* <!-- CARD 1 --> */}
             {searchsong.map((it, i) => {
@@ -116,10 +132,8 @@ function SearchSongPg() {
                 </div>
               );
             })}
-
             {/* <!-- END OF CARD 1 --> */}
           </section>
-
         </div>
       </main>
     </div>

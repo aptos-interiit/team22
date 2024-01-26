@@ -1,33 +1,89 @@
+// Summary: This file contains the code for the audio player that plays the songs from the radio.
+
+
+// importing dependencies
 import React, { useEffect, useState, useRef } from "react";
-import { Network, Provider } from "aptos";
 import axios from "axios";
 import { useContext } from "react";
 import { dataContext } from "../Context/dataContext";
 import Music from "./Music";
-// import tracks from "../tracks";
 import { ToastContainer, toast } from 'react-toastify';
 
+// server address
 const server_address = process.env.REACT_APP_SERVER_ADDRESS
 
+// AudioPlayer2 component
 function AudioPlayer2() {
+
+    // distrix: distribution
+    // setDistri: set distribution
+    // recName: recommended name
+    // setRecName: set recommended name
+    // setOpen: set open
+    // account: account of the user
+    // trackid: track id
+    // recadd: recommended address
+    // setRecAdd: set recommended address
+    // transact: transaction state
+    // setTransact: set transaction state
+    // current: current state
+    // setTrackid: set track id
+    // setRadio: set radio
+    // setPopup: set popup
+    // provider: provider of the contract
+    // useduptime: used up time
+    // setCurrent: set current
+    // user: user state
+    // setUsedUpTime: set used up time
+    // setDisable: set disable
     const { distrix, setDistri, recName, setRecName, setOpen, account, trackid, recadd, setRecAdd, transact, setTransact, current, setTrackid, setRadio, setPopup, provider, useduptime, setCurrent, user, setUsedUpTime, setDisable } = useContext(dataContext)
 
+    // timearr: time array
     const [timearr, setTimearr] = useState([])
+
+    // trackIndex: track index
     const [trackIndex, setTrackIndex] = useState(trackid);
+
+    // trackProgress: track progress
     const [trackProgress, setTrackProgress] = useState(0);
+
+    // isPlaying: is playing state
     const [isPlaying, setIsPlaying] = useState(true);
+
+    // songsListened: songs listened
     const [songsListened, setSongsListened] = useState([]);
+
+    // disable: disable state
     const [load, setLoad] = useState(0)
+
+    // flag: flag state
     const [flag, setFlag] = useState(0)
+
+    // recieverAddress: reciever address
     const recieverAddress = recadd
+
+    // recieverName: reciever name
     const recieverName = recName
+
+    // distriarr: distribution array
     const distriarr = distrix
 
+    // audioRef: audio reference
     const audioRef = useRef(null);
 
+    // coverIpfs: cover ipfs
+    // ipfsHash: ipfs hash
+    // title: title
+    // owner: owner
+    // owner_name: owner name
+    // duration: duration
+    // artists: artists
+    // distri: distribution
+    // id: id
     const { coverIpfs, ipfsHash, title, owner, owner_name, duration, artists, distri, id } = trackid < current.length ? current[trackid] : ["null", "null", "null"];
 
 
+    // function to get file
     const handleGetFile = async (ipfsHash) => {
         setLoad(0)
         try {
@@ -42,10 +98,7 @@ function AudioPlayer2() {
                     }
                 )
                 .then(async (res) => {
-                    // // console.log("SUCC");
-                    // // console.log(new Audio(URL.createObjectURL(res.data)))
                     audioRef.current = new Audio(URL.createObjectURL(res.data))
-
                 })
                 .catch((err) => {
                     console.log(err);
@@ -56,26 +109,21 @@ function AudioPlayer2() {
         setLoad(1);
         setIsPlaying(1);
     };
-    // // console.log(tracks)
 
-
-
-    // const [audioRef.current, setaudioRef.current]=useState(null)
+    // intervalRef: interval reference
     const intervalRef = useRef();
-    const isReady = useRef(false);
 
-
-    // const { duration } = audioRef.current
-
-
+    // function to add songs data
     const addSongsData = (timestamp, type, title, id) => {
-        // // console.log(timestamp, type, title, id);
         setSongsListened([...songsListened, { timestamp, type, title, id }]);
     };
 
+    // function to handle get file
     useEffect(() => {
         localStorage.setItem("songsListened", JSON.stringify(songsListened));
     }, [songsListened.length]);
+
+    // function to start timer
     const startTimer = () => {
         clearInterval(intervalRef.current);
         intervalRef.current = setInterval(() => {
@@ -87,21 +135,22 @@ function AudioPlayer2() {
         }, [1000]);
     };
 
+    // function to handle scrub
     const onScrub = (value) => {
-
         clearInterval(intervalRef.current);
         audioRef.current.currentTime = value;
         setTrackProgress(audioRef.current.currentTime);
     };
 
+    // function to handle scrub end
     const onScrubEnd = () => {
-
         if (!isPlaying) {
             setIsPlaying(true);
         }
         startTimer();
     };
 
+    // function to handle previous track
     const toPrevTrack = () => {
         if (current.length > 1) {
             audioRef.current.currentTime = 0
@@ -114,6 +163,7 @@ function AudioPlayer2() {
         }
     };
 
+    // function to handle next track
     const toNextTrack = () => {
         if (current.length > 1) {
             audioRef.current.currentTime = 0
@@ -126,88 +176,64 @@ function AudioPlayer2() {
         }
     };
 
+    // function to calculate token from songs data
     const CalculateTokenFromSongsData = async (songsListenedx) => {
-        // // console.log("in function CalculateTokenFromSongsData")
-        // // console.log(songsListenedx);
         let arr = songsListenedx
         let temp = {}
-        // // console.log(arr[0]);
-        // // console.log(arr[1]);
         for (let i = 0; i < arr.length - 1; i++) {
             if (arr[i].type === 'start') {
                 if (arr[i + 1].type === 'end') {
                     let duration = (arr[i + 1].timestamp - arr[i].timestamp) / 1000;
-                    // console.log(duration, ':', arr[i].title);
                     if (temp[arr[i].title]) {
                         temp[arr[i].title] += duration
-
                     }
                     else {
                         temp[arr[i].title] = duration
-
                     }
                 }
             }
             if (arr[i].type === 'start') {
                 if (arr[i + 1].type === 'change') {
                     let duration = (arr[i + 1].timestamp - arr[i].timestamp) / 1000;
-                    // console.log(duration, ':', arr[i].title);
                     if (temp[arr[i].title]) {
                         temp[arr[i].title] += duration
-
                     }
                     else {
                         temp[arr[i].title] = duration
-
                     }
                 }
             }
             if (arr[i].type === 'change') {
                 if (arr[i + 1].type === 'end') {
                     let duration = (arr[i + 1].timestamp - arr[i].timestamp) / 1000;
-                    // console.log(duration, ':', arr[i].title);
                     if (temp[arr[i].title]) {
                         temp[arr[i].title] += duration
-
                     }
                     else {
                         temp[arr[i].title] = duration
-
                     }
                 }
             }
             if (arr[i].type === 'change') {
                 if (arr[i + 1].type === 'change') {
                     let duration = (arr[i + 1].timestamp - arr[i].timestamp) / 1000;
-                    // console.log(duration, ':', arr[i].title);
                     if (temp[arr[i].title]) {
                         temp[arr[i].title] += duration
-
                     }
                     else {
                         temp[arr[i].title] = duration
-
                     }
                 }
             }
         }
-        // // console.log(temp);
-
         setTimearr(temp)
-        // console.log("fbewjhlbhjlwbf hwjb fwjef cwje fcwhejbfhwe dwbejfh bwehjf bwjef whefcw")
-        // console.log(owner, temp[arr[0].title] * 1000)
-        // console.log(recieverAddress)
-        // console.log(distriarr)
-
         if (!isNaN(temp[arr[0].title]) && temp[arr[0].title] > 5) {
-            // console.log("sent")
-            // console.log(arr[0])
-            // console.log(`The song id is ${arr[0].id} and time listened is ${temp[arr[0].title]}`)
             sendTransaction(parseInt(temp[arr[0].title] * 50), recieverName, recieverAddress, distriarr, temp[arr[0].title], arr[0].id)
         }
         setSongsListened([])
     }
 
+    // function to send transaction
     const sendTransaction = (amount, artName, artAddr, distriArr, timelistened, songId) => {
         axios.post(server_address + "/user_to_artist", {
             userAddress: account.address,
@@ -215,9 +241,7 @@ function AudioPlayer2() {
             dist: distriArr,
             amount
         }).then(async (res) => {
-            // console.log(res)
             await provider.waitForTransaction(res.data.response);
-            // console.log(transact)
             toast.success(`${amount / 100000000} T22 Coins sent to ${artName}.`, {
                 position: "top-left",
                 autoClose: 5000,
@@ -236,18 +260,19 @@ function AudioPlayer2() {
         })
     }
 
+    // function to update time listened
     const updateTimeListened = async (timelistened, songId) => {
         axios.post(server_address + "/update_timelistened", {
             songId: songId,
             time: parseInt(timelistened)
         }).then(async (res) => {
-            // console.log(res)
             await provider.waitForTransaction(res.data.response);
         }).catch((err) => {
             console.log(err)
         })
     }
 
+    // function to stop radio
     const stopRadio = async () => {
         await audioRef.current.pause();
         let date = new Date()
@@ -259,8 +284,8 @@ function AudioPlayer2() {
         setRadio([])
     }
 
+    // useEffect hook for songs listened
     useEffect(() => {
-        // console.log(songsListened)
         if (audioRef.current !== null) {
             if (isPlaying) {
                 audioRef.current.play();
@@ -277,7 +302,7 @@ function AudioPlayer2() {
         }
     }, [isPlaying]);
 
-
+    // useEffect hook for track index
     useEffect(() => {
         (async () => {
             setDisable(1)
@@ -288,12 +313,12 @@ function AudioPlayer2() {
         })()
     }, [])
 
+
+    // useEffect hook for track index
     useEffect(() => {
         if (trackid < current.length) {
-            // console.log(songsListened)
             setDisable(1)
             if (user.savings < 12000) {
-                // console.log("no balance")
                 setTrackid(-1)
                 setCurrent([])
                 setOpen(true)
@@ -302,7 +327,6 @@ function AudioPlayer2() {
                 setRecAdd(artists)
                 setRecName(owner_name)
                 setDistri(distri)
-                // console.log("lkefrw")
                 let date = new Date()
                 let sec = date.getTime()
                 addSongsData(sec, 'end', title, id)
@@ -323,16 +347,15 @@ function AudioPlayer2() {
         }
     }, [trackid, current])
 
+    // useEffect hook for track index
     useEffect(() => {
         if (audioRef.current === null) return
-
         audioRef.current.pause();
         (async () => {
             await handleGetFile(ipfsHash)
             audioRef.current.currentTime = useduptime
             setUsedUpTime(0)
             if (user.savings < 12000) {
-                // console.log("no balance")
                 setTrackid(-1)
                 setCurrent([])
             }
@@ -345,41 +368,30 @@ function AudioPlayer2() {
                 setDisable(0)
             }
         })()
-
         setTrackProgress(audioRef.current.currentTime);
-
-
-
     }, [flag]);
 
+    // useEffect hook for track index
     useEffect(() => {
-
         const handleReload = async (e) => {
-            
             e.preventDefault();
             if (audioRef.current !== null) {
-                // console.log("reloading");
                 audioRef.current.pause();
                 let date = new Date()
                 let sec = date.getTime()
                 addSongsData(sec, 'end', title, id)
                 let songlistenedx = JSON.parse(localStorage.getItem("songsListened"));
-                // console.log(songsListened);
                 songlistenedx.push({ timestamp: sec, type: 'end', title: title, id: id });
                 await CalculateTokenFromSongsData(songlistenedx);
             }
         }
-
         window.addEventListener('beforeunload', handleReload);
-
         return () => {
-          // hit endpoint to end show
-          window.removeEventListener('beforeunload', handleReload);
+            window.removeEventListener('beforeunload', handleReload);
         }
     }, []);
 
-
-
+    // returning the AudioPlayer2 component
     return <div>
         {audioRef.current !== null ? (<><Music
             isPlaying={isPlaying}
@@ -396,8 +408,6 @@ function AudioPlayer2() {
             stopRadio={stopRadio}
             owner_name={owner_name}
         /></>) : (<>Loading</>)}
-
     </div>;
 }
-
 export default AudioPlayer2;

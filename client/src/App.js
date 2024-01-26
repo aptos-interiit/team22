@@ -1,3 +1,7 @@
+// Summary: The main app component which is the parent component of all the other components.
+
+
+// importing the react library
 import React, { useState, useEffect, useRef } from "react";
 import AudioPlayer2 from "./MusicPlayer/AudioPlayers2";
 import { Network, Provider } from "aptos";
@@ -6,65 +10,106 @@ import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { dataContext } from "./Context/dataContext";
 import "./pages/Style.css";
-import SideSlider from "./pages/SideSlider";
-import AlbumPage from "./pages/AlbumPage";
-import UserPage from "./pages/UserPage";
-import LandingPage from "./pages/LandingPage";
 import { FetchUser } from "./helpers/FetchUser.js";
 import Dashboard from "./pages/Dashboard.jsx";
-import AddSongPage from "./pages/AddSongPage.jsx";
-import PlaylistSpace from "./components/PlaylistSpace.jsx";
-import ProfilePg from "./pages/ProfilePg";
 import { FetchUserFromAddress } from "./helpers/FetchUserFromAddress.js";
-import ArtistSongsSpace from "./components/ArtistSongsSpace.jsx";
-import YourRadio from "./pages/YourRadio.jsx";
-import AllRadios from "./pages/AllRadios.jsx";
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import SearchPage from "./pages/SearchPage.jsx";
 import LandingPg from "./pages/LandingPg";
-import Navbar from "./pages/Navbar.jsx";
 import { ToastContainer, toast } from 'react-toastify';
-import AboutUs from "./pages/AboutUs";
-import DaoFrontend from "./pages/DaoFrontend.jsx";
+import DynamicComponent from "./components/DynamicComponent.jsx";
 
-
-
+// addre: the address of the module
 const addre = process.env.REACT_APP_MODULE_ADDRESS;
+
+// res_acc: the address of the resource account
 const res_acc = process.env.REACT_APP_RESOURCE_ACCOUNT;
+
+// provider: the provider of the blockchain
 export const provider = new Provider(Network.TESTNET);
 
 function App() {
+
+  // account: the account of the user
   const { account, signAndSubmitTransaction } = useWallet();
+
+  // songs: the list of all songs
   const [songs, setSongs] = useState([]);
+
+  // user: the user data
   const [user, setUser] = useState(null);
+
+  // transactionInProgress: the transaction in progress
   const [transactionInProgress, setTransactionInProgress] = useState(0);
+
+  // load: the load of the page
   const [load, setLoad] = useState(0);
+
+  // trackid: the id of the track
   const [trackid, setTrackid] = useState(-1);
+
+  // transact: the transaction
   const [transact, setTransact] = useState(0);
+
+  // current: the current song
   const [current, setCurrent] = useState([]);
+
+  // deposit: the deposit of the user
   const [deposit, setDeposit] = useState(0);
+
+  // usersongs: the songs of the user
   const [usersongs, setUserSongs] = useState([]);
+
+  // latestSong: the latest song
   const [latestSong, setLatestSong] = useState([]);
+
+  // trendingSong: the trending song
   const [trendingSong, setTrendingSong] = useState([]);
+
+  // artistsAndTheirSongs: the artists and their songs
   const [artistsAndTheirSongs, setArtistsAndTheirSongs] = useState([]);
+
+  // searchsong: the search song
   const [searchsong, setSearchsong] = useState([]);
+
+  // useduptime: the used up time
   const [useduptime, setUsedUpTime] = useState(0);
+
+  // myPlaylists: the playlists of the user
   const [myPlaylists, setMyPlaylists] = useState([]);
+
+  // myPlaylistName: the name of the playlists of the user
   const [myPlaylistName, setMyPlaylistsName] = useState([]);
+
+  // disable: the disable
   const [disable, setDisable] = useState(0);
+
+  // radio: the radio
   const [radio, setRadio] = useState([]);
+
+  // isRadio: the is radio
   const [isRadio, setIsRadio] = useState(0);
+
+  // open: the open
   const [open, setOpen] = useState(false)
+
+  // popup: the popup
   const [popup, setPopup] = useState(null)
+
+  // recadd: the rec add
   const [recadd, setRecAdd] = useState(null)
+
+  // recName: the rec name
   const [recName, setRecName] = useState("")
+
+  // distrix: the distribution
   const [distrix, setDistri] = useState(null)
+
+  // currPlaylist: the current playlist
   const [currPlaylist, setCurrPlaylist] = useState(null)
 
-
-  
-
+  // useEffect hook
   useEffect(() => {
     if (popup !== null) {
       setTimeout(() => {
@@ -73,6 +118,7 @@ function App() {
     }
   }, [popup])
 
+  // modal style
   const style = {
     position: 'absolute',
     top: '50%',
@@ -85,13 +131,13 @@ function App() {
     p: 4,
   };
 
+  // function to close the modal
   const handleClose = () => setOpen(false);
 
+  // function to add user
   const handleAdd = async () => {
     if (!account) return;
-
     setTransactionInProgress(true);
-
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -100,10 +146,8 @@ function App() {
         functionArguments: ["name", "hash", "loc", "desc"],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
-      // console.log("user added");
       await provider.waitForTransaction(response.hash);
       handleInitialReg();
     } catch (err) {
@@ -113,9 +157,9 @@ function App() {
     }
   };
 
+  // function to handle turbo tip
   const handleTurboTip = async (amount, to_address) => {
     if (!account) return;
-
     if (amount === 0) {
       toast.error(`Amount of APT should be greater than zero!!!`, {
         position: "top-left",
@@ -129,9 +173,7 @@ function App() {
       });
       return;
     }
-
     setTransactionInProgress(true);
-
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -141,11 +183,10 @@ function App() {
       },
     };
 
+    // transaction
     try {
       const response = await signAndSubmitTransaction(payload);
-      // console.log("Paise sent");
       await provider.waitForTransaction(response.hash);
-
       toast.success(`Thank you for contributing!!!`, {
         position: "top-left",
         autoClose: 5000,
@@ -156,9 +197,7 @@ function App() {
         progress: undefined,
         theme: "light",
       });
-
       return "success";
-
     } catch (err) {
       console.log(err);
       return "error";
@@ -167,11 +206,10 @@ function App() {
     }
   }
 
+  // function to handle initial registration
   const handleInitialReg = async () => {
     if (!account) return;
-
     setTransactionInProgress(true);
-
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -180,20 +218,18 @@ function App() {
         functionArguments: [],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
-      // console.log("registered too");
       setTransact(transact + 1)
       await provider.waitForTransaction(response.hash);
     } catch (err) {
       console.log(err);
     } finally {
       setTransactionInProgress(false);
-
     }
   };
 
+  // function to handle deposit
   const handleDeposit = async (e) => {
     e.preventDefault();
     if (!account) return;
@@ -203,7 +239,6 @@ function App() {
       return;
     }
     setTransactionInProgress(true);
-
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -212,7 +247,6 @@ function App() {
         functionArguments: [deposit * 1e8],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
       await provider.waitForTransaction(response.hash);
@@ -226,21 +260,18 @@ function App() {
     }
   };
 
+  // useEffect hook
   useEffect(() => {
     (async () => {
       if (!account) return;
-
+      // fetching all songs
       const todoListResource = await provider.getAccountResource(
         `${addre}`,
         `${addre}::music_platform::All_songs`
       );
-      // console.log(todoListResource);
       const tableHandle = todoListResource.data.content.handle;
       let songsx = songs;
-      // console.log("songsx", songsx);
-      // console.log("songsx", songsx);
       let len = todoListResource.data.all_indexes.length
-
       for (let i = 0; i < len; i++) {
         const tableItem = {
           key_type: "u64",
@@ -250,7 +281,6 @@ function App() {
         try {
           const song = await provider.getTableItem(tableHandle, tableItem);
           if (songsx.some((e) => e.IpfsHash !== song.IpfsHash)) {
-            // console.log("Already exists");
             continue;
           }
           songsx.push(song);
@@ -258,12 +288,8 @@ function App() {
           console.log(err);
         }
       }
-      // console.log("all songs", songs);
       let x = songs.toSorted((b, a) => parseInt(a.timestamp - b.timestamp));
       let y = songs.toSorted((b, a) => parseInt(a.timeListened - b.timeListened));
-
-      // console.log("trending songs", y);
-      // console.log("latest songs", x);
       setLatestSong(x.slice(0, 5));
       setTrendingSong(y.slice(0, 5));
       setSongs(x);
@@ -276,7 +302,6 @@ function App() {
       if (!account) return;
       try {
         const usery = await FetchUser(account);
-        // console.log(usery);
         setUser(usery);
         setUserSongs(usery.songs);
       } catch (error) {
@@ -290,28 +315,19 @@ function App() {
     if (!songs) return;
     if (load === 0) return;
     if (!user) return;
-
-    // console.log("updating playlist");
     let temp2 = [];
-    let temp3 = [];
-    // console.log(user.playlists);
+    let temp3 = []
     user &&
       user.playlists.map((e) => {
         let temp = [];
         temp3.push(e.name);
-        // console.log("name of playlist", e.name);
-        // console.log("songs in playlist", e.songs);
         e.songs.map((x) => {
-          // console.log("id of song", x);
           songs.map((f) => {
-            // console.log("songs", f);
             if (x === f.id) {
-              // console.log("pushing", f);
               temp.push(f);
             }
           });
         });
-        // console.log("pushed songs", temp);
         temp2.push(temp);
       });
     setMyPlaylists(temp2);
@@ -319,8 +335,6 @@ function App() {
   }, [load, user]);
 
   useEffect(() => {
-    // console.log("myplaylist from App.jsx", myPlaylists);
-    // console.log("myplaylistname from App.jsx", myPlaylistName);
   }, [myPlaylists]);
 
   useEffect(() => {
@@ -349,354 +363,29 @@ function App() {
         let info = await FetchUserFromAddress(Object.keys(temp)[i]);
         artistInfo.push(info);
       }
-      // console.log("artist info", artistInfo);
       setArtistsAndTheirSongs(artistInfo);
     })();
-
-
   }, [load, user]);
 
-  useEffect(() => {
-    // console.log("artists and their songs", artistsAndTheirSongs);
-  }, [artistsAndTheirSongs])
 
   return (
-    <dataContext.Provider
-      value={{
-        handleTurboTip,
-        currPlaylist, setCurrPlaylist,
-        deposit, setDeposit,
-        setLoad,
-        setUser,
-        setUserSongs,
-        user,
-        songs,
-        trackid,
-        setTrackid,
-        account,
-        transact,
-        setTransact,
-        setCurrent,
-        current,
-        usersongs,
-        provider,
-        addre,
-        res_acc,
-        latestSong,
-        trendingSong,
-        searchsong,
-        setSearchsong,
-        useduptime,
-        setUsedUpTime,
-        myPlaylistName,
-        myPlaylists,
-        disable,
-        setDisable,
-        isRadio,
-        setIsRadio,
-        radio,
-        setRadio,
-        artistsAndTheirSongs,
-        setOpen,
-        setPopup,
-        recadd,
-        setRecAdd,
-        recName,
-        setRecName,
-        handleDeposit,
-        distrix,
-        setDistri,
-      }}
-    >
-      {/* {
-        popup === null ? (<></>):(<>
-          <div className={`p-5 absolute flex w-[250px] h-[150px] content-center justify-center bg-gray-900 right-12 rounded-xl top-12 text-white flex-col`}>
-            <p className="ml-auto mr-auto">Transaction Sent!</p>
-            <p className="ml-auto mr-auto">{popup.amount}</p>
-            <p className="ml-auto mr-auto">{popup.artistName}</p>
-          </div>
-        </>)
-      } */}      
-      {/* Same as */}
+    <dataContext.Provider value={{ handleTurboTip, currPlaylist, setCurrPlaylist, deposit, setDeposit, setLoad, setUser, setUserSongs, user, songs, trackid, setTrackid, account, transact, setTransact, setCurrent, current, usersongs, provider, addre, res_acc, latestSong, trendingSong, searchsong, setSearchsong, useduptime, setUsedUpTime, myPlaylistName, myPlaylists, disable, setDisable, isRadio, setIsRadio, radio, setRadio, artistsAndTheirSongs, setOpen, setPopup, recadd, setRecAdd, recName, setRecName, handleDeposit, distrix, setDistri }}>
       <ToastContainer />
-
       <Router>
         <Routes>
-          <Route
-            path="/"
-            element={
-              !user ? (
-                <div className="bg-black flex max-h-screen overflow-y-scroll">
-
-                  <LandingPg />
-                </div>
-              ) : (
-                <Dashboard
-                  load={load}
-                  user={user}
-                  handleAdd={handleAdd}
-                  handleDeposit={handleDeposit}
-                  setDeposit={setDeposit}
-                  setTrackid={setTrackid}
-                />
-              )
-            }
-          ></Route>
-          <Route
-            path="/dashboard"
-            element={
-              <Dashboard
-                load={load}
-                user={user}
-                handleAdd={handleAdd}
-                handleDeposit={handleDeposit}
-                setDeposit={setDeposit}
-                setTrackid={setTrackid}
-              />
-            }
-          ></Route>
+          <Route path="/" element={!user ? (<div className="bg-black flex max-h-screen overflow-y-scroll"><LandingPg /></div>) : (<Dashboard load={load} user={user} handleAdd={handleAdd} handleDeposit={handleDeposit} setDeposit={setDeposit} setTrackid={setTrackid}/>)}></Route>
+          <Route path="/dashboard" element={<Dashboard load={load} user={user} handleAdd={handleAdd} handleDeposit={handleDeposit} setDeposit={setDeposit} setTrackid={setTrackid}/>}></Route>
           <Route path="/land" element={<LandingPg/>}> </Route>
-          <Route
-            path="/dao"
-            element={
-              <>
-                <div className="bg-black flex">
-                  <div className="border-e">
-                    <SideSlider />
-                  </div>
-                  <div className="w-full">
-                    {load ? (
-                      <>
-                        <div className=" max-h-screen overflow-y-scroll">
-                          <Navbar savings={user ? user.savings : 0} handleDeposit={handleDeposit}></Navbar>
-                          <DaoFrontend />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="loader"></div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <>
-                <div className="bg-black flex max-h-screen overflow-y-scroll">
-                <div className="border-e">
-                    <SideSlider />
-                  </div>
-                  <div className="w-full">
-                    {load ? (
-                      <>
-                        <div className="">
-                          <ProfilePg />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="loader"></div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </>
-            }
-          />
-          <Route
-            path="/my-account"
-            element={
-              <>
-                <div className="bg-black flex">
-                <div className="border-e">
-                    <SideSlider />
-                  </div>
-                  <div className="w-full">
-                    {load ? (
-                      <>
-                        <div className="">
-                          <UserPage />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="loader"></div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </>
-            }
-          />
-          <Route
-            path="/my-account/editProfile"
-            element={
-              <>
-                <div className="bg-black flex">
-                <div className="border-e">
-                    <SideSlider />
-                  </div>
-                  <div className="w-full">
-                    {load ? (
-                      <>
-                        <div className="">
-                          <UserPage />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="loader"></div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </>
-            }
-          />
-          <Route
-            path="/addsong"
-            element={
-              <>
-                <div className="bg-black flex">
-                <div className="border-e">
-                    <SideSlider />
-                  </div>
-                  <div className="w-full">
-                    {load ? (
-                      <>
-                        <Navbar savings={user ? user.savings : 0} handleDeposit={handleDeposit}></Navbar>
-                        <div className="max-h-[100%] overflow-y-scroll">
-                          <AddSongPage />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="loader"></div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </>
-            }
-          />
-          <Route
-            path="/search_bar"
-            element={
-              <SearchPage
-                load={load}
-                user={user}
-                handleAdd={handleAdd}
-                handleDeposit={handleDeposit}
-                setDeposit={setDeposit}
-                setTrackid={setTrackid}
-              />
-            }
-          />
-          <Route
-            path="/yourradio"
-            element={
-              <>
-                <div className="bg-black flex ">
-                  <div className="border-e">
-                    <SideSlider />
-                  </div>
-                  <div className="w-full max-h-screen overflow-y-scroll">
-                    {load ? (
-                      <>
-                        <Navbar savings={user ? user.savings : 0} handleDeposit={handleDeposit}></Navbar>
-                        <div className="">
-                          <YourRadio />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="loader"></div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </>
-            }
-          />
-          <Route
-            path="/allradios"
-            element={
-              <>
-                <div className="bg-black flex">
-                <div className="border-e">
-                    <SideSlider />
-                  </div>
-                  <div className="w-full">
-                    {load ? (
-                      <>
-                        <Navbar savings={user ? user.savings : 0} handleDeposit={handleDeposit}></Navbar>
-                        <div className="">
-                          <AllRadios />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="loader"></div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </>
-            }
-          />
-          <Route
-            path="/playlistSpace"
-            element={
-              <>
-                <div className="bg-black flex">
-                <div className="border-e">
-                    <SideSlider />
-                  </div>
-                  <div className="w-full">
-                    {load ? (
-                      <>
-                        <div className="">
-                          <PlaylistSpace />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="loader"></div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </>
-            }
-          />
-          <Route
-            path="/artistSongsSpace"
-            element={
-              <>
-                <div className="bg-black flex">
-                <div className="border-e">
-                    <SideSlider />
-                  </div>
-                  <div className="w-full">
-                    {load ? (
-                      <>
-                        <div className="">
-                          <ArtistSongsSpace />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="loader"></div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </>
-            }
+          <Route path="/dao" element={<DynamicComponent component="daoFrontend" user={user} load={load} handleDeposit={handleDeposit} />}/>
+          <Route path="/profile" element={<DynamicComponent component="profile" user={user} load={load} handleDeposit={handleDeposit} />}/>
+          <Route path="/my-account" element={<DynamicComponent component="userPage" user={user} load={load} handleDeposit={handleDeposit} />} />
+          <Route path="/my-account/editProfile" element={<DynamicComponent component="userPage" user={user} load={load} handleDeposit={handleDeposit} />} />
+          <Route path="/addsong" element={<DynamicComponent component="addSong" user={user} load={load} handleDeposit={handleDeposit} />}/>
+          <Route path="/search_bar" element={<SearchPage load={load} user={user} handleAdd={handleAdd} handleDeposit={handleDeposit} setDeposit={setDeposit} setTrackid={setTrackid}/>}/>
+          <Route path="/yourradio" element={<DynamicComponent component="yourRadio" user={user} load={load} handleDeposit={handleDeposit} />}/>
+          <Route path="/allradios" element={<DynamicComponent component="allRadios" user={user} load={load} handleDeposit={handleDeposit} />}/>
+          <Route path="/playlistSpace" element={<DynamicComponent component="playlistSpace" user={user} load={load} handleDeposit={handleDeposit} />}/>
+          <Route path="/artistSongsSpace" element={<DynamicComponent component="artistSongsSpace" user={user} load={load} handleDeposit={handleDeposit} />}
           />
         </Routes>
       </Router>
@@ -715,8 +404,6 @@ function App() {
                   <label className="text-white dark:text-gray-200" htmlFor="pname">Amount in APT</label>
                   <input step="any" onChange={(e) => setDeposit(e.target.value)} id="pname" type="number" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
                 </div>
-                {/* </div> */}
-
                 <div className="flex justify-end mt-6">
                   <button onClick={handleClose} className="px-6 py-2 mx-5 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600">Cancel</button>
                   <button onClick={(e) => handleDeposit(e)} className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600">Add</button>
@@ -725,9 +412,7 @@ function App() {
             </form>
           </section>
         </Box>
-
       </Modal>
-
       {load && trackid !== -1 ? (
         <div className="sticky bottom-0">
           <AudioPlayer2 />
@@ -738,5 +423,4 @@ function App() {
     </dataContext.Provider>
   );
 }
-
 export default App;

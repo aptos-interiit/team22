@@ -1,14 +1,27 @@
+// Summary: This file contains the code for the AddCollaborators component. 
+
+
+// importing dependencies
 import React from "react";
 
+// AddCollaborators component
 function AddCollaborators({
   formFields,
   setFormFields,
   remainingSplit,
   setRemainingSplit, 
 }) {  
+
+  // function to handle form change
   const handleFormChange = (event, index) => {
+
+    // data: state to store the form fields
     let data = [...formFields];
+
+    // updating the data state
     data[index][event.target.name] = event.target.value;
+
+    // if the name of the event target is Split
     if (event.target.name === "Split") {
       let sum = 0;
       let id = 0;
@@ -23,16 +36,17 @@ function AddCollaborators({
     setFormFields(data);
   };
 
+  // function to add fields
   const addFields = (e) => {
     let object = {
       ArtistAddr: "",
       Split: "",
     };
     e.preventDefault();
-
     setFormFields([...formFields, object]);
   };
 
+  // function to remove fields
   const removeFields = (index) => {
     let data = [...formFields];
     if (data[index].Split !== "") {
@@ -42,6 +56,7 @@ function AddCollaborators({
     setFormFields(data);
   };
 
+  // function to check and submit
   const check_and_submit = (e) => {
     e.preventDefault();
     let sum = 0;
@@ -57,12 +72,12 @@ function AddCollaborators({
       x[0].Split = 100 - sum;
       setFormFields(x);
       setRemainingSplit(100 - sum);
-      // console.log(formFields);
     } else {
       alert("Split should be 100%");
     }
   };
 
+  // returning the AddCollaborators component
   return (
     <div>
       {formFields.map((form, index) => {

@@ -1,30 +1,33 @@
+//Summary: This component is used to display the music card in the music page.
+
+
+// importing libraries and dependencies
 import React, { useContext, useEffect, useState } from "react";
 import { dataContext } from "../Context/dataContext";
-// import bg from "../../src/pages/img/cover.jpg";
-// import play from "../../src/pages/img/play-icon-removebg-preview.png";
 import play_icon from "../MusicPlayer/assets/playBtn.png";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import remove from "../MusicPlayer/assets/icons8-remove-50.png";
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 
+// MusicCard component
 export default function MusicCard({ song, id, tracks, inPlaylist, playListName }) {
   const {
-    disable,
-    recName,
-    setRecName,
-    setCurrent,
-    setTrackid,
-    setIsRadio,
-    setRadio,
-    recadd,
-    setRecAdd,
-    distrix,
-    setDistri
+    disable,     // disable: disable state
+    recName,     // recName: recommended name
+    setRecName,  // setRecName: set recommended name
+    setCurrent,  // setCurrent: set current
+    setTrackid,  // setTrackid: set track id
+    setIsRadio,  // setIsRadio: set is radio
+    setRadio,    // setRadio: set radio
+    recadd,      // recadd: recommended address
+    setRecAdd,   // setRecAdd: set recommended address
+    distrix,     // distrix: distribution
+    setDistri    // setDistri: set distribution
   } = useContext(dataContext);
+
+  // function to set id
   const setid = (e, id, songtrack, name, addr, dist) => {
     e.preventDefault();
     if (!disable) {
@@ -43,12 +46,24 @@ export default function MusicCard({ song, id, tracks, inPlaylist, playListName }
       }
     }
   };
+
+  // liked: liked state
   const [liked, setLiked] = useState(false);
+
+  // transactionInProgress: transaction state
   const [transactionInProgress, setTransactionInProgress] = useState(false);
-  const { account, signAndSubmitTransaction } =
-    useWallet();
+
+  // account: account of the user
+  const { account, signAndSubmitTransaction } = useWallet();
+
+  // addre: address of the contract
+  // provider: provider of the contract
+  // transact: transaction state
+  // setTransact: set transaction state
+  // user: user state
   const { addre, provider, transact, setTransact, user } = useContext(dataContext);
 
+  // useEffect hook
   useEffect(() => {
     if (user) {
       let likeSongs = user.playlists[0].songs;
@@ -65,25 +80,24 @@ export default function MusicCard({ song, id, tracks, inPlaylist, playListName }
     }
   }, [])
 
+  // function to handle like songs
   const handleLikeSongs = async (songID) => {
     if (!account) return;
     if (!user) {
       alert("User not logged in");
       return;
     }
-
     let likeSongs = user.playlists[0].songs;
-    // console.log(likeSongs);
     let flag = false;
     for (let i = 0; i < likeSongs.length; i++) {
       if (likeSongs[i] === songID) {
         flag = true;
       }
     }
-
     if (flag === true) {
       setTransactionInProgress(true);
 
+      // remove song from playlist
       const payload = {
         sender: `${account.address}`,
         data: {
@@ -92,10 +106,8 @@ export default function MusicCard({ song, id, tracks, inPlaylist, playListName }
           functionArguments: [songID, "Liked Songs"],
         },
       };
-
       try {
         const response = await signAndSubmitTransaction(payload);
-        // console.log("song removed from Liked Song Playlist");
         await provider.waitForTransaction(response.hash);
         setLiked(false);
         setTransact(transact + 1);
@@ -107,6 +119,7 @@ export default function MusicCard({ song, id, tracks, inPlaylist, playListName }
     } else {
       setTransactionInProgress(true);
 
+      // add song to playlist
       const payload = {
         sender: `${account.address}`,
         data: {
@@ -115,10 +128,8 @@ export default function MusicCard({ song, id, tracks, inPlaylist, playListName }
           functionArguments: [songID, "Liked Songs"],
         },
       };
-
       try {
         const response = await signAndSubmitTransaction(payload);
-        // console.log("song liked and added to Liked Song Playlist");
         await provider.waitForTransaction(response.hash);
         setLiked(true);
         setTransact(transact + 1);
@@ -130,9 +141,12 @@ export default function MusicCard({ song, id, tracks, inPlaylist, playListName }
     }
   };
 
+  // function to handle remove song from playlist
   const handleRemoveSongFromPlaylist = async (name, songID) => {
     if (!account) return;
     setTransactionInProgress(true);
+
+    // remove song from playlist
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -143,11 +157,8 @@ export default function MusicCard({ song, id, tracks, inPlaylist, playListName }
     };
     try {
       const response = await signAndSubmitTransaction(payload);
-      // console.log("song removed from playlist");
-      // console.log(response);
       await provider.waitForTransaction(response.hash);
       setTransact(transact + 1);
-      // window.location.href = "/";
     } catch (err) {
       console.log(err);
     } finally {
@@ -155,29 +166,16 @@ export default function MusicCard({ song, id, tracks, inPlaylist, playListName }
     }
   };
 
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",];
 
   const date = new Date(parseInt(song.timestamp));
-  // console.log(date);
+
+  // returning the MusicCard component
   return (
     <div className="group w-[250px] sm:w-[85%] sm:mx-16 grid items-center grid-cols-10 sm:grid-cols-10 border-white mx-auto mt-6 sm:mt-8 hover:opacity-80 bg-[#282829] rounded-md py-2">
       <div
         className="w-[60px] h-[60px] sm:mx-auto col-span-1"
         style={{
-          // width: "100%",
           backgroundImage: `url(https://tan-mad-salamander-939.mypinata.cloud/ipfs/${song.coverIpfs})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% 100%",
@@ -188,7 +186,6 @@ export default function MusicCard({ song, id, tracks, inPlaylist, playListName }
           className="w-[100%] h-[100%] mx-auto opacity-0 group-hover:opacity-100 translate-y-6 group-hover:translate-y-0 transition-all duration-500 ease-in-out"
           onClick={(e) => setid(e, id, tracks, song.owner_name, song.artists, song.distri)}
           style={{
-            // width: "100%",
             backgroundImage: `url(${play_icon})`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "50% 50%",
@@ -215,7 +212,7 @@ export default function MusicCard({ song, id, tracks, inPlaylist, playListName }
       </div>
 
       <div className="col-span-2 sm:col-span-2 ml-2 sm:ml-0 items-center grid">
-        {/* only user can delete its own songs wala logic */}
+        {/* only user can delete its own songs' logic*/}
         <button className="px-auto mt-1">
           {String(parseInt(song.duration / 60)).padStart(2, "0")}:
           {String(
@@ -225,38 +222,32 @@ export default function MusicCard({ song, id, tracks, inPlaylist, playListName }
       </div>
 
       <div className="flex">
-
-        {
-          liked ? (
-
-            <FaHeart
-              className="cursor:pointer ml-3 mr-2  "
-              style={{ color: "#4865F6", fontSize: "28px" }}
-              onClick={(e) => {
-                e.preventDefault();
-                handleLikeSongs(song.id);
-              }}
-            />
-          ) : (
-            <CiHeart
-              className="cursor:pointer ml-6  "
-              style={{ color: "none", fontSize: "28px" }}
-              onClick={(e) => {
-                e.preventDefault();
-                handleLikeSongs(song.id);
-              }}
-            />
-          )
+        {liked ? (
+          <FaHeart
+            className="cursor:pointer ml-3 mr-2  "
+            style={{ color: "#4865F6", fontSize: "28px" }}
+            onClick={(e) => {
+              e.preventDefault();
+              handleLikeSongs(song.id);
+            }}
+          />
+        ) : (
+          <CiHeart
+            className="cursor:pointer ml-6  "
+            style={{ color: "none", fontSize: "28px" }}
+            onClick={(e) => {
+              e.preventDefault();
+              handleLikeSongs(song.id);
+            }}
+          />
+        )
         }
-        {
-          inPlaylist ? (
+        { inPlaylist ? (
             <button className="mr-6" onClick={(e) => {
               e.preventDefault();
               handleRemoveSongFromPlaylist(playListName, song.id)
             }}
-            >
-              <img src={remove} alt="remove" className="h-5 w-5 ml-3" />
-
+            > <img src={remove} alt="remove" className="h-5 w-5 ml-3" />
             </button>
           ) : (
             <></>

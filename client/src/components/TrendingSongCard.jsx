@@ -1,3 +1,7 @@
+// Summary: This component is used to display the trending songs on the home page.
+
+
+// importing dependencies
 import React, { useContext, useEffect, useState } from "react";
 import { MdOutlinePlaylistAdd } from "react-icons/md";
 import { CiHeart } from "react-icons/ci";
@@ -8,8 +12,10 @@ import { dataContext } from "../Context/dataContext";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import play_icon from "../MusicPlayer/assets/playBtn.png";
 import OptionCard from "./OptionCard";
-import { Tooltip, Button} from "@material-tailwind/react";
+import { Tooltip } from "@material-tailwind/react";
 
+
+// style for modal
 const style = {
   position: "absolute",
   top: "50%",
@@ -24,27 +30,51 @@ const style = {
   zIndex: 999,
 };
 
+
+// TrendingSongCard component
 export default function TrendingSongCard({
-  bg,
-  owner,
-  songs,
-  id,
-  setid,
-  address,
-  songID,
-  artistName,
-  artists,
-  distri
+  bg,               // bg: background
+  owner,            // owner: owner of the song
+  songs,            // songs: songs array   
+  id,               // id: id of the song
+  setid,            // setid: set id of the song
+  address,          // address: address of the song
+  songID,           // songID: song id
+  artistName,       // artistName: artist name
+  artists,          // artists: artists array
+  distri            // distri: distribution  
 }) {
+
+  // open: open state for modal
   const [open, setOpen] = React.useState(false);
+
+  // function to handle open for modal
   const handleOpen = () => setOpen(true);
+
+  // function to handle close for modal
   const handleClose = () => setOpen(false);
+
+  // myPlaylistName: my playlist name
+  // addre: address of the contract
+  // user: user state
+  // provider: provider of the contract
+  // transact: transaction state
+  // setTransact: set transaction state
   const { myPlaylistName, addre, user, provider, transact, setTransact } = useContext(dataContext);
+
+  // account: account of the user
   const { account, signAndSubmitTransaction } = useWallet();
+
+  // currPlaylist: current playlist
   const [currPlaylist, setCurrPlaylist] = useState();
+
+  // tstatus: transaction state
   const [tstatus, setTransactionInProgress] = useState(0);
+
+  // liked: liked state
   const [liked, setLiked] = useState(false);
 
+  // useEffect hook for liked state
   useEffect(() => {
     if (user) {
       let likeSongs = user.playlists[0].songs;
@@ -61,21 +91,18 @@ export default function TrendingSongCard({
     }
   }, [])
 
+  // function to handle add song to playlist
   const handleAddSongToPlaylist = async (PlaylistName, songid) => {
     if (!account) return;
-
     if (PlaylistName === "") {
       alert("Playlist Name cannot be empty");
       return;
     }
-
     if (!user) {
       alert("User not logged in");
       return;
     }
-
     setTransactionInProgress(true);
-
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -84,12 +111,10 @@ export default function TrendingSongCard({
         functionArguments: [songid, PlaylistName],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
-      // console.log("song added to playlist");
       await provider.waitForTransaction(response.hash);
-      setTransact(transact+1)
+      setTransact(transact + 1)
     } catch (err) {
       console.log(err);
     } finally {
@@ -98,25 +123,22 @@ export default function TrendingSongCard({
     }
   };
 
+  // function to handle like songs
   const handleLikeSongs = async (songID) => {
     if (!account) return;
     if (!user) {
       alert("User not logged in");
       return;
     }
-
     let likeSongs = user.playlists[0].songs;
-    // console.log(likeSongs);
     let flag = false;
     for (let i = 0; i < likeSongs.length; i++) {
       if (likeSongs[i] === songID) {
         flag = true;
       }
     }
-
     if (flag === true) {
       setTransactionInProgress(true);
-
       const payload = {
         sender: `${account.address}`,
         data: {
@@ -126,12 +148,12 @@ export default function TrendingSongCard({
         },
       };
 
+      // signing and submitting transaction
       try {
         const response = await signAndSubmitTransaction(payload);
-        // console.log("song removed from Liked Song Playlist");
         await provider.waitForTransaction(response.hash);
         setLiked(false);
-        setTransact(transact+1);
+        setTransact(transact + 1);
       } catch (err) {
         console.log(err);
       } finally {
@@ -140,6 +162,7 @@ export default function TrendingSongCard({
     } else {
       setTransactionInProgress(true);
 
+      // add song to playlist
       const payload = {
         sender: `${account.address}`,
         data: {
@@ -148,13 +171,11 @@ export default function TrendingSongCard({
           functionArguments: [songID, "Liked Songs"],
         },
       };
-
       try {
         const response = await signAndSubmitTransaction(payload);
-        // console.log("song liked and added to Liked Song Playlist");
         await provider.waitForTransaction(response.hash);
-        setLiked(true);        
-        setTransact(transact+1);
+        setLiked(true);
+        setTransact(transact + 1);
       } catch (err) {
         console.log(err);
       } finally {
@@ -168,7 +189,6 @@ export default function TrendingSongCard({
       <div
         className="w-[150px]  h-[150px] aspect-square items-center justify-center flex mx-auto rounded-md shadow-black shadow-md"
         style={{
-          // width: "100%",
           backgroundImage: `url(${bg})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% 100%",
@@ -179,7 +199,6 @@ export default function TrendingSongCard({
           className="w-[100%] h-[100%] mx-auto opacity-0 hover:opacity-100 translate-y-2 hover:translate-y-0 transition-all duration-500 ease-in-out"
           onClick={(e) => setid(e, id, songs, artistName, artists, distri)}
           style={{
-            // width: "100%",
             backgroundImage: `url(${play_icon})`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "40% 40%",
@@ -187,47 +206,44 @@ export default function TrendingSongCard({
           }}
         ></button>
       </div>
-<div className="w-[150px] mx-auto">
-
-      <div className="text-md font-bold mt-2 truncate w-[150px]">
-      <Tooltip content={owner}>{owner}</Tooltip>
-
+      <div className="w-[150px] mx-auto">
+        <div className="text-md font-bold mt-2 truncate w-[150px]">
+          <Tooltip content={owner}>{owner}</Tooltip>
         </div>
-      <div className="text-sm mb-2 text-[#606269] truncate w-[150px]">{artistName}</div>
-      <div
-      className="w-[150px]"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        {
-          liked ? (
-            <FaHeart
-              style={{ color: "#4865F6", fontSize: "28px" }}
-              onClick={(e) => {
-                e.preventDefault();
-                handleLikeSongs(songID);
-              }}
-            />
-          ) : (
-            <CiHeart
-              style={{ color: "none", fontSize: "28px" }}
-              onClick={(e) => {
-                e.preventDefault();
-                handleLikeSongs(songID);
-              }}
-            />
-          )
-        }
-
-        <MdOutlinePlaylistAdd
-          onClick={handleOpen}
-          style={{ marginLeft: "auto", color: "none", fontSize: "28px" }}
-        />
+        <div className="text-sm mb-2 text-[#606269] truncate w-[150px]">{artistName}</div>
+        <div
+          className="w-[150px]"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          {
+            liked ? (
+              <FaHeart
+                style={{ color: "#4865F6", fontSize: "28px" }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLikeSongs(songID);
+                }}
+              />
+            ) : (
+              <CiHeart
+                style={{ color: "none", fontSize: "28px" }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLikeSongs(songID);
+                }}
+              />
+            )
+          }
+          <MdOutlinePlaylistAdd
+            onClick={handleOpen}
+            style={{ marginLeft: "auto", color: "none", fontSize: "28px" }}
+          />
+        </div>
       </div>
-</div>
 
       <Modal
         open={open}
@@ -245,25 +261,23 @@ export default function TrendingSongCard({
             })}
           </div>
           <div className="flex">
-          <button
-            className="px-6 py-2 ml-auto leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600"
-            onClick={handleClose}
-          >
-            Close
-          </button>
-          <button
-            className="px-6 py-2 leading-5 ml-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600"
-            onClick={(e) => {
-              handleAddSongToPlaylist(currPlaylist, songID);
-            }}
-          >
-            Add
-          </button>
+            <button
+              className="px-6 py-2 ml-auto leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600"
+              onClick={handleClose}
+            >
+              Close
+            </button>
+            <button
+              className="px-6 py-2 leading-5 ml-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600"
+              onClick={(e) => {
+                handleAddSongToPlaylist(currPlaylist, songID);
+              }}
+            >
+              Add
+            </button>
           </div>
-          
         </Box>
       </Modal>
-      {/* <div className="text-sm mt-[-5px] text-center overflow-hidden">{address}</div> */}
     </div>
   );
 }

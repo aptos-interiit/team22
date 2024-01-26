@@ -1,3 +1,7 @@
+// Summary: This component is used to display the playlist card in the playlist page.
+
+
+// importing libraries and dependencies
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import React, { useContext, useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
@@ -7,6 +11,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { toast } from "react-toastify";
 
+// Style for modal
 const style = {
   position: 'absolute',
   top: '50%',
@@ -19,19 +24,42 @@ const style = {
   p: 4,
 };
 
+// PlaylistCard component
 export default function PlaylistCard({ name, len, id, playlist }) {
+
+  // images: images array
   const images = ["image_1.jpg", "image_2.jpg", "image_3.jpg"];
+
+  // randomImage: random image
   const randomImage = images[id % 3];
+
+  // transactionInProgress: transaction state
   const [transactionInProgress, setTransactionInProgress] = useState(false);
-  const { account, signAndSubmitTransaction} = useWallet();
-  const { addre, provider, transact, setTransact, myPlaylistName  } = useContext(dataContext);
+
+  // account: account of the user
+  const { account, signAndSubmitTransaction } = useWallet();
+
+  // addre: address of the contract
+  // provider: provider of the contract
+  // transact: transaction state
+  // setTransact: set transaction state
+  const { addre, provider, transact, setTransact } = useContext(dataContext);
+
+  // open: open state for modal
   const [open, setOpen] = useState(false);
+
+  // function to handle open for modal
   const handleOpen = () => setOpen(true);
+
+  // function to handle close for modal
   const handleClose = () => setOpen(false);
 
+  // function to delete playlist
   const handleDeletePlaylist = async (name) => {
     if (!account) return;
     setTransactionInProgress(true);
+
+    // delete playlist
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -42,10 +70,7 @@ export default function PlaylistCard({ name, len, id, playlist }) {
     };
     try {
       const response = await signAndSubmitTransaction(payload);
-      // console.log("playlist deleted");
-      // console.log(response);
       setTransact(transact + 1);
-      // console.log(myPlaylistName);
       toast.success(`Playlist Deleted`, {
         position: "top-left",
         autoClose: 5000,
@@ -55,9 +80,8 @@ export default function PlaylistCard({ name, len, id, playlist }) {
         draggable: true,
         progress: undefined,
         theme: "light",
-    });
+      });
       await provider.waitForTransaction(response.hash);
-
     } catch (err) {
       console.log(err);
     } finally {
@@ -65,7 +89,7 @@ export default function PlaylistCard({ name, len, id, playlist }) {
     }
   };
 
-
+  // returning the PlaylistCard component
   return (
     <div className="p-2 bg-[#23252e] w-[100%] rounded-lg flex  border-white mx-auto mt-4 sm:mt-8 cursor-pointer hover:opacity-60">
       <Link
@@ -76,7 +100,6 @@ export default function PlaylistCard({ name, len, id, playlist }) {
         <div
           className="w-[60px] h-[60px] rounded-lg"
           style={{
-            // width: "100%",
             backgroundImage: `url(${require(`../MusicPlayer/assets/${randomImage}`)})`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "100% 100%",
@@ -89,25 +112,18 @@ export default function PlaylistCard({ name, len, id, playlist }) {
             {playlist.length} songs
           </div>
         </div>
-        {/* <div className="mx-auto my-auto text-sm">
-        <div>+{len===0 ? 0 : len-1} songs</div>
-      </div> */}
       </Link>
       {id === 0 ? (
         <></>
       ) : (
         <button
           className="mr-0"
-          onClick={() => {
-            // handleDeletePlaylist(name);4
-            handleOpen();
-          }}
+          onClick={() => { handleOpen(); }}
         >
           <MdDelete size={30} />
         </button>
       )}
-
-<Modal
+      <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -118,19 +134,17 @@ export default function PlaylistCard({ name, len, id, playlist }) {
             <h1 class="text-lg text-white capitalize">Are you Sure you want to delete your</h1>
             <h1 class="text-lg text-white capitalize">"{name}" playlist ?</h1>
             <form className="mt-5">
-            <button className="px-6 py-2 mx-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600" onClick={()=>{
+              <button className="px-6 py-2 mx-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600" onClick={() => {
                 handleClose();
               }}>Cancel</button>
-              <button className="px-6 py-2 mx-2 leading-5 text-white transition-colors duration-200 transform bg-red-500 rounded-md focus:outline-none focus:bg-gray-600" onClick={(e)=>{
+              <button className="px-6 py-2 mx-2 leading-5 text-white transition-colors duration-200 transform bg-red-500 rounded-md focus:outline-none focus:bg-gray-600" onClick={(e) => {
                 e.preventDefault();
                 handleDeletePlaylist(name);
                 handleClose();
               }}>Confirm</button>
-             
             </form>
           </section>
         </Box>
-
       </Modal>
     </div>
   );

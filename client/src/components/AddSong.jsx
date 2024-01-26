@@ -1,3 +1,7 @@
+// Summary: AddSong component for adding a song to the platform
+
+
+// Importing Dependencies
 import React, { useState, useContext, useRef } from 'react'
 import AddCollaborators from './AddColaborators'
 import { dataContext } from '../Context/dataContext';
@@ -7,23 +11,47 @@ import DndPic from './DndPic';
 import DndSong from './DndSong';
 import { toast } from 'react-toastify';
 
+// JWT token for pinata 
 const JWT = process.env.REACT_APP_JWT
 
+// AddSong component
 const AddSong = () => {
+
+    // useState hooks
+
+    // artname: artist name
     const [artname, setArtName] = useState('');
+
+    // sname: song name
     const [sname, setSname] = useState('');
+
+    // photo: song profile picture
     const [photo, setPhoto] = useState(null);
+
+    // song: song file
     const [song, setSong] = useState(null);
+
+    // load: loading state
     const [load, setLoad] = useState(1);
-    const [transactionInProgress, setTransactionInProgress] = useState(false);  
+
+    // transactionInProgress: transaction state
+    const [, setTransactionInProgress] = useState(false);
+
+    // addre: address of the contract
     const { addre, provider } = useContext(dataContext)
+
+    // account: account of the user
     const { account, signAndSubmitTransaction } = useWallet();
+
+    // remainingSplit: remaining split
     const [remainingSplit, setRemainingSplit] = useState(100)
 
+    // formFields: form fields
     const [formFields, setFormFields] = useState([
         { ArtistAddr: `${account.address}`, Split: remainingSplit },
     ])
 
+    // function to check and submit
     const check_and_submit = (e) => {
         e.preventDefault();
         let sum = 0;
@@ -39,15 +67,15 @@ const AddSong = () => {
             x[0].Split = 100 - sum;
             setFormFields(x);
             setRemainingSplit(100 - sum);
-            // console.log(formFields);
         } else {
             alert("Split should sum up to 100%");
         }
     };
 
+    // function to pin image
     const pinimage = async (e) => {
         e.preventDefault();
-        if(sname === "" || artname === "" || photo === null || song === null){
+        if (sname === "" || artname === "" || photo === null || song === null) {
             toast.error(`Fields cant be empty`, {
                 position: "top-left",
                 autoClose: 5000,
@@ -80,16 +108,14 @@ const AddSong = () => {
                     'Authorization': `Bearer ${JWT}`
                 }
             });
-            // console.log(res.data);
             const { IpfsHash } = res.data
-            // console.log(IpfsHash)
             await pinFileToIPFS(IpfsHash)
         } catch (error) {
             console.log(error);
         }
     }
 
-
+    // function to pin file to IPFS
     const pinFileToIPFS = async (imghash) => {
         const formData = new FormData();
 
@@ -115,38 +141,26 @@ const AddSong = () => {
                     },
                 }
             );
-            // console.log(res.data);
             const { IpfsHash } = res.data;
-            // console.log(sname + " " + artname + " " + imghash + " " + IpfsHash)
             handleAddSong(IpfsHash, imghash);
-            
         } catch (error) {
             console.log(error);
         }
     };
 
+    // audioRef: reference to audio
     const audioRef = useRef(null);
-    let val = 0
-    const click = async (e) => {
-        e.preventDefault()
-        // console.log(song)
 
-        val = parseInt(audioRef.current.duration)
-        // console.log(val)
-    }
-
-    const songup = (e) => {
-        // console.log(e)
-        // console.log('song done')
+    // function to upload song
+    const songUpload = (e) => {
         setSong(e)
         audioRef.current = new Audio(URL.createObjectURL(e))
-        // console.log(audioRef)
     }
 
+    // function to handle add song
     const handleAddSong = async (songHash, imghash) => {
         if (!account) return;
         setTransactionInProgress(true);
-        // console.log(songHash);
         let date = new Date()
         let sec = date.getTime()
         let artist = []
@@ -155,9 +169,7 @@ const AddSong = () => {
             artist.push(formFields[i].ArtistAddr)
             split.push(formFields[i].Split)
         }
-        // console.log(audioRef)
         let x = parseInt(audioRef.current.duration)
-        // console.log(artist + split)
         const payload = {
             sender: `${account.address}`,
             data: {
@@ -166,10 +178,10 @@ const AddSong = () => {
                 functionArguments: [sname, songHash, imghash, sec, artist, split, x, artname],
             },
         };
+
+        // signing and submitting transaction
         try {
             const response = await signAndSubmitTransaction(payload);
-            // console.log("song added");
-            // console.log(response)
             toast.success(`Song Uploaded`, {
                 position: "top-left",
                 autoClose: 5000,
@@ -190,14 +202,13 @@ const AddSong = () => {
         window.location.href = "/"
     };
 
+    // function to handle photo change
     const handlePhoto = (e) => {
-        // e.preventDefault();
-        // console.log("done Photo");
-        // console.log(e)
         setPhoto(e);
     }
 
 
+    // returning the AddSong component
     return (
         <>
             <section className="max-w-4xl p-6 mx-auto bg-indigo-600 rounded-md shadow-md dark:bg-gray-800">
@@ -215,47 +226,29 @@ const AddSong = () => {
                         <div>
                             <label htmlFor='Pic-Upload' className="text-gray-200">
                                 Song profile picture
-                            
-
-                            <div className="flex items-center mt-2 justify-center w-full">
-                                
-                                <DndPic handlePC={handlePhoto} id='Pic-Upload'/>
-                                
-                            </div>
-                            
+                                <div className="flex items-center mt-2 justify-center w-full">
+                                    <DndPic handlePC={handlePhoto} id='Pic-Upload' />
+                                </div>
                             </label>
                         </div>
                         <div>
                             <label htmlFor='song-upload' className="text-gray-200">
                                 Song upload
-                            
-
-                            <div className="flex items-center mt-2 justify-center w-full">
-                                <DndSong id='song-upload' handleSn={songup}/>
-                                
-                            </div>
-                            
-                                </label>
-                        </div>                        
+                                <div className="flex items-center mt-2 justify-center w-full">
+                                    <DndSong id='song-upload' handleSn={songUpload} />
+                                </div>
+                            </label>
+                        </div>
                         <div>
                             <label className="text-white dark:text-gray-200" htmlFor="password">Add Collaborators</label>
                             <AddCollaborators formFields={formFields} setFormFields={setFormFields} remainingSplit={remainingSplit} setRemainingSplit={setRemainingSplit} account={account} />
                         </div>
-
-                        {/* </div> */}
-
-                        <div className="flex justify-end mt-6">                            
-                        {load ? (<><button onClick={(e) => pinimage(e)} className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none ">Upload</button></>):(<><button disabled={true} className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600">Uploading</button></>)}
-                            
+                        <div className="flex justify-end mt-6">
+                            {load ? (<><button onClick={(e) => pinimage(e)} className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none ">Upload</button></>) : (<><button disabled={true} className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600">Uploading</button></>)}
                         </div>
-
                     </div>
-
                 </form>
-
             </section>
-
-
         </>
     )
 }

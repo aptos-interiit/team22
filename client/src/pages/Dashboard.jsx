@@ -1,19 +1,19 @@
-// MainContent.jsx
+// Purpose: Provide the main dashboard page for the user to interact with the application.
 
-import React, {useEffect} from 'react';
+// importing dependencies
+import React from 'react';
 import SideSlider from "./SideSlider";
 import MainPage from "./MainPage";
 import Navbar from './Navbar';
-import SideBar from './SideBar';
 
+
+// Dashboard component
 function Dashboard({ load, user, handleAdd, handleDeposit, setDeposit, setTrackid }) {
   return (
     <div className="flex bg-black">
       <div className="border-e">
         <SideSlider />
-        {/* <SideBar></SideBar> */}
       </div>
-      
       <div className='bg-black w-full'>
         {load ? (
           <>
@@ -23,7 +23,7 @@ function Dashboard({ load, user, handleAdd, handleDeposit, setDeposit, setTracki
             </div>
           </>
         ) : (
-          <>{/* <div className="loader"></div> */}</>
+          <></>
         )}
       </div>
     </div>

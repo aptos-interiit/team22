@@ -1,5 +1,8 @@
+// Purpose: Navbar component for the application
+
+
+// importing dependencies
 import React, { useContext, useState } from 'react';
-import { MdAccountCircle } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import { WalletSelector } from '@aptos-labs/wallet-adapter-ant-design';
 import Box from '@mui/material/Box';
@@ -10,6 +13,8 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import logo from '../MusicPlayer/assets/logo.png'
 import {toast} from 'react-toastify';
 
+
+// style for modal
 const style = {
   position: 'absolute',
   top: '50%',
@@ -23,33 +28,63 @@ const style = {
 };
 
 
+// addre: address of the contract
 const addre = process.env.REACT_APP_MODULE_ADDRESS;
+
+// res_acc: resource account
 const res_acc = process.env.REACT_APP_RESOURCE_ACCOUNT;
+
+// provider: provider of the contract
 export const provider = new Provider(Network.TESTNET);
 
 
+// Navbar component
 const Navbar = ({ savings, handleSubmit }) => {
+
+  // signAndSubmitTransaction: sign and submit transaction
   const { signAndSubmitTransaction } = useWallet();
+
+  // open: open state for modal
   const [open, setOpen] = useState(false);
+
+  // function to handle open for modal
   const handleOpen = () => setOpen(true);
+
+  // function to handle close for modal
   const handleClose = () => setOpen(false);
+
+  // openEarn: open earn state for modal
   const [openEarn, setOpenEarn] = useState(false);
+
+  // function to handle open for earn modal
   const handleOpenEarn = () => setOpenEarn(true);
+
+  // function to handle close for earn modal
   const handleCloseEarn = () => setOpenEarn(false);
+
+  // deposit: deposit state
+  // setDeposit: set deposit state
+  // account: account of the user
+  // transact: transaction state
+  // setTransact: set transaction state
+  // user: user state
   const { deposit, setDeposit, account, transact, setTransact, user } = useContext(dataContext);
+
+  // transactionInProgress: transaction state
   const [transactionInProgress, setTransactionInProgress] = useState(0);
+
+  // earnings: earnings state
   const [earnings, setEarnings] = useState(0);
 
+  // function to add deposit
   const handleDeposit = async (e) => {
     e.preventDefault();
     if (!account) return;
-
     if (deposit < 0.05) {
       alert("Minimum deposit should be 0.05 Aptos");
       return;
     }
     setTransactionInProgress(true);
-
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -58,7 +93,6 @@ const Navbar = ({ savings, handleSubmit }) => {
         functionArguments: [deposit * 1e8],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
       await provider.waitForTransaction(response.hash);
@@ -72,12 +106,11 @@ const Navbar = ({ savings, handleSubmit }) => {
     }
   };
 
+  // function to withdraw savings
   const handleWithdrawSavings = async (e) => {  
     e.preventDefault();
     if (!account) return;
-
     setTransactionInProgress(true);
-
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -86,7 +119,6 @@ const Navbar = ({ savings, handleSubmit }) => {
         functionArguments: [],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
       await provider.waitForTransaction(response.hash);
@@ -98,10 +130,10 @@ const Navbar = ({ savings, handleSubmit }) => {
     }
   }
 
+  // function to withdraw earnings
   const handleWithdrawEarnings = async (e) => {  
     e.preventDefault();
     if (!account) return;
-
     if(earnings <= 0) {
       toast.error(`Amount of T22 should be greater than zero!!!`, {
         position: "top-left",
@@ -115,9 +147,7 @@ const Navbar = ({ savings, handleSubmit }) => {
       });
       return;
     }
-
     setTransactionInProgress(true);
-
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -126,7 +156,6 @@ const Navbar = ({ savings, handleSubmit }) => {
         functionArguments: [earnings * 1e8],
       },
     };
-
     try {
       const response = await signAndSubmitTransaction(payload);
       await provider.waitForTransaction(response.hash);
@@ -139,9 +168,13 @@ const Navbar = ({ savings, handleSubmit }) => {
     }
   }
 
+  // isSearchBarPath: search bar path state
   const isSearchBarPath = window.location.pathname === '/search_bar';
+
+  // isProfilePath: profile path state
   const isProfilePath = window.location.pathname === '/profile';
 
+  // function to handle submit
   return (
     <nav className="bg-black p-4 h-20">
       <div className="container mx-auto flex items-center justify-between">
@@ -151,7 +184,6 @@ const Navbar = ({ savings, handleSubmit }) => {
         </div>
         <form style={{ display: isSearchBarPath ? 'block' : 'none' }}>
           <input className="px-4 py-2 rounded-full w-64 bg-[#242424] text-white focus:border-[#ffffff] hover:bg-[#2a2a2a]" onChange={(e) => handleSubmit(e)} id='value' type="text" placeholder='Search' />
-          {/* <button type="submit"> submit</button> */}
         </form>
 
         {/* Navigation links */}
@@ -183,16 +215,12 @@ const Navbar = ({ savings, handleSubmit }) => {
             <Link to="/profile" className="text-white hover:text-gray-300 rounded-full">
              <div className='w-[50px] h-[50px] mx-auto rounded-full'
              style={{
-              // width: "100%",
-              
               backgroundImage: `${user ? `url(https://tan-mad-salamander-939.mypinata.cloud/ipfs/${user.profile_pic})` : ""}`,
               backgroundRepeat: "no-repeat",
               backgroundSize: "100% 100%",
               backgroundPosition: "center center",
-              
             }}
              >
-              
               </div> 
             </Link>
           </li>
@@ -214,7 +242,6 @@ const Navbar = ({ savings, handleSubmit }) => {
                   <input min="0.05" onChange={(e) => setDeposit(e.target.value)} id="pname" type="number" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
                 </div>
                 {/* </div> */}
-
                 <div className="flex justify-end mt-6">
                   <button onClick={handleClose} className="px-6 py-2 mx-5 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600">Cancel</button>
                   <button onClick={(e) => handleDeposit(e)} className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600">Add</button>
@@ -223,9 +250,7 @@ const Navbar = ({ savings, handleSubmit }) => {
             </form>
           </section>
         </Box>
-
       </Modal>
-
       <Modal
         open={openEarn}
         onClose={handleCloseEarn}
@@ -241,8 +266,6 @@ const Navbar = ({ savings, handleSubmit }) => {
                   <label className="text-white dark:text-gray-200" htmlFor="pname">Amount in T22</label>
                   <input step="any" onChange={(e) => setEarnings(e.target.value)} id="pname" type="number" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
                 </div>
-                {/* </div> */}
-
                 <div className="flex justify-end mt-6">
                   <button onClick={handleCloseEarn} className="px-6 py-2 mx-5 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600">Cancel</button>
                   <button onClick={(e) => handleWithdrawEarnings(e)} className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-[#4865f6] rounded-md focus:outline-none focus:bg-gray-600">Add</button>
@@ -251,9 +274,7 @@ const Navbar = ({ savings, handleSubmit }) => {
             </form>
           </section>
         </Box>
-
       </Modal>
-
     </nav>
   );
 };

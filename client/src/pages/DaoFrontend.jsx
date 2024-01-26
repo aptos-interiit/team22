@@ -1,27 +1,58 @@
+// Purpose: Provide a frontend for the DAO contract
+
+
+// importing dependencies 
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { dataContext } from "../Context/dataContext";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
 
-
+// moduleAddress: module address
 export const moduleAddress = process.env.REACT_APP_MODULE_ADDRESS;
+
+// nftMintAddr: nft mint address
 const nftMintAddr = process.env.REACT_APP_RESOURCE_ACCOUNT;
+
+// dao_addr: dao address
 const dao_addr = process.env.REACT_APP_DAO_ADDRESS
 
+// DaoFrontend component
 function DaoFrontend() {
+
+  // account: account of the user
   const { account, provider } = useContext(dataContext);
+
+  // accountHasList: account has list state
   const [accountHasList, setAccountHasList] = useState(false);
+
+  // currentProposals: current proposals state
   const [currentProposals, setCurrentProposals] = useState([]);
+
+  // load: load state
   const [load, setLoad] = useState(1)
+
+  // showOne: show one state
   const [showOne, setShowOne] = useState("hidden")
+
+  // showTwo: show two state
   const [showTwo, setShowTwo] = useState("hidden")
+
+  // pending: pending state
   const [pending, setPending] = useState([]);
+
+  // passed: passed state
   const [passed, setPassed] = useState([])
+
+  // failed: failed state
   const [failed, setFailed] = useState([])
+
+  // signAndSubmitTransaction: sign and submit transaction
   const { signAndSubmitTransaction } = useWallet();
 
+  // bottomRef: bottom reference
   const bottomRef = useRef(null);
 
+  // proposalAttributes: proposal attributes
   const [proposalAttributes, setProposalAttributes] = useState({
     title: "",
     description: "",
@@ -31,6 +62,7 @@ function DaoFrontend() {
     artist: "0x0",
   })
 
+  // voteAttributes: vote attributes
   const [voteAttributes, setVoteAttributes] = useState({
     tokenName: "",
     proposalId: 0,
@@ -38,11 +70,11 @@ function DaoFrontend() {
     propertyVersion: 0,
   })
 
+  // useEffect hook
   useEffect(() => {
     (async () => {
       setLoad(1)
       if (!account) return;
-
       const resource = await provider.getAccountResource(
         `${dao_addr}`,
         `${moduleAddress}::nft_dao::Proposals`
@@ -52,13 +84,9 @@ function DaoFrontend() {
         `${moduleAddress}::nft_dao::DAO`
       );
       console.log(resource.data.proposals);
-      // console.log(resource2.data);
       const tableHandle = resource.data.proposals.handle;
       let prop = [];
       let pending = [], passed = [], failed = [];
-
-      // // console.log(/tableHandle);
-
       for (let i = 1; i <= resource2.data.next_proposal_id; i++) {
         const tableItem = {
           key_type: "u64",
@@ -90,12 +118,10 @@ function DaoFrontend() {
     })();
   }, [account]);
 
-
+  // function to get NFT
   const getNFT = async (e) => {
     e.preventDefault();
-    // console.log("getNFT");
     if (!account) return [];
-    // build a transaction payload to be submited
     const payload = {
       sender: `${account.address}`,
       data: {
@@ -104,11 +130,9 @@ function DaoFrontend() {
         functionArguments: [],
       },
     };
-    // console.log(payload)
     try {
       // sign and submit transaction to chain
       const response = await signAndSubmitTransaction(payload);
-      // console.log(response);
       // wait for transaction
       await provider.waitForTransaction(response.hash);
       setAccountHasList(true);
@@ -118,6 +142,7 @@ function DaoFrontend() {
     }
   }
 
+  // function to handle change
   const handleChange1 = (event) => {
     setProposalAttributes({
       ...proposalAttributes,
@@ -125,6 +150,7 @@ function DaoFrontend() {
     });
   };
 
+  // function to handle change
   const handleChange2 = (event) => {
     setVoteAttributes({
       ...voteAttributes,
@@ -132,8 +158,8 @@ function DaoFrontend() {
     });
   };
 
+  // function to create proposal
   const createProposal = async (e) => {
-    // console.log(proposalAttributes.title+" "+proposalAttributes.description+" "+proposalAttributes.startTime+" "+proposalAttributes.proposalId+" "+proposalAttributes.songId+" "+proposalAttributes.artist)
     e.preventDefault();
     if (!account) return [];
     // build a transaction payload to be submited
@@ -156,16 +182,15 @@ function DaoFrontend() {
     try {
       // sign and submit transaction to chain
       const response = await signAndSubmitTransaction(payload);
-      // console.log(response);
       // wait for transaction
       await provider.waitForTransaction(response.hash);
-      // console.log("done");
       setAccountHasList(true);
     } catch (error) {
       setAccountHasList(false);
     }
   }
 
+  // function to vote
   const vote = async (e) => {
     e.preventDefault();
     if (!account) return [];
@@ -195,6 +220,8 @@ function DaoFrontend() {
       setAccountHasList(false);
     }
   }
+
+  // function to resolve
   const resolve = async (id) => {
     console.log(id);
     if (!account) return [];
@@ -213,7 +240,6 @@ function DaoFrontend() {
     try {
       // sign and submit transaction to chain
       const response = await signAndSubmitTransaction(payload);
-      // console.log(response);
       // wait for transaction
       await provider.waitForTransaction(response.hash);
       setAccountHasList(true);
@@ -222,6 +248,7 @@ function DaoFrontend() {
     }
   }
 
+  // function to handle change
   const handleOne = () => {
     if (showOne === "hidden") {
       setShowOne("block")
@@ -231,11 +258,14 @@ function DaoFrontend() {
     }
 
   }
+
+  // function to handle change
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [showOne, showTwo]);
 
+  // function to convert seconds to date string
   function convertSecondsToDateString(second) {
     const date = new Date(second * 1000); // Convert seconds to milliseconds
     const year = date.getFullYear();
@@ -243,12 +273,11 @@ function DaoFrontend() {
     const day = String(date.getDate()).padStart(2, '0');
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-
     const formattedDate = `${year}-${month}-${day}  ${hours}:${minutes}`;
     return formattedDate;
   }
 
+  // returning the DaoFrontend component
   return (
     load ? (<div className="loader"></div>) : (
       <>
