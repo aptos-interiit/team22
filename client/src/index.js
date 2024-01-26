@@ -4,7 +4,6 @@ import App from "./App";
 import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 import { PetraWallet } from "petra-plugin-wallet-adapter";
 import './index.css';
-import Music from "./MusicPlayer/Music";
 
 const wallets = [new PetraWallet()];
 
